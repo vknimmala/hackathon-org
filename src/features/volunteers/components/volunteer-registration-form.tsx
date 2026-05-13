@@ -70,7 +70,7 @@ export function VolunteerRegistrationForm() {
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-white">Full name</span>
+          <span className="text-sm font-semibold text-[#15110d]">Full name</span>
           <Input
             autoComplete="name"
             placeholder="Your name"
@@ -80,7 +80,7 @@ export function VolunteerRegistrationForm() {
         </label>
 
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-white">Work email</span>
+          <span className="text-sm font-semibold text-[#15110d]">Work email</span>
           <Input
             autoComplete="email"
             placeholder="you@surgevector.com"
@@ -92,7 +92,7 @@ export function VolunteerRegistrationForm() {
       </div>
 
       <label className="space-y-2 block">
-        <span className="text-sm font-semibold text-white">
+        <span className="text-sm font-semibold text-[#15110d]">
           Team or department
         </span>
         <Input
@@ -103,13 +103,13 @@ export function VolunteerRegistrationForm() {
       </label>
 
       <fieldset className="space-y-3">
-        <legend className="text-sm font-semibold text-white">
+        <legend className="text-sm font-semibold text-[#15110d]">
           Preferred roles
         </legend>
         <div className="grid gap-3 sm:grid-cols-2">
           {roleOptions.map((role) => (
             <label
-              className="flex items-start gap-3 rounded-xl border border-border bg-black/25 p-4 text-sm text-white transition focus-within:border-primary/70"
+              className="flex items-start gap-3 rounded-xl border border-orange-200/60 bg-orange-50/30 p-4 text-sm text-[#15110d] transition focus-within:border-primary/70"
               key={role}
             >
               <input
@@ -126,7 +126,7 @@ export function VolunteerRegistrationForm() {
       </fieldset>
 
       <label className="space-y-2 block">
-        <span className="text-sm font-semibold text-white">
+        <span className="text-sm font-semibold text-[#15110d]">
           Availability notes
         </span>
         <Textarea
@@ -138,14 +138,14 @@ export function VolunteerRegistrationForm() {
 
       {result ? (
         <div
-          className="rounded-xl border border-border bg-black/30 p-4 text-sm text-white"
+          className="rounded-xl border border-orange-200/60 bg-orange-50/50 p-4 text-sm"
           role="status"
         >
-          <p className={result.ok ? "text-white" : "text-primary"}>
+          <p className={result.ok ? "text-[#15110d]" : "text-primary"}>
             {result.message}
           </p>
           {result.ok ? (
-            <p className="mt-2 text-muted-foreground">
+            <p className="mt-2 text-[#66584c]">
               Volunteer registration ID: {result.id}
             </p>
           ) : null}

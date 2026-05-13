@@ -37,13 +37,10 @@ const defaultValues: TeamRegistrationInput = {
 
 interface TeamRegistrationFormProps {
   availableIdeas: AvailableTeamIdea[];
-  isSharedPoolOpen: boolean;
 }
 
 function FieldError({ message }: { message?: string }) {
-  if (!message) {
-    return null;
-  }
+  if (!message) return null;
 
   return (
     <p className="text-sm font-medium text-primary" role="alert">
@@ -52,10 +49,11 @@ function FieldError({ message }: { message?: string }) {
   );
 }
 
-export function TeamRegistrationForm({
-  availableIdeas,
-  isSharedPoolOpen,
-}: TeamRegistrationFormProps) {
+const labelClass = "text-sm font-semibold text-[#15110d]";
+const selectClass =
+  "h-11 w-full rounded-lg border border-orange-200/70 bg-white/80 px-3 text-sm text-[#15110d] outline-none transition focus:border-primary/70 focus:ring-2 focus:ring-primary/20";
+
+export function TeamRegistrationForm({ availableIdeas }: TeamRegistrationFormProps) {
   const [result, setResult] = useState<RegistrationActionResult | null>(null);
   const {
     control,
@@ -87,39 +85,35 @@ export function TeamRegistrationForm({
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-white">Idea to build</span>
+          <span className={labelClass}>Idea to build</span>
           <select
-            className="h-11 w-full rounded-lg border border-border bg-black/30 px-3 text-sm text-white outline-none transition focus:border-primary/70 focus:ring-2 focus:ring-ring/50"
+            className={selectClass}
             disabled={availableIdeas.length === 0 || isSubmitting}
             {...register("ideaSubmissionId")}
           >
             <option value="">Select an available idea</option>
             {availableIdeas.map((idea) => (
               <option key={idea.id} value={idea.id}>
-                {idea.idea_title} - {idea.participant_full_name}
+                {idea.idea_title} — {idea.participant_full_name}
               </option>
             ))}
           </select>
-          <p className="text-xs leading-5 text-muted-foreground">
-            {isSharedPoolOpen
-              ? "The shared idea pool is open. Claimed ideas disappear after team registration."
-              : "Before May 22 at 12:00 PM IST, only the original idea submitter can register a team for their idea."}
+          <p className="text-xs leading-5 text-[#66584c]">
+            Original submitters have 1 hour of priority. After that, anyone can
+            claim an unclaimed idea.
           </p>
           <FieldError message={errors.ideaSubmissionId?.message} />
         </label>
 
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-white">Team name</span>
+          <span className={labelClass}>Team name</span>
           <Input placeholder="Your hackathon team name" {...register("teamName")} />
           <FieldError message={errors.teamName?.message} />
         </label>
 
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-white">Organization</span>
-          <select
-            className="h-11 w-full rounded-lg border border-border bg-black/30 px-3 text-sm text-white outline-none transition focus:border-primary/70 focus:ring-2 focus:ring-ring/50"
-            {...register("organization")}
-          >
+          <span className={labelClass}>Organization</span>
+          <select className={selectClass} {...register("organization")}>
             {organizationOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -130,12 +124,10 @@ export function TeamRegistrationForm({
         </label>
       </div>
 
-      <label className="space-y-2 block">
-        <span className="text-sm font-semibold text-white">
-          Team execution note
-        </span>
+      <label className="block space-y-2">
+        <span className={labelClass}>Execution note</span>
         <Textarea
-          placeholder="Optional: add a short note about how this team will execute the selected idea."
+          placeholder="Optional: a short note about how this team will execute the selected idea."
           {...register("projectSummary")}
         />
         <FieldError message={errors.projectSummary?.message} />
@@ -144,10 +136,10 @@ export function TeamRegistrationForm({
       <div className="space-y-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-white">Team members</h2>
-            <p className="text-sm text-muted-foreground">
-              Add one to four members. The first member is the captain and
-              point of contact.
+            <h2 className="text-xl font-semibold text-[#15110d]">Team members</h2>
+            <p className="text-sm text-[#66584c]">
+              Add one to four members. The first member is the captain and point
+              of contact.
             </p>
           </div>
           <Button
@@ -155,6 +147,7 @@ export function TeamRegistrationForm({
             onClick={() => append({ ...defaultMember })}
             type="button"
             variant="secondary"
+            className="border-orange-200/70 bg-white/80 text-[#15110d] hover:bg-primary/10 hover:text-[#15110d]"
           >
             Add member
           </Button>
@@ -162,7 +155,7 @@ export function TeamRegistrationForm({
 
         {fields.map((field, index) => (
           <div
-            className="rounded-xl border border-border bg-black/25 p-4"
+            className="rounded-xl border border-orange-200/60 bg-orange-50/30 p-4"
             key={field.id}
           >
             <div className="mb-4 flex items-center justify-between gap-3">
@@ -175,20 +168,19 @@ export function TeamRegistrationForm({
                 size="sm"
                 type="button"
                 variant="ghost"
+                className="text-[#66584c] hover:bg-primary/10 hover:text-[#15110d]"
               >
                 Remove
               </Button>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
               <label className="space-y-2">
-                <span className="text-sm font-semibold text-white">
-                  Full name
-                </span>
+                <span className={labelClass}>Full name</span>
                 <Input {...register(`members.${index}.fullName`)} />
                 <FieldError message={errors.members?.[index]?.fullName?.message} />
               </label>
               <label className="space-y-2">
-                <span className="text-sm font-semibold text-white">Email</span>
+                <span className={labelClass}>Email</span>
                 <Input
                   autoComplete="email"
                   type="email"
@@ -197,7 +189,7 @@ export function TeamRegistrationForm({
                 <FieldError message={errors.members?.[index]?.email?.message} />
               </label>
               <label className="space-y-2">
-                <span className="text-sm font-semibold text-white">Role</span>
+                <span className={labelClass}>Role</span>
                 <Input
                   placeholder="Builder, designer, presenter..."
                   {...register(`members.${index}.role`)}
@@ -211,14 +203,14 @@ export function TeamRegistrationForm({
 
       {result ? (
         <div
-          className="rounded-xl border border-border bg-black/30 p-4 text-sm text-white"
+          className="rounded-xl border border-orange-200/60 bg-orange-50/50 p-4 text-sm"
           role="status"
         >
-          <p className={result.ok ? "text-white" : "text-primary"}>
+          <p className={result.ok ? "text-[#15110d]" : "text-primary"}>
             {result.message}
           </p>
           {result.ok ? (
-            <p className="mt-2 text-muted-foreground">Team ID: {result.id}</p>
+            <p className="mt-2 text-[#66584c]">Team ID: {result.id}</p>
           ) : null}
         </div>
       ) : null}

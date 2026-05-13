@@ -32,9 +32,7 @@ const defaultValues: IdeaSubmissionInput = {
 };
 
 function FieldError({ message }: { message?: string }) {
-  if (!message) {
-    return null;
-  }
+  if (!message) return null;
 
   return (
     <p className="text-sm font-medium text-primary" role="alert">
@@ -42,6 +40,10 @@ function FieldError({ message }: { message?: string }) {
     </p>
   );
 }
+
+const labelClass = "text-sm font-semibold text-[#15110d]";
+const selectClass =
+  "h-11 w-full rounded-lg border border-orange-200/70 bg-white/80 px-3 text-sm text-[#15110d] outline-none transition focus:border-primary/70 focus:ring-2 focus:ring-primary/20";
 
 export function IdeaSubmissionForm() {
   const [result, setResult] = useState<RegistrationActionResult | null>(null);
@@ -70,7 +72,7 @@ export function IdeaSubmissionForm() {
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-white">Full name</span>
+          <span className={labelClass}>Full name</span>
           <Input
             autoComplete="name"
             placeholder="Your name"
@@ -80,7 +82,7 @@ export function IdeaSubmissionForm() {
         </label>
 
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-white">Work email</span>
+          <span className={labelClass}>Work email</span>
           <Input
             autoComplete="email"
             placeholder="you@surgevector.com"
@@ -91,11 +93,8 @@ export function IdeaSubmissionForm() {
         </label>
 
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-white">Organization</span>
-          <select
-            className="h-11 w-full rounded-lg border border-border bg-black/30 px-3 text-sm text-white outline-none transition focus:border-primary/70 focus:ring-2 focus:ring-ring/50"
-            {...register("organization")}
-          >
+          <span className={labelClass}>Organization</span>
+          <select className={selectClass} {...register("organization")}>
             {organizationOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -106,24 +105,26 @@ export function IdeaSubmissionForm() {
         </label>
 
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-white">
-            Team or department
-          </span>
-          <Input placeholder="AI Platform, Taxilla Labs..." {...register("department")} />
+          <span className={labelClass}>Team or department</span>
+          <Input
+            placeholder="AI Platform, Taxilla Labs..."
+            {...register("department")}
+          />
           <FieldError message={errors.department?.message} />
         </label>
       </div>
 
-      <label className="space-y-2 block">
-        <span className="text-sm font-semibold text-white">Idea title</span>
-        <Input placeholder="A short, memorable project name" {...register("ideaTitle")} />
+      <label className="block space-y-2">
+        <span className={labelClass}>Idea title</span>
+        <Input
+          placeholder="A short, memorable project name"
+          {...register("ideaTitle")}
+        />
         <FieldError message={errors.ideaTitle?.message} />
       </label>
 
-      <label className="space-y-2 block">
-        <span className="text-sm font-semibold text-white">
-          Problem statement
-        </span>
+      <label className="block space-y-2">
+        <span className={labelClass}>Problem statement</span>
         <Textarea
           placeholder="What internal workflow, customer pain, or operational gap should this idea solve?"
           {...register("problemStatement")}
@@ -131,10 +132,8 @@ export function IdeaSubmissionForm() {
         <FieldError message={errors.problemStatement?.message} />
       </label>
 
-      <label className="space-y-2 block">
-        <span className="text-sm font-semibold text-white">
-          Proposed solution
-        </span>
+      <label className="block space-y-2">
+        <span className={labelClass}>Proposed solution</span>
         <Textarea
           placeholder="Describe the prototype you want to build during the hackathon."
           {...register("proposedSolution")}
@@ -142,10 +141,10 @@ export function IdeaSubmissionForm() {
         <FieldError message={errors.proposedSolution?.message} />
       </label>
 
-      <label className="space-y-2 block">
-        <span className="text-sm font-semibold text-white">AI usage</span>
+      <label className="block space-y-2">
+        <span className={labelClass}>AI usage</span>
         <Textarea
-          placeholder="Explain how AI will be used in the idea without adding future-phase copilot or chat scope."
+          placeholder="Explain how AI will be used in this idea."
           {...register("aiUsage")}
         />
         <FieldError message={errors.aiUsage?.message} />
@@ -153,20 +152,20 @@ export function IdeaSubmissionForm() {
 
       {result ? (
         <div
-          className="rounded-xl border border-border bg-black/30 p-4 text-sm text-white"
+          className="rounded-xl border border-orange-200/60 bg-orange-50/50 p-4 text-sm"
           role="status"
         >
-          <p className={result.ok ? "text-white" : "text-primary"}>
+          <p className={result.ok ? "text-[#15110d]" : "text-primary"}>
             {result.message}
           </p>
           {result.ok ? (
-            <p className="mt-2 text-muted-foreground">Idea ID: {result.id}</p>
+            <p className="mt-2 text-[#66584c]">Idea ID: {result.id}</p>
           ) : null}
         </div>
       ) : null}
 
       <Button className="w-full sm:w-auto" disabled={isSubmitting} type="submit">
-        {isSubmitting ? "Submitting idea..." : "Submit idea for review"}
+        {isSubmitting ? "Submitting..." : "Submit idea"}
       </Button>
     </form>
   );
