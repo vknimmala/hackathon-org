@@ -70,15 +70,15 @@ OBJECT STATE:
 - Team form initializes with one member by default.
 
 EXECUTION:
-- User enters approved idea ID, team name, organization, and 1 to 3 members.
-- Client validation enforces minimum one member and maximum three members.
+- User enters approved idea ID, team name, organization, and one to four members.
+- Client validation enforces minimum one member and maximum four members.
 - Server action validates the payload again.
 - Server action checks that the idea exists and is approved.
 - Server action creates a team linked to the idea.
 - Server action creates team member rows and an audit log entry.
 
 MEMORY:
-- Database gains one team and one to three team member rows.
+- Database gains one team and one to four team member rows.
 - Mentor assignment remains a later admin/mentor action.
 
 NEXT: Mentor coordination in Phase 1 admin/mentor management.
@@ -87,7 +87,7 @@ STEP 4: Invalid team registration attempt
 --------------------------------------------------------------------------------
 OBJECT STATE:
 - Idea ID is missing, malformed, not found, or not approved.
-- Member list may be empty or above three entries.
+- Member list may be empty or above four entries.
 
 EXECUTION:
 - Malformed IDs and invalid member counts fail Zod validation.

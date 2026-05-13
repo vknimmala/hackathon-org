@@ -184,8 +184,8 @@ begin
     and deleted_at is null
     and (tg_op = 'INSERT' or id <> new.id);
 
-  if active_member_count >= 3 then
-    raise exception 'A team can have at most 3 active members';
+  if active_member_count >= 4 then
+    raise exception 'A team can have at most 4 active members';
   end if;
 
   return new;

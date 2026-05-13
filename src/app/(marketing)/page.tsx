@@ -35,8 +35,8 @@ interface PrimaryRoute {
 }
 
 const heroMetrics = [
-  { label: "Team size", value: "1-3" },
-  { label: "Eligibility", value: "SV + Taxilla" },
+  { label: "Team size", value: "1-4" },
+  { label: "Eligibility", value: "SurgeVector, Taxilla" },
   { label: "Entry", value: "Idea first" },
 ];
 
@@ -78,7 +78,7 @@ const phaseOneFeatures: FeatureCard[] = [
   },
   {
     description:
-      "Team captains claim an available idea and register one to three members.",
+      "Team captains claim an available idea and register one to four members.",
     icon: ShieldCheck,
     label: "03",
     title: "Team Formation",

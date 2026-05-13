@@ -2,7 +2,7 @@ export const APP_NAME = "SurgeVector Hackathon 2026";
 
 export const TEAM_MEMBER_LIMITS = {
   min: 1,
-  max: 3,
+  max: 4,
 } as const;
 
 export const IDEA_SUBMISSION_CLOSES_AT = new Date("2026-05-22T06:30:00.000Z");
@@ -22,7 +22,7 @@ export const HACKATHON_TIMELINE = [
   },
   {
     date: "May 22, 2026",
-    description: "Team captains claim ideas and register one to three members.",
+    description: "Team captains claim ideas and register one to four members.",
     title: "Team formation",
   },
   {

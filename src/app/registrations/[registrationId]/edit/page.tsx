@@ -162,7 +162,7 @@ export default async function EditRegistrationRoute({
                   <CardTitle>No active team members found</CardTitle>
                   <CardDescription className="text-base leading-7">
                     Add at least one member before saving. Phase 1 teams must
-                    have one to three active members.
+                    have one to four active members.
                   </CardDescription>
                 </CardHeader>
               </Card>

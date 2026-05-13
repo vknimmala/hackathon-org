@@ -141,7 +141,7 @@ Key Phase 1 constraints:
 - Before May 22, 2026 at 12:00 PM IST, only the original idea submitter can register a team for that idea by matching the captain email to the idea submitter email. After that cutoff, the remaining idea pool is open for team captains.
 - Registration editing loads an existing non-deleted team, active team members, and linked idea context; successful updates write `audit_logs.before_state` and `audit_logs.after_state`.
 - Organizer review updates `idea_submissions.status`, `reviewed_at`, and `review_notes`, then writes an `audit_logs` row for approval or rejection.
-- Team member count is enforced at a maximum of 3 active members.
+- Team member count is enforced at a maximum of 4 active members.
 - App validation enforces minimum 1 team member.
 - Volunteer registration inserts a `submitted` volunteer row and audit log only; assignment, scheduling, shifts, realtime coordination, and approval workflows stay out of scope.
 - Mentor capacity is modeled with `capacity`, `current_team_count`, and `is_available`.

@@ -158,8 +158,8 @@ Initial state:
 
 Execution:
 
-- User enters the approved idea ID, team name, organization, and 1 to 3 members.
-- Client validation enforces at least one member and at most three members.
+- User enters the approved idea ID, team name, organization, and one to four members.
+- Client validation enforces at least one member and at most four members.
 - Server action revalidates the payload.
 - Server action checks that the referenced idea exists and has status `approved`.
 - Server action creates the team and team member rows, then writes an audit log entry.
@@ -168,14 +168,14 @@ Execution:
 Object state:
 
 - Database state gains one team linked to the approved idea.
-- Database state gains one to three team members.
+- Database state gains one to four team members.
 - No mentor assignment is automatically created.
 
 Findings:
 
 - P0: None.
 - P1: Team creation must be blocked when the idea is not approved.
-- P2: The database trigger still enforces the maximum of three active members, while app validation enforces minimum one.
+- P2: The database trigger still enforces the maximum of four active members, while app validation enforces minimum one.
 
 ### Scenario: Invalid or premature team registration
 
@@ -188,7 +188,7 @@ Execution:
 
 - Malformed IDs fail Zod validation.
 - Existing but unapproved ideas fail the server-side approved-status check.
-- More than three members fail client and server validation before database writes.
+- More than four members fail client and server validation before database writes.
 
 Object state:
 
@@ -641,7 +641,7 @@ Date: 2026-05-13
 Initial state:
 
 - Route `/registrations/[registrationId]/edit` receives a team registration UUID.
-- The existing registration lives in `teams`, is linked to an approved idea through `idea_submissions`, and has one to three active `team_members`.
+- The existing registration lives in `teams`, is linked to an approved idea through `idea_submissions`, and has one to four active `team_members`.
 - Supabase service-role access is used for the Phase 1 foundation until auth ownership and RLS policies are finalized.
 
 Execution:
@@ -670,9 +670,9 @@ Findings:
 
 Initial state:
 
-- A team row exists with one to three active members.
+- A team row exists with one to four active members.
 - User edits team name, organization, optional project summary, and member full name, email, or role fields.
-- Submitted members include at least one member and no more than three members.
+- Submitted members include at least one member and no more than four members.
 
 Execution:
 
@@ -694,7 +694,7 @@ Object state:
 Findings:
 
 - P0: None.
-- P1: Member synchronization must avoid creating more than three active members before removals are applied.
+- P1: Member synchronization must avoid creating more than four active members before removals are applied.
 - P1: Audit logging should happen after successful updates and should surface a clear error if it fails.
 - P2: Duplicate emails must be blocked before database writes to avoid unique constraint failures.
 
@@ -702,7 +702,7 @@ Findings:
 
 Initial state:
 
-- User submits a malformed registration ID, removes all members, adds more than three members, duplicates member emails, or submits a member ID that does not belong to the team.
+- User submits a malformed registration ID, removes all members, adds more than four members, duplicates member emails, or submits a member ID that does not belong to the team.
 
 Execution:
 
@@ -802,7 +802,7 @@ Initial state:
 Execution:
 
 - Team route loads available, non-deleted, non-rejected ideas that are not already linked to an active team.
-- The client form captures the selected idea, team name, organization, optional execution note, and one to three members.
+- The client form captures the selected idea, team name, organization, optional execution note, and one to four members.
 - The first member is treated as captain / point of contact.
 - Server action validates the payload and looks up the idea.
 - Server action rejects deleted, rejected, or already claimed ideas.
@@ -863,6 +863,42 @@ Findings:
 - P1: Stored enum values, Zod enums, and TypeScript `Organization` must change together or typecheck will fail.
 - P2: This is a breaking rename for any existing local seed/data using the previous misspelled enum value; no compatibility shim is needed for unshipped branch work.
 - P3: Run lint and typecheck after the rename to catch missed labels or enum mismatches.
+
+## Paper-Based Team Size and Eligibility Copy Simulation
+
+Date: 2026-05-13
+
+### Scenario: Platform uses 1-4 team size and full organization names
+
+Initial state:
+
+- Landing metrics show the previous compact team-size and shorthand eligibility values.
+- Registration validation allows the previous compact member count.
+- Team registration and edit forms disable the add button when the member count reaches the previous limit.
+- The Supabase team member trigger raises when an insert/update would exceed the previous active member limit.
+- Route copy and docs describe teams with the previous compact limit.
+
+Execution:
+
+- Update the shared team member limit constant to maximum four.
+- Update Zod schemas for team registration and editing to allow four members.
+- Update the add-member button guards in create and edit forms to allow a fourth member.
+- Update the Supabase trigger threshold and error text to enforce at most four active members.
+- Update user-facing copy and docs to one-to-four / 1-4.
+- Change the landing eligibility metric from shorthand to `SurgeVector, Taxilla`.
+
+Object state:
+
+- Team registrations can submit one, two, three, or four active members.
+- The first member remains the captain / point of contact.
+- The database trigger remains the final invariant for active team member count.
+- No new tables, routes, workflows, or future-phase features are introduced.
+
+Findings:
+
+- P0: None.
+- P1: Client validation, form add-button guards, and the database trigger must all move to four together.
+- P2: Older paper simulation notes may mention prior one-to-three behavior; current architecture and feature docs should describe the new rule.
 
 ## Open TODOs
 

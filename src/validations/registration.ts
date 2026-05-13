@@ -37,7 +37,7 @@ export const teamRegistrationSchema = z
     members: z
       .array(teamMemberSchema)
       .min(1, "Add at least one team member.")
-      .max(3, "A team can have at most three members."),
+      .max(4, "A team can have at most four members."),
   })
   .superRefine((value, context) => {
     const memberEmails = new Set<string>();
@@ -66,7 +66,7 @@ export const teamRegistrationEditSchema = z
     members: z
       .array(teamMemberEditSchema)
       .min(1, "Add at least one team member.")
-      .max(3, "A team can have at most three members."),
+      .max(4, "A team can have at most four members."),
     organization: z.enum(["surgevector", "taxilla"]),
     projectSummary: z.string().max(1000).optional(),
     registrationId: z

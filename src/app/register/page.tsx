@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 const registrationChoices = [
   {
     description:
-      "Submit ideas, claim an available idea as captain, and register a focused team of one to three builders.",
+      "Submit ideas, claim an available idea as captain, and register a focused team of one to four builders.",
     href: "/register/participant" as Route,
     icon: Users,
     label: "Participant",

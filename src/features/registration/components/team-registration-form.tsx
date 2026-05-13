@@ -146,12 +146,12 @@ export function TeamRegistrationForm({
           <div>
             <h2 className="text-xl font-semibold text-white">Team members</h2>
             <p className="text-sm text-muted-foreground">
-              Add one to three members. The first member is the captain and
+              Add one to four members. The first member is the captain and
               point of contact.
             </p>
           </div>
           <Button
-            disabled={fields.length >= 3 || isSubmitting}
+            disabled={fields.length >= 4 || isSubmitting}
             onClick={() => append({ ...defaultMember })}
             type="button"
             variant="secondary"

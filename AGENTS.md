@@ -141,7 +141,7 @@ PHASE 1 TEAM RULES
 
 Team registration constraints:
 - minimum 1 member
-- maximum 3 members
+- maximum 4 members
 
 Mentor system requirements:
 - mentor capacity limits

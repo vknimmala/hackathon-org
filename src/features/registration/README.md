@@ -10,7 +10,7 @@ Phase 1 constraints:
 - Before May 22, 2026 at 12:00 PM IST, only the original idea submitter can register a team for that idea by matching captain email to submitter email.
 - After May 22, 2026 at 12:00 PM IST, remaining submitted or approved ideas are available in the shared team formation pool.
 - Minimum 1 team member.
-- Maximum 3 team members.
+- Maximum 4 team members.
 - Store audit-friendly registration changes.
 
 Implemented routes:
@@ -18,7 +18,7 @@ Implemented routes:
 - `/register/participant` shows the participant timeline and links to idea submission and team registration.
 - `/register/idea` captures participant ideas for admin review.
 - `/register/team` creates a team for an available idea and hides ideas already claimed by active teams.
-- `/registrations/[registrationId]/edit` loads an existing team registration, allows editing team details and one to three active members, and writes an `audit_logs` row after a successful update.
+- `/registrations/[registrationId]/edit` loads an existing team registration, allows editing team details and one to four active members, and writes an `audit_logs` row after a successful update.
 
 Registration editing scope:
 - Editable fields are team name, organization, optional project summary, and member full name, email, and role.

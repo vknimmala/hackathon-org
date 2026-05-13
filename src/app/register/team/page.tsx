@@ -57,7 +57,7 @@ export default async function TeamRegistrationRoute() {
                   Register a team around an available idea.
                 </CardTitle>
                 <CardDescription className="text-base leading-7">
-                  Team captains choose an unclaimed idea, add one to three
+                  Team captains choose an unclaimed idea, add one to four
                   members, and become the point of contact for mentor
                   coordination.
                 </CardDescription>
@@ -85,10 +85,10 @@ export default async function TeamRegistrationRoute() {
                 <span className="mb-2 inline-flex size-11 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
                   <Users aria-hidden="true" className="size-5" />
                 </span>
-                <CardTitle>One to three members</CardTitle>
+                <CardTitle>One to four members</CardTitle>
                 <CardDescription className="leading-6">
                   The form and database keep the Phase 1 team size rule aligned:
-                  minimum one member, maximum three members.
+                  minimum one member, maximum four members.
                 </CardDescription>
               </CardHeader>
             </Card>
