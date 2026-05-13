@@ -101,7 +101,7 @@ supabase/
 | `/register/idea` | Participant idea submission before review |
 | `/register/team` | Approved-idea team registration |
 | `/register/volunteer` | Volunteer registration for contact details, preferred roles, and availability notes |
-| `/registrations/[registrationId]/edit` | Registration editing foundation |
+| `/registrations/[registrationId]/edit` | Edit an existing team registration and audit successful updates |
 | `/admin` | Organizer idea review dashboard for approving or rejecting submitted ideas |
 | `/admin/mentors` | Organizer mentor profile list and create form |
 
@@ -127,6 +127,7 @@ Key Phase 1 constraints:
 
 - Participants submit ideas before team creation.
 - Team registration requires an approved idea submission.
+- Registration editing loads an existing non-deleted team, active team members, and linked idea context; successful updates write `audit_logs.before_state` and `audit_logs.after_state`.
 - Organizer review updates `idea_submissions.status`, `reviewed_at`, and `review_notes`, then writes an `audit_logs` row for approval or rejection.
 - Team member count is enforced at a maximum of 3 active members.
 - App validation enforces minimum 1 team member.
@@ -174,6 +175,8 @@ Optional for Phase 1 notifications:
 | `src/lib/env.ts` | Zod-backed environment validation |
 | `src/features/admin/actions/idea-review-actions.ts` | Service-role idea approval/rejection action with audit logging |
 | `src/features/admin/queries/idea-review-queries.ts` | Service-role submitted idea list query for the organizer dashboard |
+| `src/features/registration/actions/registration-actions.ts` | Idea submission, approved team registration, and team registration edit actions with audit logging |
+| `src/features/registration/queries/registration-edit-queries.ts` | Service-role team registration edit lookup for team, member, and linked idea context |
 | `src/features/mentors/actions/mentor-actions.ts` | Service-role mentor profile creation action with audit logging |
 | `src/features/mentors/queries/mentor-queries.ts` | Service-role mentor list query for organizer mentor management |
 | `src/features/volunteers/actions/volunteer-registration-actions.ts` | Service-role volunteer registration action with audit logging |

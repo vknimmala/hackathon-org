@@ -57,5 +57,43 @@ export const teamRegistrationSchema = z
     });
   });
 
+export const teamMemberEditSchema = teamMemberSchema.extend({
+  id: z.string().uuid().optional(),
+});
+
+export const teamRegistrationEditSchema = z
+  .object({
+    members: z
+      .array(teamMemberEditSchema)
+      .min(1, "Add at least one team member.")
+      .max(3, "A team can have at most three members."),
+    organization: z.enum(["surgevector", "taxila"]),
+    projectSummary: z.string().max(1000).optional(),
+    registrationId: z
+      .string()
+      .uuid({ message: "Enter a valid registration ID." }),
+    teamName: z.string().min(2, "Enter a team name.").max(120),
+  })
+  .superRefine((value, context) => {
+    const memberEmails = new Set<string>();
+
+    value.members.forEach((member, index) => {
+      const email = member.email.toLowerCase();
+
+      if (memberEmails.has(email)) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Each member email must be unique.",
+          path: ["members", index, "email"],
+        });
+      }
+
+      memberEmails.add(email);
+    });
+  });
+
 export type IdeaSubmissionInput = z.infer<typeof ideaSubmissionSchema>;
+export type TeamRegistrationEditInput = z.infer<
+  typeof teamRegistrationEditSchema
+>;
 export type TeamRegistrationInput = z.infer<typeof teamRegistrationSchema>;
