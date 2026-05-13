@@ -501,6 +501,96 @@ Findings:
 - P2: Docs should describe the new cream/white, orange, black, and subtle glass guidance so future landing edits remain aligned.
 - P3: Visual validation remains manual unless a browser smoke harness is added later; lint and typecheck are the required validation commands for this task.
 
+## Paper-Based Registration Editing Simulation
+
+Date: 2026-05-13
+
+### Scenario: Participant opens an existing team registration for editing
+
+Initial state:
+
+- Route `/registrations/[registrationId]/edit` receives a team registration UUID.
+- The existing registration lives in `teams`, is linked to an approved idea through `idea_submissions`, and has one to three active `team_members`.
+- Supabase service-role access is used for the Phase 1 foundation until auth ownership and RLS policies are finalized.
+
+Execution:
+
+- Server route validates the registration ID shape before querying.
+- Query loads the non-deleted `teams` row, active `team_members`, and linked idea details when present.
+- Page renders an error state when Supabase configuration or query execution fails.
+- Page renders a not-found state when no active team exists for the ID.
+- Page renders an empty-member notice when the team exists but has no active members, while the edit form still requires at least one member before save.
+- Client form initializes with team name, organization, project summary, and current member details.
+
+Object state:
+
+- Database state is read-only during initial render.
+- Form state starts with loaded team and member values.
+- No approval workflow, mentor assignment, realtime collaboration, or advanced permission layer is created.
+
+Findings:
+
+- P0: None.
+- P1: Server-side validation must remain authoritative because the client form can be bypassed.
+- P1: Missing registration rows must not throw a route crash; they should show a not-found state.
+- P2: Keep the route on the existing service-role MVP assumption and document that auth ownership checks remain a later hardening task.
+
+### Scenario: Participant saves valid registration edits
+
+Initial state:
+
+- A team row exists with one to three active members.
+- User edits team name, organization, optional project summary, and member full name, email, or role fields.
+- Submitted members include at least one member and no more than three members.
+
+Execution:
+
+- Client-side Zod validation checks text limits, organization, team size, and duplicate member emails.
+- Server action validates the same payload again.
+- Server action reads existing team and member rows as `before_state`.
+- Server action updates the team row and synchronizes member rows by updating retained members, inserting new members, and soft-deleting removed members.
+- Server action fetches the updated team and active members as `after_state`.
+- Server action writes an `audit_logs` row with action `updated`, entity table `teams`, and source metadata.
+- Route revalidates after a successful update and the form shows a success state.
+
+Object state:
+
+- Team state changes only for editable fields: `name`, `organization`, and `project_summary`.
+- Member state changes for active member details and primary contact ordering; the first submitted member remains primary.
+- Removed members keep auditability through `deleted_at` instead of hard deletion.
+- Idea approval status, team status, mentor assignment, points, and admin review state remain unchanged.
+
+Findings:
+
+- P0: None.
+- P1: Member synchronization must avoid creating more than three active members before removals are applied.
+- P1: Audit logging should happen after successful updates and should surface a clear error if it fails.
+- P2: Duplicate emails must be blocked before database writes to avoid unique constraint failures.
+
+### Scenario: Invalid or stale edit submission
+
+Initial state:
+
+- User submits a malformed registration ID, removes all members, adds more than three members, duplicates member emails, or submits a member ID that does not belong to the team.
+
+Execution:
+
+- Zod validation rejects malformed IDs, missing team names, invalid organization values, invalid member details, duplicate emails, and invalid team sizes.
+- Server action returns a friendly error when the team no longer exists.
+- Server action rejects member IDs outside the team before writing any member changes.
+- No audit log is written when validation or lookup fails before updates.
+
+Object state:
+
+- Existing team and member rows remain unchanged for validation and lookup failures.
+- Audit log state remains unchanged for rejected submissions.
+
+Findings:
+
+- P0: None.
+- P1: Cross-team member IDs must be rejected to avoid accidental edits to another registration.
+- P2: Focused automated tests can be added after a test runner exists; for now, lint and typecheck validate implementation shape.
+
 ## Open TODOs
 
 - Add RLS policies when auth roles and ownership flows are implemented.
