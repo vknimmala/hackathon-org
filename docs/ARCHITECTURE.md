@@ -52,6 +52,9 @@ src/
       textarea.tsx
   features/
     admin/
+      actions/
+      components/
+      queries/
     gamification/
     landing/
     mentors/
@@ -75,6 +78,7 @@ src/
   utils/
     format.ts
   validations/
+    admin.ts
     mentor.ts
     registration.ts
     volunteer.ts
@@ -93,7 +97,7 @@ supabase/
 | `/register/team` | Approved-idea team registration |
 | `/register/volunteer` | Volunteer registration foundation |
 | `/registrations/[registrationId]/edit` | Registration editing foundation |
-| `/admin` | Admin dashboard foundation |
+| `/admin` | Organizer idea review dashboard for approving or rejecting submitted ideas |
 | `/admin/mentors` | Mentor management foundation |
 
 ## Database Schema
@@ -118,6 +122,7 @@ Key Phase 1 constraints:
 
 - Participants submit ideas before team creation.
 - Team registration requires an approved idea submission.
+- Organizer review updates `idea_submissions.status`, `reviewed_at`, and `review_notes`, then writes an `audit_logs` row for approval or rejection.
 - Team member count is enforced at a maximum of 3 active members.
 - App validation enforces minimum 1 team member.
 - Mentor capacity is modeled with `capacity`, `current_team_count`, and `is_available`.
@@ -159,6 +164,8 @@ Optional for Phase 1 notifications:
 | `src/lib/supabase/server.ts` | Server Component and server action client |
 | `src/lib/supabase/middleware.ts` | Session refresh helper, not activated until auth routes need it |
 | `src/lib/env.ts` | Zod-backed environment validation |
+| `src/features/admin/actions/idea-review-actions.ts` | Service-role idea approval/rejection action with audit logging |
+| `src/features/admin/queries/idea-review-queries.ts` | Service-role submitted idea list query for the organizer dashboard |
 | `supabase/migrations/001_phase_1_initial_schema.sql` | Phase 1 foundation PostgreSQL schema |
 | `supabase/migrations/002_idea_first_registration_flow.sql` | Participant idea intake and approved team linkage |
 
@@ -238,9 +245,9 @@ Use this only when the feature needs the folder. Do not create abstractions befo
 1. Finalize project setup and Supabase connection.
 2. Build polished landing page. Completed for SurgeVector Hackathon.
 3. Apply and verify Supabase schema.
-4. Implement idea submission and approved team registration with React Hook Form and Zod.
-5. Implement volunteer registration.
-6. Build admin dashboard summary cards and tables.
+4. Implement idea submission and approved team registration with React Hook Form and Zod. Completed.
+5. Build simple admin idea review with approval, rejection, review notes, and audit logs. Completed.
+6. Implement volunteer registration.
 7. Add mentor management and manual assignment controls.
 8. Add registration editing with audit log writes.
 9. Add simple gamification and leaderboard views.
