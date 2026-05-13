@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { isSharedTeamFormationOpen } from "@/lib/constants";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/server";
 import type { Database, Json } from "@/types/database";
 import {
@@ -98,11 +99,13 @@ export async function submitIdeaAction(
       metadata: { source: "participant_idea_form" },
     });
 
+    revalidatePath("/register/team");
+
     return {
       ok: true,
       id: data.id,
       message:
-        "Idea submitted. The review panel will vet it before team registration opens.",
+        "Idea submitted. You can register a team for your own idea now, or let it enter the shared pool after idea submission closes.",
     };
   } catch (error) {
     return {
@@ -384,8 +387,9 @@ export async function submitTeamRegistrationAction(
     const supabase = createSupabaseServiceRoleClient();
     const { data: idea, error: ideaError } = await supabase
       .from("idea_submissions")
-      .select("id, status")
-      .eq("id", values.approvedIdeaId)
+      .select("id, participant_email, status")
+      .eq("id", values.ideaSubmissionId)
+      .is("deleted_at", null)
       .maybeSingle();
 
     if (ideaError) {
@@ -402,16 +406,50 @@ export async function submitTeamRegistrationAction(
       };
     }
 
-    if (idea.status !== "approved") {
+    if (idea.status !== "submitted" && idea.status !== "approved") {
+      return {
+        ok: false,
+        message: "This idea is not available for team registration.",
+      };
+    }
+
+    const { data: existingClaims, error: claimsError } = await supabase
+      .from("teams")
+      .select("id")
+      .eq("idea_submission_id", values.ideaSubmissionId)
+      .is("deleted_at", null)
+      .limit(1);
+
+    if (claimsError) {
+      return {
+        ok: false,
+        message: claimsError.message,
+      };
+    }
+
+    if (existingClaims.length > 0) {
       return {
         ok: false,
         message:
-          "This idea is not approved yet. Team registration opens after review approval.",
+          "This idea has already been claimed by another team. Please choose a different available idea.",
+      };
+    }
+
+    const primaryContactEmail = values.members[0]?.email.toLowerCase();
+
+    if (
+      !isSharedTeamFormationOpen() &&
+      primaryContactEmail !== idea.participant_email.toLowerCase()
+    ) {
+      return {
+        ok: false,
+        message:
+          "Before May 22 at 12:00 PM IST, only the original idea submitter can register a team for this idea.",
       };
     }
 
     const teamRecord = {
-      idea_submission_id: values.approvedIdeaId,
+      idea_submission_id: values.ideaSubmissionId,
       name: values.teamName,
       organization: values.organization,
       project_summary: values.projectSummary || null,
@@ -459,14 +497,17 @@ export async function submitTeamRegistrationAction(
       },
       entity_id: team.id,
       entity_table: "teams",
-      metadata: { source: "approved_idea_team_registration" },
+      metadata: { source: "idea_claim_team_registration" },
     });
+
+    revalidatePath("/leaderboard");
+    revalidatePath("/register/team");
 
     return {
       ok: true,
       id: team.id,
       message:
-        "Team registered. Mentor assignment will be coordinated after admin review.",
+        "Team registered. The selected idea is now claimed for your team.",
     };
   } catch (error) {
     return {

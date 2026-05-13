@@ -43,21 +43,21 @@ const heroMetrics = [
 const primaryRoutes: PrimaryRoute[] = [
   {
     description:
-      "Register yourself and submit the AI idea you want reviewed for the hackathon.",
-    href: "/register/idea" as Route,
-    label: "Submit your idea",
+      "Choose participant or volunteer registration, then follow the right Phase 1 path.",
+    href: "/register" as Route,
+    label: "Register now",
   },
   {
     description:
-      "Create a team only after the idea has been vetted and approved.",
-    href: "/register/team",
-    label: "Register approved team",
+      "See the participant timeline for idea submission and team formation windows.",
+    href: "/register/participant",
+    label: "Participant timeline",
   },
   {
     description:
-      "Help run check-ins, logistics, participant support, and event coordination.",
-    href: "/register/volunteer",
-    label: "Volunteer for the event",
+      "Track simple participation points, badges, and completion progress.",
+    href: "/leaderboard",
+    label: "View leaderboard",
   },
 ];
 
@@ -71,14 +71,14 @@ const phaseOneFeatures: FeatureCard[] = [
   },
   {
     description:
-      "Organizers review each idea and mark it approved or rejected before teams form.",
+      "Idea submission stays individual, so every idea has a clear owner and contact.",
     icon: UserRoundCheck,
     label: "02",
-    title: "Organizer Review",
+    title: "Named Idea Owner",
   },
   {
     description:
-      "Approved ideas move into compact teams of one to three members.",
+      "Team captains claim an available idea and register one to three members.",
     icon: ShieldCheck,
     label: "03",
     title: "Team Formation",
@@ -93,9 +93,9 @@ const phaseOneFeatures: FeatureCard[] = [
 ];
 
 const operatingSteps = [
-  "Register yourself and submit the AI idea you want to build.",
-  "Organizers review the idea before team creation.",
-  "Approved ideas can form teams with one to three members.",
+  "Submit ideas under your own name before May 22 at 12:00 PM IST.",
+  "Register as captain for your own idea immediately, or wait for the shared pool.",
+  "After May 22, remaining available ideas can be claimed by teams.",
   "Mentors are coordinated after team creation so teams can prepare for the build.",
 ];
 
@@ -108,7 +108,7 @@ const participationBenefits = [
   },
   {
     description:
-      "Get focused guidance from mentors as your approved idea moves toward build time.",
+      "Get focused guidance from mentors as your selected idea moves toward build time.",
     icon: UserRoundCheck,
     title: "Mentorship From Experts",
   },
@@ -131,19 +131,19 @@ export default function LandingFoundationPage() {
     <main className="relative min-h-screen overflow-hidden bg-[#fff8ef] text-[#15110d]">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_12%,rgba(255,106,0,0.24),transparent_28rem),radial-gradient(circle_at_86%_8%,rgba(255,255,255,0.92),transparent_22rem),radial-gradient(circle_at_74%_68%,rgba(255,183,77,0.18),transparent_28rem),linear-gradient(135deg,#fff8ef_0%,#fffaf6_48%,#f6eadf_100%)]"
+        className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_15%_12%,rgba(255,106,0,0.24),transparent_28rem),radial-gradient(circle_at_86%_8%,rgba(255,255,255,0.92),transparent_22rem),radial-gradient(circle_at_74%_68%,rgba(255,183,77,0.18),transparent_28rem),linear-gradient(135deg,#fff8ef_0%,#fffaf6_48%,#f6eadf_100%)]"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(17,17,17,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(17,17,17,0.035)_1px,transparent_1px)] bg-[size:72px_72px]"
+        className="pointer-events-none fixed inset-0 bg-[linear-gradient(rgba(17,17,17,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(17,17,17,0.035)_1px,transparent_1px)] bg-[size:72px_72px]"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent"
+        className="pointer-events-none fixed inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent"
       />
 
-      <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-20 px-6 py-8 sm:px-8 lg:px-10">
-        <header className="flex items-center justify-between gap-6">
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col px-6 sm:px-8 lg:px-10">
+        <header className="sticky top-0 z-20 flex items-center justify-between gap-6 py-6">
           <Link
             aria-label="SurgeVector Hackathon home"
             className="group inline-flex items-center gap-3 rounded-full border border-orange-200/70 bg-white/70 px-3 py-2 text-sm font-semibold shadow-[0_18px_60px_rgba(17,17,17,0.08)] backdrop-blur-xl transition hover:border-primary/60"
@@ -162,52 +162,35 @@ export default function LandingFoundationPage() {
           >
             <Button
               asChild
-              className="text-[#2a1b10] hover:bg-primary/10 hover:text-[#111111]"
-              size="sm"
-              variant="ghost"
-            >
-              <Link href={"/register/idea" as Route}>Participant</Link>
-            </Button>
-            <Button
-              asChild
-              className="text-[#2a1b10] hover:bg-primary/10 hover:text-[#111111]"
-              size="sm"
-              variant="ghost"
-            >
-              <Link href="/admin">Organizer</Link>
-            </Button>
-            <Button
-              asChild
               className="border-[#111111] bg-[#111111] text-white hover:bg-primary"
               size="sm"
               variant="secondary"
             >
-              <Link href="/register/volunteer">Volunteer</Link>
+              <Link href="/register">Register now</Link>
             </Button>
           </nav>
         </header>
 
-        <section className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+        <section className="grid min-h-[calc(100svh-5.75rem)] content-center gap-12 py-14 sm:py-16 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-14 lg:py-20">
           <FadeIn className="space-y-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-primary shadow-[0_0_36px_rgba(255,106,0,0.16)] backdrop-blur-xl">
               <Sparkles aria-hidden="true" className="size-4" />
               2026 Internal AI Hackathon
             </div>
             <div className="space-y-5">
-              <h1 className="max-w-5xl text-balance text-5xl font-semibold tracking-[-0.05em] text-[#15110d] sm:text-6xl lg:text-7xl">
-                SurgeVector Hackathon is where AI ideas become working
-                prototypes.
+              <h1 className="max-w-5xl text-balance text-5xl font-semibold tracking-[-0.05em] text-[#15110d] sm:text-6xl lg:text-[4.25rem] lg:leading-[0.95] xl:text-7xl">
+                Where AI ideas become reusable enterprise accelerators.
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-[#5f5348] sm:text-xl">
-                SurgeVector and Taxila builders start by submitting an idea,
-                then form a team after review approval and move into mentor-led
-                execution during the hackathon.
+                SurgeVector and Taxila builders submit practical ideas, form
+                focused teams, and move into mentor-led execution during the
+                hackathon.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button asChild className="h-12 px-6" size="lg">
-                <Link href={"/register/idea" as Route}>
-                  Submit your idea
+                <Link href={"/register" as Route}>
+                  Register now
                   <ArrowRight aria-hidden="true" className="size-4" />
                 </Link>
               </Button>
@@ -217,7 +200,7 @@ export default function LandingFoundationPage() {
                 size="lg"
                 variant="secondary"
               >
-                <Link href="/register/volunteer">Become a volunteer</Link>
+                <Link href="/leaderboard">View leaderboard</Link>
               </Button>
             </div>
             <dl className="grid max-w-xl grid-cols-3 gap-3">
@@ -253,7 +236,7 @@ export default function LandingFoundationPage() {
                       Event Flow
                     </p>
                     <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#15110d]">
-                      Start with an idea, then build the team.
+                      Start with registration, then pick the right path.
                     </h2>
                   </div>
                   <div className="rounded-full border border-primary/30 bg-primary/10 p-3 text-primary">
@@ -285,8 +268,11 @@ export default function LandingFoundationPage() {
           </FadeIn>
         </section>
 
-        <section aria-labelledby="phase-one-scope" className="space-y-6">
-          <FadeIn className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <section
+          aria-labelledby="phase-one-scope"
+          className="flex min-h-svh flex-col justify-center gap-10 py-20 sm:py-24 lg:py-28"
+        >
+          <FadeIn className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <div className="space-y-3">
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
                 Hackathon Details
@@ -295,16 +281,16 @@ export default function LandingFoundationPage() {
                 className="max-w-3xl text-3xl font-semibold tracking-tight text-[#15110d] sm:text-4xl"
                 id="phase-one-scope"
               >
-                The participant journey is idea-first, review-gated, and built
-                for focused teams.
+                The participant journey separates idea ownership from team
+                formation.
               </h2>
             </div>
             <p className="max-w-md text-sm leading-6 text-[#66584c]">
-              Submit the idea, wait for organizer approval, then assemble a
-              compact team and get ready for mentor-guided build time.
+              Submit ideas as yourself, then register a compact team as captain
+              when you are ready to build or claim from the shared pool.
             </p>
           </FadeIn>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {phaseOneFeatures.map((feature, index) => {
               const Icon = feature.icon;
 
@@ -340,28 +326,32 @@ export default function LandingFoundationPage() {
           </div>
         </section>
 
-        <section className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
+        <section className="grid min-h-svh content-center gap-6 py-20 sm:py-24 lg:grid-cols-[0.78fr_1.22fr] lg:items-center lg:gap-8 lg:py-28">
           <FadeIn>
-            <Card className="h-full border-[#111111]/10 bg-[#111111] text-white shadow-[0_24px_90px_rgba(17,17,17,0.18)]">
+            <Card className="h-full overflow-hidden border-orange-200/70 bg-white/75 text-[#15110d] shadow-[0_18px_70px_rgba(17,17,17,0.08)]">
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-primary via-[#111111] to-primary"
+              />
               <CardHeader>
-                <div className="mb-2 inline-flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-[0_0_32px_rgba(255,106,0,0.3)]">
+                <div className="mb-2 inline-flex size-12 items-center justify-center rounded-2xl bg-[#111111] text-white shadow-[0_0_32px_rgba(255,106,0,0.24)]">
                   <CalendarDays aria-hidden="true" className="size-6" />
                 </div>
                 <CardTitle className="text-3xl">Participant flow</CardTitle>
-                <CardDescription className="text-base leading-7 text-white/70">
+                <CardDescription className="text-base leading-7 text-[#66584c]">
                   SurgeVector Hackathon keeps the participant flow simple:
-                  participants submit ideas, the panel reviews them, and
-                  approved teams move into mentor coordination.
+                  participants submit ideas under their own name, then team
+                  captains claim ideas and coordinate the build group.
                 </CardDescription>
               </CardHeader>
             </Card>
           </FadeIn>
           <FadeIn transition={{ delay: 0.06, duration: 0.35 }}>
             <Card className="h-full border-orange-200/60 bg-white/70 text-[#15110d] shadow-[0_18px_70px_rgba(17,17,17,0.08)]">
-              <ol className="grid gap-4 sm:grid-cols-2">
+              <ol className="grid gap-6 sm:grid-cols-2">
                 {operatingSteps.map((step, index) => (
                   <li
-                    className="rounded-xl border border-orange-200/70 bg-[#fffaf4]/80 p-4"
+                    className="rounded-xl border border-orange-200/70 bg-[#fffaf4]/80 p-5"
                     key={step}
                   >
                     <span className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
@@ -379,9 +369,9 @@ export default function LandingFoundationPage() {
 
         <section
           aria-labelledby="why-participate"
-          className="space-y-6 pb-10"
+          className="flex min-h-svh flex-col justify-center gap-10 py-20 sm:py-24 lg:py-28"
         >
-          <FadeIn className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <FadeIn className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <div className="space-y-3">
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
                 Why Participate
@@ -395,11 +385,11 @@ export default function LandingFoundationPage() {
               </h2>
             </div>
             <p className="max-w-md text-sm leading-6 text-[#66584c]">
-              These are the durable participation reasons from the flyer. Event
-              timing details stay off the page until they are final.
+              Bring a practical AI idea, learn with mentors, and showcase a
+              working prototype with builders across SurgeVector and Taxila.
             </p>
           </FadeIn>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {participationBenefits.map((benefit, index) => {
               const Icon = benefit.icon;
 

@@ -1,17 +1,23 @@
 # Registration Feature
 
-Owns participant idea intake, approved team registration, team member capture, registration editing, and shared registration validation.
+Owns the register choice flow, participant timeline, participant idea intake, team registration, team member capture, registration editing, and shared registration validation.
 
 Phase 1 constraints:
 - Participants submit ideas before team formation.
-- Team creation requires an approved idea submission.
+- Ideas are submitted under an individual participant name.
+- Team registration is separate and is led by a captain / point of contact.
+- Team registration claims an unclaimed submitted or approved idea through `teams.idea_submission_id`.
+- Before May 22, 2026 at 12:00 PM IST, only the original idea submitter can register a team for that idea by matching captain email to submitter email.
+- After May 22, 2026 at 12:00 PM IST, remaining submitted or approved ideas are available in the shared team formation pool.
 - Minimum 1 team member.
 - Maximum 3 team members.
 - Store audit-friendly registration changes.
 
 Implemented routes:
+- `/register` asks whether the user is registering as a participant or volunteer.
+- `/register/participant` shows the participant timeline and links to idea submission and team registration.
 - `/register/idea` captures participant ideas for admin review.
-- `/register/team` creates a team only after an approved idea ID is provided.
+- `/register/team` creates a team for an available idea and hides ideas already claimed by active teams.
 - `/registrations/[registrationId]/edit` loads an existing team registration, allows editing team details and one to three active members, and writes an `audit_logs` row after a successful update.
 
 Registration editing scope:

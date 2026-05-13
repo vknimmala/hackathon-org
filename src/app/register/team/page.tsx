@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { Route } from "next";
 import Link from "next/link";
-import { ArrowLeft, ClipboardCheck, Users } from "lucide-react";
+import { ArrowLeft, ClipboardCheck, Lightbulb, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,14 +10,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TeamRegistrationForm } from "@/features/registration/components/team-registration-form";
+import { getAvailableIdeasForTeamRegistration } from "@/features/registration/queries/team-registration-queries";
+import { isSharedTeamFormationOpen } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Register Team",
   description:
-    "Register a SurgeVector Hackathon team after idea approval for Phase 1 mentor coordination.",
+    "Register a SurgeVector Hackathon team around an available Phase 1 idea.",
 };
 
-export default function TeamRegistrationRoute() {
+export default async function TeamRegistrationRoute() {
+  const ideasResult = await getAvailableIdeasForTeamRegistration();
+  const isSharedPoolOpen = isSharedTeamFormationOpen();
+
   return (
     <main className="relative min-h-screen overflow-hidden px-6 py-8 sm:px-8 lg:px-10">
       <div
@@ -33,7 +38,7 @@ export default function TeamRegistrationRoute() {
             </Link>
           </Button>
           <Button asChild variant="secondary">
-            <Link href={"/register/idea" as Route}>Submit an idea first</Link>
+            <Link href={"/register/participant" as Route}>Participant timeline</Link>
           </Button>
         </header>
 
@@ -49,12 +54,12 @@ export default function TeamRegistrationRoute() {
                   Team Formation
                 </p>
                 <CardTitle className="text-4xl sm:text-5xl">
-                  Register a team after idea approval.
+                  Register a team around an available idea.
                 </CardTitle>
                 <CardDescription className="text-base leading-7">
-                  SurgeVector Hackathon teams can include one to three members.
-                  Mentor assignment comes after the approved idea is linked to
-                  a registered team.
+                  Team captains choose an unclaimed idea, add one to three
+                  members, and become the point of contact for mentor
+                  coordination.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -64,11 +69,13 @@ export default function TeamRegistrationRoute() {
                 <span className="mb-2 inline-flex size-11 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
                   <ClipboardCheck aria-hidden="true" className="size-5" />
                 </span>
-                <CardTitle>Approval required</CardTitle>
+                <CardTitle>
+                  {isSharedPoolOpen ? "Shared idea pool open" : "Owner claim window"}
+                </CardTitle>
                 <CardDescription className="leading-6">
-                  Use the approved idea ID returned by the review workflow. The
-                  server action blocks team creation until the idea status is
-                  approved.
+                  {isSharedPoolOpen
+                    ? "All remaining submitted or approved ideas can be claimed by a team."
+                    : "Until May 22 at 12:00 PM IST, the first member email must match the idea submitter email."}
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -85,20 +92,57 @@ export default function TeamRegistrationRoute() {
                 </CardDescription>
               </CardHeader>
             </Card>
+
+            <Card>
+              <CardHeader>
+                <span className="mb-2 inline-flex size-11 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
+                  <Lightbulb aria-hidden="true" className="size-5" />
+                </span>
+                <CardTitle>Ideas disappear after claim</CardTitle>
+                <CardDescription className="leading-6">
+                  The form only lists ideas not linked to an active team. The
+                  server action rechecks before saving to avoid stale claims.
+                </CardDescription>
+              </CardHeader>
+            </Card>
           </div>
 
           <Card className="h-fit">
             <CardHeader className="mb-6">
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                Approved Team Registration
+                Team Registration
               </p>
-              <CardTitle>Build the team around the vetted idea</CardTitle>
+              <CardTitle>Build the team around the selected idea</CardTitle>
               <CardDescription>
-                The first member entered here becomes the primary contact for
-                mentor coordination.
+                The first member entered here becomes the captain and primary
+                contact for mentor coordination.
               </CardDescription>
             </CardHeader>
-            <TeamRegistrationForm />
+            {!ideasResult.ok ? (
+              <Card className="mb-6 border-primary/40">
+                <CardHeader>
+                  <CardTitle>Available ideas could not be loaded</CardTitle>
+                  <CardDescription className="text-base leading-7">
+                    {ideasResult.message}
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ) : null}
+            {ideasResult.ok && ideasResult.ideas.length === 0 ? (
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle>No available ideas right now</CardTitle>
+                  <CardDescription className="text-base leading-7">
+                    Submit an idea first or check back after teams claim the
+                    shared pool.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ) : null}
+            <TeamRegistrationForm
+              availableIdeas={ideasResult.ideas}
+              isSharedPoolOpen={isSharedPoolOpen}
+            />
           </Card>
         </section>
       </div>

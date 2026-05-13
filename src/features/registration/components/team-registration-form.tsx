@@ -10,6 +10,7 @@ import {
   submitTeamRegistrationAction,
   type RegistrationActionResult,
 } from "@/features/registration/actions/registration-actions";
+import type { AvailableTeamIdea } from "@/features/registration/queries/team-registration-queries";
 import {
   teamRegistrationSchema,
   type TeamRegistrationInput,
@@ -27,12 +28,17 @@ const defaultMember = {
 };
 
 const defaultValues: TeamRegistrationInput = {
-  approvedIdeaId: "",
+  ideaSubmissionId: "",
   members: [defaultMember],
   organization: "surgevector",
   projectSummary: "",
   teamName: "",
 };
+
+interface TeamRegistrationFormProps {
+  availableIdeas: AvailableTeamIdea[];
+  isSharedPoolOpen: boolean;
+}
 
 function FieldError({ message }: { message?: string }) {
   if (!message) {
@@ -46,7 +52,10 @@ function FieldError({ message }: { message?: string }) {
   );
 }
 
-export function TeamRegistrationForm() {
+export function TeamRegistrationForm({
+  availableIdeas,
+  isSharedPoolOpen,
+}: TeamRegistrationFormProps) {
   const [result, setResult] = useState<RegistrationActionResult | null>(null);
   const {
     control,
@@ -78,14 +87,25 @@ export function TeamRegistrationForm() {
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-white">
-            Approved idea ID
-          </span>
-          <Input
-            placeholder="UUID from the approved idea submission"
-            {...register("approvedIdeaId")}
-          />
-          <FieldError message={errors.approvedIdeaId?.message} />
+          <span className="text-sm font-semibold text-white">Idea to build</span>
+          <select
+            className="h-11 w-full rounded-lg border border-border bg-black/30 px-3 text-sm text-white outline-none transition focus:border-primary/70 focus:ring-2 focus:ring-ring/50"
+            disabled={availableIdeas.length === 0 || isSubmitting}
+            {...register("ideaSubmissionId")}
+          >
+            <option value="">Select an available idea</option>
+            {availableIdeas.map((idea) => (
+              <option key={idea.id} value={idea.id}>
+                {idea.idea_title} - {idea.participant_full_name}
+              </option>
+            ))}
+          </select>
+          <p className="text-xs leading-5 text-muted-foreground">
+            {isSharedPoolOpen
+              ? "The shared idea pool is open. Claimed ideas disappear after team registration."
+              : "Before May 22 at 12:00 PM IST, only the original idea submitter can register a team for their idea."}
+          </p>
+          <FieldError message={errors.ideaSubmissionId?.message} />
         </label>
 
         <label className="space-y-2">
@@ -115,7 +135,7 @@ export function TeamRegistrationForm() {
           Team execution note
         </span>
         <Textarea
-          placeholder="Optional: add a short note about how this team will execute the approved idea."
+          placeholder="Optional: add a short note about how this team will execute the selected idea."
           {...register("projectSummary")}
         />
         <FieldError message={errors.projectSummary?.message} />
@@ -126,7 +146,8 @@ export function TeamRegistrationForm() {
           <div>
             <h2 className="text-xl font-semibold text-white">Team members</h2>
             <p className="text-sm text-muted-foreground">
-              Add one to three members. The first member is the primary contact.
+              Add one to three members. The first member is the captain and
+              point of contact.
             </p>
           </div>
           <Button
@@ -146,7 +167,7 @@ export function TeamRegistrationForm() {
           >
             <div className="mb-4 flex items-center justify-between gap-3">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">
-                Member {index + 1}
+                {index === 0 ? "Captain / Point of contact" : `Member ${index + 1}`}
               </p>
               <Button
                 disabled={fields.length === 1 || isSubmitting}
@@ -202,8 +223,12 @@ export function TeamRegistrationForm() {
         </div>
       ) : null}
 
-      <Button className="w-full sm:w-auto" disabled={isSubmitting} type="submit">
-        {isSubmitting ? "Registering team..." : "Register approved team"}
+      <Button
+        className="w-full sm:w-auto"
+        disabled={isSubmitting || availableIdeas.length === 0}
+        type="submit"
+      >
+        {isSubmitting ? "Registering team..." : "Register team"}
       </Button>
     </form>
   );

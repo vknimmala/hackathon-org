@@ -28,9 +28,9 @@ export const ideaSubmissionSchema = z.object({
 
 export const teamRegistrationSchema = z
   .object({
-    approvedIdeaId: z
+    ideaSubmissionId: z
       .string()
-      .uuid({ message: "Enter a valid approved idea ID." }),
+      .uuid({ message: "Select or enter a valid idea ID." }),
     teamName: z.string().min(2, "Enter a team name.").max(120),
     organization: z.enum(["surgevector", "taxila"]),
     projectSummary: z.string().max(1000).optional(),

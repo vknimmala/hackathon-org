@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { IdeaSubmissionForm } from "@/features/registration/components/idea-submission-form";
+import { isIdeaSubmissionOpen } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Submit Idea",
@@ -31,13 +32,15 @@ const reviewSteps = [
   },
   {
     description:
-      "After approval, create a team with one to three members and move into mentor coordination.",
+      "Create a team as captain for your own idea immediately, or join the shared idea pool after team formation opens.",
     icon: Users,
     title: "Form the team",
   },
 ];
 
 export default function IdeaRegistrationRoute() {
+  const isOpen = isIdeaSubmissionOpen();
+
   return (
     <main className="relative min-h-screen overflow-hidden px-6 py-8 sm:px-8 lg:px-10">
       <div
@@ -53,7 +56,7 @@ export default function IdeaRegistrationRoute() {
             </Link>
           </Button>
           <Button asChild variant="secondary">
-            <Link href="/register/team">Already approved?</Link>
+            <Link href="/register/participant">Participant timeline</Link>
           </Button>
         </header>
 
@@ -72,8 +75,8 @@ export default function IdeaRegistrationRoute() {
                   Submit your SurgeVector Hackathon idea.
                 </CardTitle>
                 <CardDescription className="text-base leading-7">
-                  Start with yourself and your idea. Team registration opens
-                  after the panel or admin review marks the idea as approved.
+                  Start with your own name and idea. Team formation is a
+                  separate step led by a captain or point of contact.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -114,7 +117,19 @@ export default function IdeaRegistrationRoute() {
                 hackathon.
               </CardDescription>
             </CardHeader>
-            <IdeaSubmissionForm />
+            {isOpen ? (
+              <IdeaSubmissionForm />
+            ) : (
+              <Card className="border-primary/40">
+                <CardHeader>
+                  <CardTitle>Idea submission is closed</CardTitle>
+                  <CardDescription className="text-base leading-7">
+                    Idea submission closed on May 22 at 12:00 PM IST. Continue
+                    with team registration for the remaining available ideas.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            )}
           </Card>
         </section>
       </div>
