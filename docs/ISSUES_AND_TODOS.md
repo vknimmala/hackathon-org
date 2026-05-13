@@ -202,6 +202,115 @@ Findings:
 - P1: Server-side validation must be treated as authoritative because client validation can be bypassed.
 - P3: Admin review UI can be built in the admin dashboard phase; for now, schema and copy should make the expected review state clear.
 
+## Paper-Based Admin Idea Review Simulation
+
+Date: 2026-05-13
+
+### Scenario: Admin opens idea review dashboard
+
+Initial state:
+
+- Submitted idea rows exist in `idea_submissions`.
+- Route `/admin` resolves to `src/app/(dashboard)/admin/page.tsx`.
+- No Supabase auth screens or admin session flow exist yet.
+- The minimal Phase 1 assumption is that `/admin` is used by internal organizers in a controlled environment until Supabase Auth and RLS policies are hardened.
+
+Execution:
+
+- The admin page creates a server-side Supabase service-role client.
+- The page queries non-deleted `idea_submissions` rows ordered by newest `submitted_at`.
+- Each row renders participant name, email, organization, department, idea title, problem statement, proposed solution, AI usage, current status, submitted date, and any existing review notes.
+- No scoring, judging rubric, voting, realtime updates, panel hierarchy, or super-admin role is created.
+
+Object state:
+
+- Database state is read-only during dashboard render.
+- If Supabase service configuration is missing, the dashboard should show an operational error instead of crashing the route.
+
+Findings:
+
+- P0: None.
+- P1: Admin dashboard reads use the service-role client until the ownership/admin model is ready; this must remain documented and scoped.
+- P2: The list can be card-based for Phase 1 instead of adding a reusable data table abstraction before needed.
+
+### Scenario: Admin approves a submitted idea
+
+Initial state:
+
+- One `idea_submissions` row has status `submitted`.
+- Admin enters optional review notes and selects approve.
+
+Execution:
+
+- Client form posts `ideaId`, `reviewStatus=approved`, and optional `reviewNotes` to a server action.
+- Server action validates the idea ID and status payload.
+- Server action fetches the existing idea row as `before_state`.
+- Server action updates `status` to `approved`, sets `reviewed_at` to the current timestamp, and stores trimmed `review_notes` or `null`.
+- Server action inserts an `audit_logs` row with action `approved`, the previous idea state, the updated idea state, and metadata identifying the admin idea review source.
+- `/admin` is revalidated so the new status appears.
+
+Object state:
+
+- Idea state changes from `submitted` to `approved`.
+- `reviewed_at` changes from `null` to an ISO timestamp.
+- `review_notes` changes from `null` or prior text to the latest submitted notes.
+- Audit state gains one append-only log entry.
+- Team state remains unchanged until a participant registers a team with the approved idea ID.
+
+Findings:
+
+- P0: None.
+- P1: The audit log insert must happen after a successful idea update and should surface any write failure to the admin.
+- P2: Because there is no auth session yet, `reviewed_by` and `actor_id` remain `null`; document this as the current minimal assumption.
+
+### Scenario: Admin rejects an idea
+
+Initial state:
+
+- One `idea_submissions` row has status `submitted` or `approved`.
+- Admin enters optional review notes and selects reject.
+
+Execution:
+
+- Server action validates `reviewStatus=rejected`.
+- Server action fetches the existing row, updates `status` to `rejected`, sets `reviewed_at`, and stores review notes.
+- Server action writes an `audit_logs` row with action `rejected`.
+- Team registration remains blocked because the registration action only accepts ideas with status `approved`.
+
+Object state:
+
+- Idea state changes to `rejected`.
+- No team, mentor assignment, leaderboard, or notification rows are created.
+
+Findings:
+
+- P0: None.
+- P1: Rejection must not delete or mutate the submitted idea content because organizers need auditability.
+- P2: Optional review notes are useful for organizer context, but they are not sent as email notifications in this task.
+
+### Scenario: Invalid review submission
+
+Initial state:
+
+- Admin submits a malformed idea ID, missing status, or an idea ID that no longer exists.
+
+Execution:
+
+- Zod validation rejects malformed form data before database writes.
+- Missing rows return a friendly error.
+- No idea update or audit log insert is attempted when validation or lookup fails.
+
+Object state:
+
+- Existing idea submission state remains unchanged.
+- Existing audit log state remains unchanged.
+
+Findings:
+
+- P0: None.
+- P1: Server-side validation remains authoritative because client forms can be bypassed.
+- P3: Focused automated tests can be added later when the project has a test runner; for now, lint and typecheck validate implementation shape.
+
 ## Open TODOs
 
 - Add RLS policies when auth roles and ownership flows are implemented.
