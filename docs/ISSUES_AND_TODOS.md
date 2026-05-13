@@ -458,6 +458,49 @@ Findings:
 - P1: Invalid submissions must not create partial mentor or audit records.
 - P3: Focused automated tests can be added later when the project has a test runner; for now, lint and typecheck validate implementation shape.
 
+## Paper-Based Landing Theme Refresh Simulation
+
+Date: 2026-05-13
+
+### Scenario: Render landing page with refreshed SurgeVector visual theme
+
+Initial state:
+
+- Next.js loads `src/app/layout.tsx`.
+- Global theme tokens load from `src/app/globals.css`.
+- Route `/` resolves to `src/app/(marketing)/page.tsx`.
+- Landing content arrays provide the existing Phase 1 hero metrics, registration CTAs, event flow cards, participant steps, and benefits.
+- Shared `Button`, `Card`, and `FadeIn` primitives are available.
+
+Execution:
+
+- The landing route renders the same event-focused Phase 1 content and routes.
+- The page background shifts from a dark-first canvas to a light cream/white canvas with subtle orange radial gradients.
+- Header, hero metrics, event flow links, cards, and step blocks use soft white or cream glass surfaces with orange accents and black text.
+- Primary actions still route to `/register/idea`, `/register/volunteer`, and `/admin`.
+- No registration form, admin dashboard, Supabase query, server action, database row, auth session, or future-phase feature is touched.
+
+Object state:
+
+- No Supabase client is created during the static landing render.
+- Module-level landing arrays remain unchanged in shape and continue to drive presentational UI.
+- Existing registration, volunteer, and admin routes remain the only CTA destinations.
+- Visual state changes are limited to CSS theme tokens and landing page class names.
+
+Alternative path:
+
+- On small screens, the header keeps the compact logo and hides desktop navigation while the hero, metrics, and cards stack vertically.
+- Focus-visible rings remain available through the shared `ring` theme token for keyboard navigation.
+
+Findings:
+
+- P0: None.
+- P1: Preserve Phase 1 scope by refreshing visual treatment only; do not add judging, realtime, chat, AI assistant, or infrastructure features.
+- P1: Light global tokens can affect admin and registration surfaces, so keep token changes compatible with existing `Button` and `Card` primitives instead of adding page-specific primitives.
+- P2: Landing contrast must shift text from `text-white` assumptions to black/neutral text where surfaces become cream or white.
+- P2: Docs should describe the new cream/white, orange, black, and subtle glass guidance so future landing edits remain aligned.
+- P3: Visual validation remains manual unless a browser smoke harness is added later; lint and typecheck are the required validation commands for this task.
+
 ## Open TODOs
 
 - Add RLS policies when auth roles and ownership flows are implemented.
