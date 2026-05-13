@@ -501,6 +501,137 @@ Findings:
 - P2: Docs should describe the new cream/white, orange, black, and subtle glass guidance so future landing edits remain aligned.
 - P3: Visual validation remains manual unless a browser smoke harness is added later; lint and typecheck are the required validation commands for this task.
 
+## Paper-Based Landing Polish Follow-Up Simulation
+
+Date: 2026-05-13
+
+### Scenario: Review landing page screenshot feedback
+
+Initial state:
+
+- Route `/` renders `src/app/(marketing)/page.tsx`.
+- The refreshed theme uses a cream/white canvas with orange accents.
+- The participant flow section includes one black feature card beside light step cards.
+- The why-participate intro includes explanatory implementation copy about flyer-derived reasons and hidden event timing.
+
+Execution:
+
+- User scrolls through the landing page after the theme refresh.
+- The black participant flow card visually reads as a leftover dark-theme block instead of a deliberate light-theme element.
+- The why-participate supporting sentence exposes internal content guidance instead of participant-facing event value.
+- CTA routes, registration links, admin routes, and Phase 1 content arrays remain unchanged.
+
+Object state:
+
+- No Supabase client is created.
+- No form state, auth session, database row, route, or server action changes.
+- Fixes are limited to presentational copy and landing section classes.
+
+Findings:
+
+- P0: None.
+- P1: Remove internal/planning copy from participant-facing landing content.
+- P2: Restyle the participant flow card as a light glass surface with a black accent, preserving the cream/orange theme.
+- P3: Keep the follow-up narrow and avoid redesigning admin pages, forms, or future-phase features.
+
+## Paper-Based Favicon Simulation
+
+Date: 2026-05-13
+
+### Scenario: Browser loads SurgeVector Hackathon favicon
+
+Initial state:
+
+- Next.js loads root app metadata from `src/app/layout.tsx`.
+- No existing favicon, app icon, or public image asset is present.
+- The landing theme uses orange, black, white, and cream as its primary visual palette.
+
+Execution:
+
+- Add a root-level `src/app/icon.svg` file using the Next.js App Router icon convention.
+- Browser metadata can resolve the icon without adding a custom route or dependency.
+- The SVG renders a compact orange rounded square with white `SV` lettering for small browser-tab display.
+
+Object state:
+
+- No route, form, Supabase client, auth session, database row, or server action changes.
+- The icon is a static asset and does not affect landing content or registration/admin behavior.
+
+Findings:
+
+- P0: None.
+- P1: Keep the favicon simple and brand-aligned; do not introduce generated image pipelines or additional packages.
+- P2: Text must stay high-contrast at small sizes, so use white lettering on the orange mark.
+
+## Paper-Based Spacious Landing Scroll Simulation
+
+Date: 2026-05-13
+
+### Scenario: Scroll through screen-like landing sections
+
+Initial state:
+
+- Route `/` renders `src/app/(marketing)/page.tsx`.
+- The page has four major participant-facing content groups: hero/event flow, hackathon details, participant flow, and why participate.
+- The current visual treatment uses a cream/white canvas with subtle grid texture and orange accents.
+
+Execution:
+
+- Convert the landing page from a tightly stacked long page into a normal vertical scroll page with screen-like sections.
+- Use large vertical padding and viewport-height section targets so each major group gets enough whitespace.
+- Apply proximity scroll snapping to help major sections land cleanly without creating carousel state, slideshow controls, or hidden content.
+- Keep the same Phase 1 content arrays, CTA labels, and routes.
+
+Object state:
+
+- No Supabase client is created.
+- No form state, auth session, database row, route, or server action changes.
+- The scroll behavior is CSS-only and remains accessible as normal page scrolling.
+
+Alternative path:
+
+- On smaller screens, content stacks naturally and uses minimum section height only where there is enough room.
+- If a viewport is too short for a section, normal overflow scrolling still exposes all content.
+
+Findings:
+
+- P0: None.
+- P1: Do not implement a real slideshow, carousel, route transition system, or client-side scroll state.
+- P2: Section spacing should improve screenshots by reducing partial cross-section overlap and giving each content group a clear visual pause.
+- P3: Keep copy and routes unchanged except for prior participant-facing polish.
+
+## Paper-Based Landing Scroll Stability Simulation
+
+Date: 2026-05-13
+
+### Scenario: User scrolls a small amount on the landing page
+
+Initial state:
+
+- Route `/` renders `src/app/(marketing)/page.tsx`.
+- The landing page uses screen-like section spacing.
+- The page currently has an internal `h-svh` scroll container with CSS scroll snapping.
+
+Execution:
+
+- User performs a small wheel or trackpad scroll gesture.
+- Browser applies scroll snap selection inside the internal scroll container.
+- Because sections are near full viewport height, the snap algorithm can jump multiple sections and feel like the page moved from top to bottom.
+- Replace the internal scroll container and snap classes with normal document scrolling.
+
+Object state:
+
+- No Supabase client is created.
+- No form state, auth session, database row, route, or server action changes.
+- Section spacing remains CSS-only; scroll position is left to the browser's normal document flow.
+
+Findings:
+
+- P0: None.
+- P1: Remove CSS scroll snapping from the landing page because it causes unpredictable jumps on normal scroll input.
+- P2: Keep the roomier section layout, but use plain document scrolling for stability.
+- P3: Update landing theme guidance so future edits avoid reintroducing snap behavior.
+
 ## Paper-Based Registration Editing Simulation
 
 Date: 2026-05-13
@@ -590,6 +721,114 @@ Findings:
 - P0: None.
 - P1: Cross-team member IDs must be rejected to avoid accidental edits to another registration.
 - P2: Focused automated tests can be added after a test runner exists; for now, lint and typecheck validate implementation shape.
+
+## Paper-Based Gamification and Registration Choice Simulation
+
+Date: 2026-05-13
+
+### Scenario: Visitor opens the simple leaderboard
+
+Initial state:
+
+- Existing schema includes `teams.participation_points`, `leaderboard_entries`, `achievements`, and `audit_logs`.
+- `src/features/gamification` only contains a README, so no leaderboard query or route currently exists.
+- `src/types/database.ts` does not yet expose TypeScript table types for `achievements` or `leaderboard_entries`.
+
+Execution:
+
+- Route `/leaderboard` renders as a server component.
+- The feature-local query reads non-deleted teams and non-deleted leaderboard entries using the service-role MVP pattern already used by admin and mentor pages.
+- Query code joins data in application code: entries are matched to teams by `team_id`, while teams without entries fall back to `teams.participation_points`.
+- Rows are sorted by effective points descending, with updated time as a stable secondary signal.
+- The page renders summary cards, rank cards, completion progress, and badge chips when badge data is present.
+
+Object state:
+
+- Database rows are read-only.
+- No audit log is written because leaderboard viewing has no side effect.
+- No realtime scoring, XP engine, audience voting, judging workflow, or AI recommendation state is introduced.
+
+Alternative paths:
+
+- If Supabase configuration or query execution fails, the route shows a readable error card.
+- If no teams exist, the route shows an empty state.
+- If a team has no leaderboard entry, participation points still display from the `teams` row and badges/progress stay empty.
+
+Findings:
+
+- P0: None.
+- P1: Database types must include the existing gamification tables before strongly typed queries can be added.
+- P1: Points ordering must use `leaderboard_entries.total_points` when present and `teams.participation_points` as fallback.
+- P2: Badge JSON should be parsed conservatively because the schema stores badges as JSONB.
+
+### Scenario: Visitor clicks Register Now and chooses a path
+
+Initial state:
+
+- Landing navigation currently exposes participant, organizer, and volunteer links.
+- `/register/idea`, `/register/team`, and `/register/volunteer` already exist.
+- Idea submission currently creates an individual idea submission row; team registration currently requires an approved idea ID.
+
+Execution:
+
+- Landing navigation and primary hero CTA route to `/register`.
+- `/register` presents a simple choice between participant and volunteer paths with grounded SurgeVector/Texila AI accelerator copy.
+- Participant choice routes to `/register/participant`.
+- `/register/participant` shows the event timeline and two actions: idea submission and team registration.
+- The idea submission action is shown as live until 2026-05-22 12:00 IST and closed after that timestamp.
+- Team registration remains available for an original idea owner before the cutoff and becomes the shared idea pool after the cutoff.
+
+Object state:
+
+- No database state changes occur while viewing the choice or participant timeline pages.
+- Route state is derived from the current server time only.
+- Organizer/admin links are not removed as routes; they are simply no longer primary landing nav actions.
+
+Findings:
+
+- P0: None.
+- P1: Do not delete existing admin, volunteer, or registration routes while changing landing navigation.
+- P1: Date-gated UI must not be the only enforcement for team claiming; the team registration server action must validate claims.
+- P2: Keep the new pages static/server-rendered and avoid client-side wizards or complex state.
+
+### Scenario: Participant registers a team around an idea
+
+Initial state:
+
+- Idea rows live in `idea_submissions`.
+- Team rows link to ideas through `teams.idea_submission_id`.
+- A unique database constraint on `teams.idea_submission_id` does not exist, so application validation must prevent duplicate active claims in Phase 1.
+
+Execution:
+
+- Team route loads available, non-deleted, non-rejected ideas that are not already linked to an active team.
+- The client form captures the selected idea, team name, organization, optional execution note, and one to three members.
+- The first member is treated as captain / point of contact.
+- Server action validates the payload and looks up the idea.
+- Server action rejects deleted, rejected, or already claimed ideas.
+- Before 2026-05-22 12:00 IST, server action allows registration only when the first member email matches the original idea submitter email.
+- From 2026-05-22 12:00 IST onward, any unclaimed, non-rejected idea can be selected.
+- Successful registration inserts `teams`, inserts team members, writes an `audit_logs` row, and revalidates `/register/team` and `/leaderboard`.
+
+Object state:
+
+- `idea_submissions` remain separate individual idea records.
+- `teams.idea_submission_id` becomes the claim marker for the chosen idea.
+- `team_members.is_primary_contact` marks the first member as captain / point of contact.
+- Rejected ideas and already claimed ideas are never offered as valid team registrations.
+
+Alternative paths:
+
+- Malformed idea IDs, missing teams, duplicate member emails, too many members, and stale claims return friendly errors without writes.
+- If a concurrent team claim happens between page load and submit, the action rechecks active teams and rejects the second claim.
+- If audit logging fails after inserts, the action returns the existing partial-audit warning pattern instead of hiding the problem.
+
+Findings:
+
+- P0: None.
+- P1: Recheck claim status inside the server action to prevent stale available-idea selections.
+- P1: The pre-cutoff owner exception needs email matching because auth ownership is not implemented in the MVP yet.
+- P2: A future database unique partial index on active `teams.idea_submission_id` would strengthen this invariant after schema migration policy is decided.
 
 ## Open TODOs
 
