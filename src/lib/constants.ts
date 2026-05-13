@@ -5,35 +5,39 @@ export const TEAM_MEMBER_LIMITS = {
   max: 4,
 } as const;
 
-export const IDEA_SUBMISSION_CLOSES_AT = new Date("2026-05-22T06:30:00.000Z");
+// Idea submission window closes May 18 at 11:59 PM IST (18:30 UTC).
+export const IDEA_SUBMISSION_CLOSES_AT = new Date("2026-05-18T18:30:00.000Z");
 
-export const TEAM_FORMATION_POOL_OPENS_AT = IDEA_SUBMISSION_CLOSES_AT;
+// Shared team formation pool opens May 22 at 12:00 PM IST (06:30 UTC).
+export const TEAM_FORMATION_POOL_OPENS_AT = new Date(
+  "2026-05-22T06:30:00.000Z",
+);
 
 export const HACKATHON_TIMELINE = [
   {
     date: "May 14, 2026",
-    description: "Event introduction, problem statement, and guidelines.",
-    title: "Kick-off and briefing",
+    description: "Event introduction, problem statements, and guidelines shared with all participants.",
+    title: "Kick-off",
   },
   {
-    date: "May 14-22, 2026",
-    description: "Submit individual AI ideas before May 22 at 12:00 PM IST.",
-    title: "Idea submission",
+    date: "May 14–18, 2026",
+    description: "Submit your AI idea individually before May 18. Every idea needs a named owner.",
+    title: "Idea Generation",
   },
   {
-    date: "May 22, 2026",
-    description: "Team captains claim ideas and register one to four members.",
-    title: "Team formation",
+    date: "By May 22, 2026",
+    description: "Form a team of up to four members. Original submitters can register first; shared pool opens May 22.",
+    title: "Team Formation",
   },
   {
-    date: "May 22-29, 2026",
-    description: "Build prototypes with focused mentor coordination.",
-    title: "Development",
+    date: "May 22–29, 2026",
+    description: "Build your prototype during the sprint with support from mentors and engineering leads.",
+    title: "Development Sprint",
   },
   {
     date: "May 30, 2026",
-    description: "Final presentations and judging.",
-    title: "Demo day",
+    description: "Present your working prototype to judges and peers on demo day.",
+    title: "Demo Day",
   },
 ] as const;
 
