@@ -4,7 +4,6 @@ import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
   CalendarDays,
-  CheckCircle2,
   Gauge,
   LayoutDashboard,
   ShieldCheck,
@@ -100,24 +99,30 @@ const operatingSteps = [
   "Mentors are coordinated after team creation so teams can prepare for the build.",
 ];
 
-const signalCards = [
+const participationBenefits = [
   {
     description:
-      "Built for the 2026 internal AI hackathon for SurgeVector and Taxila teams.",
-    icon: CheckCircle2,
-    title: "Internal Event",
-  },
-  {
-    description:
-      "Bring a clear problem, a practical AI prototype plan, and a focused build mindset.",
+      "Turn an internal workflow, customer pain, or operational gap into a practical AI prototype.",
     icon: Sparkles,
-    title: "What To Bring",
+    title: "Build Real-World AI Solutions",
   },
   {
     description:
-      "Participants move from idea submission to review, team formation, and mentor-guided build time.",
+      "Get focused guidance from mentors as your approved idea moves toward build time.",
+    icon: UserRoundCheck,
+    title: "Mentorship From Experts",
+  },
+  {
+    description:
+      "Showcase strong prototypes and earn visibility for thoughtful execution.",
     icon: Trophy,
-    title: "Event Milestones",
+    title: "Prizes And Recognition",
+  },
+  {
+    description:
+      "Work with SurgeVector and Taxila builders across teams while growing your AI delivery skills.",
+    icon: Users,
+    title: "Network And Grow",
   },
 ];
 
@@ -151,6 +156,9 @@ export default function LandingFoundationPage() {
             aria-label="Primary landing actions"
             className="hidden items-center gap-2 md:flex"
           >
+            <Button asChild size="sm" variant="ghost">
+              <Link href={"/register/idea" as Route}>Participant</Link>
+            </Button>
             <Button asChild size="sm" variant="ghost">
               <Link href="/admin">Organizer</Link>
             </Button>
@@ -341,32 +349,52 @@ export default function LandingFoundationPage() {
         </section>
 
         <section
-          aria-label="Hackathon signals"
-          className="grid gap-4 pb-10 md:grid-cols-3"
+          aria-labelledby="why-participate"
+          className="space-y-6 pb-10"
         >
-          {signalCards.map((signal, index) => {
-            const Icon = signal.icon;
-
-            return (
-              <FadeIn
-                className="h-full"
-                key={signal.title}
-                transition={{ delay: index * 0.04, duration: 0.35 }}
+          <FadeIn className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div className="space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+                Why Participate
+              </p>
+              <h2
+                className="max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl"
+                id="why-participate"
               >
-                <Card className="h-full">
-                  <CardHeader>
-                    <span className="mb-2 inline-flex size-11 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
-                      <Icon aria-hidden="true" className="size-5" />
-                    </span>
-                    <CardTitle>{signal.title}</CardTitle>
-                    <CardDescription className="leading-6">
-                      {signal.description}
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-              </FadeIn>
-            );
-          })}
+                Build useful AI prototypes, learn with mentors, and grow across
+                teams.
+              </h2>
+            </div>
+            <p className="max-w-md text-sm leading-6 text-muted-foreground">
+              These are the durable participation reasons from the flyer. Event
+              timing details stay off the page until they are final.
+            </p>
+          </FadeIn>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {participationBenefits.map((benefit, index) => {
+              const Icon = benefit.icon;
+
+              return (
+                <FadeIn
+                  className="h-full"
+                  key={benefit.title}
+                  transition={{ delay: index * 0.04, duration: 0.35 }}
+                >
+                  <Card className="h-full">
+                    <CardHeader>
+                      <span className="mb-2 inline-flex size-11 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
+                        <Icon aria-hidden="true" className="size-5" />
+                      </span>
+                      <CardTitle>{benefit.title}</CardTitle>
+                      <CardDescription className="leading-6">
+                        {benefit.description}
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                </FadeIn>
+              );
+            })}
+          </div>
         </section>
       </div>
     </main>
