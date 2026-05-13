@@ -55,58 +55,49 @@ const primaryRoutes: PrimaryRoute[] = [
     label: "Register approved team",
   },
   {
-    description: "Join the operations crew for check-ins, logistics, and support.",
+    description:
+      "Help run check-ins, logistics, participant support, and event coordination.",
     href: "/register/volunteer",
-    label: "Volunteer for operations",
-  },
-  {
-    description: "Review registrations, mentor capacity, and basic activity signals.",
-    href: "/admin",
-    label: "Open admin dashboard",
-  },
-  {
-    description: "Manage availability, capacity, reassignment, and overrides.",
-    href: "/admin/mentors",
-    label: "Coordinate mentors",
+    label: "Volunteer for the event",
   },
 ];
 
 const phaseOneFeatures: FeatureCard[] = [
   {
     description:
-      "Participants begin individually by submitting a focused AI prototype idea.",
+      "Start as an individual participant by sharing the AI prototype idea you want to build.",
     icon: Users,
     label: "01",
     title: "Idea Submission",
   },
   {
     description:
-      "Admins, mentors, or the panel vet ideas with a simple submitted, approved, or rejected status.",
+      "Organizers review each idea and mark it approved or rejected before teams form.",
     icon: UserRoundCheck,
     label: "02",
-    title: "Review Gate",
+    title: "Organizer Review",
   },
   {
     description:
-      "Approved ideas move into team formation with one to three members.",
+      "Approved ideas move into compact teams of one to three members.",
     icon: ShieldCheck,
     label: "03",
     title: "Team Formation",
   },
   {
     description:
-      "Mentor assignment and volunteer coordination follow through Phase 1 admin operations.",
+      "Mentors help teams stay focused once the hackathon build phase begins.",
     icon: LayoutDashboard,
     label: "04",
-    title: "Mentor Coordination",
+    title: "Mentor Support",
   },
 ];
 
 const operatingSteps = [
   "Register yourself and submit the AI idea you want to build.",
-  "The panel, mentors, or admins review the idea before team creation.",
+  "Organizers review the idea before team creation.",
   "Approved ideas can form teams with one to three members.",
-  "Mentors are assigned after team creation, with simple progress and badge tracking.",
+  "Mentors are coordinated after team creation so teams can prepare for the build.",
 ];
 
 const signalCards = [
@@ -118,15 +109,15 @@ const signalCards = [
   },
   {
     description:
-      "Premium glass surfaces, clear hierarchy, keyboard-friendly CTAs, and responsive layouts.",
+      "Bring a clear problem, a practical AI prototype plan, and a focused build mindset.",
     icon: Sparkles,
-    title: "Polished Experience",
+    title: "What To Bring",
   },
   {
     description:
-      "Simple progress, badges, and leaderboard signals without realtime scoring complexity.",
+      "Participants move from idea submission to review, team formation, and mentor-guided build time.",
     icon: Trophy,
-    title: "Simple Gamification",
+    title: "Event Milestones",
   },
 ];
 
@@ -161,7 +152,7 @@ export default function LandingFoundationPage() {
             className="hidden items-center gap-2 md:flex"
           >
             <Button asChild size="sm" variant="ghost">
-              <Link href="/admin">Admin</Link>
+              <Link href="/admin">Organizer</Link>
             </Button>
             <Button asChild size="sm" variant="secondary">
               <Link href="/register/volunteer">Volunteer</Link>
@@ -224,7 +215,7 @@ export default function LandingFoundationPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                      Hackathon Flow
+                      Event Flow
                     </p>
                     <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white">
                       Start with an idea, then build the team.
@@ -274,8 +265,8 @@ export default function LandingFoundationPage() {
               </h2>
             </div>
             <p className="max-w-md text-sm leading-6 text-muted-foreground">
-              Submit the idea, wait for approval, then assemble a compact team
-              and coordinate with mentors without adding future-phase systems.
+              Submit the idea, wait for organizer approval, then assemble a
+              compact team and get ready for mentor-guided build time.
             </p>
           </FadeIn>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -323,7 +314,7 @@ export default function LandingFoundationPage() {
                 </div>
                 <CardTitle className="text-3xl">Participant flow</CardTitle>
                 <CardDescription className="text-base leading-7">
-                  SurgeVector Hackathon keeps the first event flow simple:
+                  SurgeVector Hackathon keeps the participant flow simple:
                   participants submit ideas, the panel reviews them, and
                   approved teams move into mentor coordination.
                 </CardDescription>
