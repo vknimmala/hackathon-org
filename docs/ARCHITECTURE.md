@@ -7,7 +7,7 @@ SurgeVector Hackathon 2026 uses a focused Next.js 15 App Router application back
 The app is organized around Phase 1 features:
 
 - `landing` for the public-facing entry experience.
-- `registration` for team registration and registration editing.
+- `registration` for idea intake, approved team registration, and registration editing.
 - `volunteers` for volunteer signups and coordination views.
 - `mentors` for mentor profiles, capacity, availability, and reassignment controls.
 - `admin` for dashboard composition and operational actions.
@@ -32,6 +32,8 @@ src/
         edit/
           page.tsx
     register/
+      idea/
+        page.tsx
       team/
         page.tsx
       volunteer/
@@ -46,12 +48,16 @@ src/
     ui/
       button.tsx
       card.tsx
+      input.tsx
+      textarea.tsx
   features/
     admin/
     gamification/
     landing/
     mentors/
     registration/
+      actions/
+      components/
     volunteers/
   hooks/
     use-media-query.ts
@@ -75,14 +81,16 @@ src/
 supabase/
   migrations/
     001_phase_1_initial_schema.sql
+    002_idea_first_registration_flow.sql
 ```
 
 ## Route Structure
 
 | Route | Purpose |
 | --- | --- |
-| `/` | Polished HackVector landing page with Phase 1 CTAs and route map |
-| `/register/team` | Team registration foundation |
+| `/` | SurgeVector Hackathon landing page with event details and Phase 1 CTAs |
+| `/register/idea` | Participant idea submission before review |
+| `/register/team` | Approved-idea team registration |
 | `/register/volunteer` | Volunteer registration foundation |
 | `/registrations/[registrationId]/edit` | Registration editing foundation |
 | `/admin` | Admin dashboard foundation |
@@ -90,9 +98,10 @@ supabase/
 
 ## Database Schema
 
-The initial migration defines:
+The initial migrations define:
 
 - `users`
+- `idea_submissions`
 - `teams`
 - `team_members`
 - `mentors`
@@ -107,6 +116,8 @@ All operational tables use UUID primary keys and timestamps. Soft delete columns
 
 Key Phase 1 constraints:
 
+- Participants submit ideas before team creation.
+- Team registration requires an approved idea submission.
 - Team member count is enforced at a maximum of 3 active members.
 - App validation enforces minimum 1 team member.
 - Mentor capacity is modeled with `capacity`, `current_team_count`, and `is_available`.
@@ -148,7 +159,8 @@ Optional for Phase 1 notifications:
 | `src/lib/supabase/server.ts` | Server Component and server action client |
 | `src/lib/supabase/middleware.ts` | Session refresh helper, not activated until auth routes need it |
 | `src/lib/env.ts` | Zod-backed environment validation |
-| `supabase/migrations/001_phase_1_initial_schema.sql` | Phase 1 PostgreSQL schema |
+| `supabase/migrations/001_phase_1_initial_schema.sql` | Phase 1 foundation PostgreSQL schema |
+| `supabase/migrations/002_idea_first_registration_flow.sql` | Participant idea intake and approved team linkage |
 
 ## Dependency List
 
@@ -179,13 +191,13 @@ Initial primitives:
 - `CardHeader`
 - `CardTitle`
 - `CardDescription`
+- `Input`
+- `Textarea`
 - `RoutePlaceholder`
 - `FadeIn`
 
 Recommended next primitives:
 
-- `Input`
-- `Textarea`
 - `Select`
 - `Checkbox`
 - `Badge`
@@ -217,16 +229,16 @@ Use this only when the feature needs the folder. Do not create abstractions befo
 1. Create a Supabase project.
 2. Copy `.env.example` to `.env.local`.
 3. Add Supabase URL and anon key.
-4. Apply `supabase/migrations/001_phase_1_initial_schema.sql`.
+4. Apply all migrations in `supabase/migrations/` in order.
 5. Run `npm run dev`.
 6. Run `npm run lint` and `npm run typecheck` before opening a PR.
 
 ## Suggested Implementation Order
 
 1. Finalize project setup and Supabase connection.
-2. Build polished landing page. Completed for HackVector by SurgeVector.
+2. Build polished landing page. Completed for SurgeVector Hackathon.
 3. Apply and verify Supabase schema.
-4. Implement team registration with React Hook Form and Zod.
+4. Implement idea submission and approved team registration with React Hook Form and Zod.
 5. Implement volunteer registration.
 6. Build admin dashboard summary cards and tables.
 7. Add mentor management and manual assignment controls.

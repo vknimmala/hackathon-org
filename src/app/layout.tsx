@@ -3,11 +3,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "HackVector by SurgeVector",
-    template: "%s | HackVector by SurgeVector",
+    default: "SurgeVector Hackathon",
+    template: "%s | SurgeVector Hackathon",
   },
   description:
-    "Phase 1 MVP registration platform for HackVector by SurgeVector.",
+    "Internal AI hackathon registration for SurgeVector and Taxila teams.",
 };
 
 export default function RootLayout({

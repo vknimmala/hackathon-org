@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Route } from "next";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
@@ -28,17 +29,30 @@ interface FeatureCard {
   title: string;
 }
 
+interface PrimaryRoute {
+  description: string;
+  href: Route;
+  label: string;
+}
+
 const heroMetrics = [
   { label: "Team size", value: "1-3" },
-  { label: "Phase", value: "MVP" },
-  { label: "Tracks", value: "AI" },
+  { label: "Eligibility", value: "SV + Taxila" },
+  { label: "Entry", value: "Idea first" },
 ];
 
-const primaryRoutes = [
+const primaryRoutes: PrimaryRoute[] = [
   {
-    description: "Create a HackVector team for SurgeVector and Taxila builders.",
+    description:
+      "Register yourself and submit the AI idea you want reviewed for the hackathon.",
+    href: "/register/idea" as Route,
+    label: "Submit your idea",
+  },
+  {
+    description:
+      "Create a team only after the idea has been vetted and approved.",
     href: "/register/team",
-    label: "Register your team",
+    label: "Register approved team",
   },
   {
     description: "Join the operations crew for check-ins, logistics, and support.",
@@ -59,51 +73,58 @@ const primaryRoutes = [
 
 const phaseOneFeatures: FeatureCard[] = [
   {
-    description: "Fast team onboarding with clear eligibility, member limits, and editing paths.",
+    description:
+      "Participants begin individually by submitting a focused AI prototype idea.",
     icon: Users,
     label: "01",
-    title: "Team Registration",
+    title: "Idea Submission",
   },
   {
-    description: "Volunteer intake for availability, preferred roles, and coordination notes.",
+    description:
+      "Admins, mentors, or the panel vet ideas with a simple submitted, approved, or rejected status.",
     icon: UserRoundCheck,
     label: "02",
-    title: "Volunteer Registration",
+    title: "Review Gate",
   },
   {
-    description: "Simple capacity visibility, availability toggles, and manual mentor reassignment.",
+    description:
+      "Approved ideas move into team formation with one to three members.",
     icon: ShieldCheck,
     label: "03",
-    title: "Mentor Management",
+    title: "Team Formation",
   },
   {
-    description: "Focused operational view for registrations, mentor load, volunteers, and analytics.",
+    description:
+      "Mentor assignment and volunteer coordination follow through Phase 1 admin operations.",
     icon: LayoutDashboard,
     label: "04",
-    title: "Admin Dashboard",
+    title: "Mentor Coordination",
   },
 ];
 
 const operatingSteps = [
-  "Register teams with one to three members.",
-  "Capture volunteer availability for event operations.",
-  "Assign mentors with capacity and override visibility.",
-  "Track completion progress, points, badges, and basic analytics.",
+  "Register yourself and submit the AI idea you want to build.",
+  "The panel, mentors, or admins review the idea before team creation.",
+  "Approved ideas can form teams with one to three members.",
+  "Mentors are assigned after team creation, with simple progress and badge tracking.",
 ];
 
 const signalCards = [
   {
-    description: "Scoped to landing, registrations, mentors, volunteers, admin, analytics, gamification, and notifications.",
+    description:
+      "Built for the 2026 internal AI hackathon for SurgeVector and Taxila teams.",
     icon: CheckCircle2,
-    title: "Phase 1 Only",
+    title: "Internal Event",
   },
   {
-    description: "Premium glass surfaces, clear hierarchy, keyboard-friendly CTAs, and responsive layouts.",
+    description:
+      "Premium glass surfaces, clear hierarchy, keyboard-friendly CTAs, and responsive layouts.",
     icon: Sparkles,
-    title: "Enterprise Polish",
+    title: "Polished Experience",
   },
   {
-    description: "Simple progress, badges, and leaderboard signals without realtime scoring complexity.",
+    description:
+      "Simple progress, badges, and leaderboard signals without realtime scoring complexity.",
     icon: Trophy,
     title: "Simple Gamification",
   },
@@ -124,15 +145,15 @@ export default function LandingFoundationPage() {
       <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-20 px-6 py-8 sm:px-8 lg:px-10">
         <header className="flex items-center justify-between gap-6">
           <Link
-            aria-label="HackVector home"
+            aria-label="SurgeVector Hackathon home"
             className="group inline-flex items-center gap-3 rounded-full border border-border bg-white/8 px-3 py-2 text-sm font-semibold backdrop-blur-xl transition hover:border-primary/60"
             href="/"
           >
             <span className="flex size-9 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_0_28px_rgba(255,106,0,0.42)]">
-              HV
+              SV
             </span>
             <span className="hidden text-white sm:inline">
-              HackVector by SurgeVector
+              SurgeVector Hackathon
             </span>
           </Link>
           <nav
@@ -152,23 +173,23 @@ export default function LandingFoundationPage() {
           <FadeIn className="space-y-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-primary shadow-[0_0_36px_rgba(255,106,0,0.16)] backdrop-blur-xl">
               <Sparkles aria-hidden="true" className="size-4" />
-              Phase 1 MVP Registration Platform
+              2026 Internal AI Hackathon
             </div>
             <div className="space-y-5">
               <h1 className="max-w-5xl text-balance text-5xl font-semibold tracking-[-0.05em] text-white sm:text-6xl lg:text-7xl">
-                HackVector is where SurgeVector teams turn AI ideas into
-                shipped prototypes.
+                SurgeVector Hackathon is where AI ideas become working
+                prototypes.
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
-                A polished internal hackathon hub for SurgeVector and Taxila
-                teams, focused on registrations, volunteers, mentors, admin
-                operations, basic analytics, and simple gamification.
+                SurgeVector and Taxila builders start by submitting an idea,
+                then form a team after review approval and move into mentor-led
+                execution during the hackathon.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button asChild className="h-12 px-6" size="lg">
-                <Link href="/register/team">
-                  Register your team
+                <Link href={"/register/idea" as Route}>
+                  Submit your idea
                   <ArrowRight aria-hidden="true" className="size-4" />
                 </Link>
               </Button>
@@ -203,10 +224,10 @@ export default function LandingFoundationPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                      Command Preview
+                      Hackathon Flow
                     </p>
                     <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white">
-                      Registration operations, ready for launch.
+                      Start with an idea, then build the team.
                     </h2>
                   </div>
                   <div className="rounded-full border border-primary/30 bg-primary/10 p-3 text-primary">
@@ -242,20 +263,19 @@ export default function LandingFoundationPage() {
           <FadeIn className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div className="space-y-3">
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                Phase 1 Scope
+                Hackathon Details
               </p>
               <h2
                 className="max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl"
                 id="phase-one-scope"
               >
-                Everything needed to open registration and coordinate the first
-                wave.
+                The participant journey is idea-first, review-gated, and built
+                for focused teams.
               </h2>
             </div>
             <p className="max-w-md text-sm leading-6 text-muted-foreground">
-              Built for speed and operational clarity: no heavy infrastructure,
-              no future-phase collaboration systems, just the MVP surface that
-              teams need now.
+              Submit the idea, wait for approval, then assemble a compact team
+              and coordinate with mentors without adding future-phase systems.
             </p>
           </FadeIn>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -301,11 +321,11 @@ export default function LandingFoundationPage() {
                 <div className="mb-2 inline-flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-[0_0_32px_rgba(255,106,0,0.3)]">
                   <CalendarDays aria-hidden="true" className="size-6" />
                 </div>
-                <CardTitle className="text-3xl">MVP operating flow</CardTitle>
+                <CardTitle className="text-3xl">Participant flow</CardTitle>
                 <CardDescription className="text-base leading-7">
-                  The landing page sets expectations for a focused registration
-                  platform, then routes participants and coordinators into the
-                  correct Phase 1 entry points.
+                  SurgeVector Hackathon keeps the first event flow simple:
+                  participants submit ideas, the panel reviews them, and
+                  approved teams move into mentor coordination.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -330,7 +350,7 @@ export default function LandingFoundationPage() {
         </section>
 
         <section
-          aria-label="Platform signals"
+          aria-label="Hackathon signals"
           className="grid gap-4 pb-10 md:grid-cols-3"
         >
           {signalCards.map((signal, index) => {

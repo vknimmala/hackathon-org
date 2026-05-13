@@ -4,9 +4,10 @@ Phase 1 MVP foundation for an internal AI Hackathon Management Platform serving 
 
 ## Scope
 
-This repository is currently scoped to the Phase 1 registration platform:
+This repository is currently scoped to the Phase 1 hackathon registration MVP:
 - Landing page foundation
-- Team registration foundation
+- Participant idea submission
+- Approved team registration foundation
 - Volunteer registration foundation
 - Mentor management foundation
 - Admin dashboard foundation
@@ -41,4 +42,4 @@ Future-phase systems such as microservices, Kubernetes, Redis, GraphQL, vector d
 ## Documentation
 
 - Architecture, routes, setup, dependencies, UI primitives, and implementation order: `docs/ARCHITECTURE.md`
-- Supabase schema: `supabase/migrations/001_phase_1_initial_schema.sql`
+- Supabase schema: `supabase/migrations/`

@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
+import { createClient } from "@supabase/supabase-js";
 import { getServerEnv } from "@/lib/env";
 import type { Database } from "@/types/database";
 
@@ -24,6 +25,25 @@ export async function createSupabaseServerClient() {
             // Server Components cannot always set cookies; middleware can refresh sessions.
           }
         },
+      },
+    },
+  );
+}
+
+export function createSupabaseServiceRoleClient() {
+  const env = getServerEnv();
+
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error("Supabase service role key is not configured.");
+  }
+
+  return createClient<Database>(
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.SUPABASE_SERVICE_ROLE_KEY,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
       },
     },
   );
