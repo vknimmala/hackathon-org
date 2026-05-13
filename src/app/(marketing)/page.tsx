@@ -3,10 +3,7 @@ import type { Route } from "next";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
-  CalendarDays,
   Gauge,
-  LayoutDashboard,
-  ShieldCheck,
   Sparkles,
   Trophy,
   UserRoundCheck,
@@ -20,13 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-interface FeatureCard {
-  description: string;
-  icon: LucideIcon;
-  label: string;
-  title: string;
-}
+import { HACKATHON_TIMELINE } from "@/lib/constants";
 
 interface PrimaryRoute {
   description: string;
@@ -34,72 +25,34 @@ interface PrimaryRoute {
   label: string;
 }
 
+interface ParticipationBenefit {
+  description: string;
+  icon: LucideIcon;
+  title: string;
+}
+
 const heroMetrics = [
-  { label: "Team size", value: "1-4" },
+  { label: "Team size", value: "1–4" },
   { label: "Eligibility", value: "SurgeVector, Taxilla" },
-  { label: "Entry", value: "Idea first" },
+  { label: "Dates", value: "May 14–30" },
 ];
 
 const primaryRoutes: PrimaryRoute[] = [
   {
     description:
-      "Choose participant or volunteer registration, then follow the right Phase 1 path.",
+      "Choose participant or volunteer registration, then follow the right path.",
     href: "/register" as Route,
     label: "Register now",
   },
   {
     description:
-      "See the participant timeline for idea submission and team formation windows.",
-    href: "/register/participant",
-    label: "Participant timeline",
-  },
-  {
-    description:
-      "Track simple participation points, badges, and completion progress.",
+      "Track participation points, badges, and completion progress.",
     href: "/leaderboard",
     label: "View leaderboard",
   },
 ];
 
-const phaseOneFeatures: FeatureCard[] = [
-  {
-    description:
-      "Start as an individual participant by sharing the AI prototype idea you want to build.",
-    icon: Users,
-    label: "01",
-    title: "Idea Submission",
-  },
-  {
-    description:
-      "Idea submission stays individual, so every idea has a clear owner and contact.",
-    icon: UserRoundCheck,
-    label: "02",
-    title: "Named Idea Owner",
-  },
-  {
-    description:
-      "Team captains claim an available idea and register one to four members.",
-    icon: ShieldCheck,
-    label: "03",
-    title: "Team Formation",
-  },
-  {
-    description:
-      "Mentors help teams stay focused once the hackathon build phase begins.",
-    icon: LayoutDashboard,
-    label: "04",
-    title: "Mentor Support",
-  },
-];
-
-const operatingSteps = [
-  "Submit ideas under your own name before May 22 at 12:00 PM IST.",
-  "Register as captain for your own idea immediately, or wait for the shared pool.",
-  "After May 22, remaining available ideas can be claimed by teams.",
-  "Mentors are coordinated after team creation so teams can prepare for the build.",
-];
-
-const participationBenefits = [
+const participationBenefits: ParticipationBenefit[] = [
   {
     description:
       "Turn an internal workflow, customer pain, or operational gap into a practical AI prototype.",
@@ -108,7 +61,7 @@ const participationBenefits = [
   },
   {
     description:
-      "Get focused guidance from mentors as your selected idea moves toward build time.",
+      "Get focused guidance from mentors as your idea moves toward the build phase.",
     icon: UserRoundCheck,
     title: "Mentorship From Experts",
   },
@@ -143,6 +96,7 @@ export default function LandingFoundationPage() {
       />
 
       <div className="relative mx-auto flex w-full max-w-7xl flex-col px-6 sm:px-8 lg:px-10">
+        {/* ── Header ── */}
         <header className="sticky top-0 z-20 flex items-center justify-between gap-6 py-6">
           <Link
             aria-label="SurgeVector Hackathon home"
@@ -171,6 +125,7 @@ export default function LandingFoundationPage() {
           </nav>
         </header>
 
+        {/* ── Hero ── */}
         <section className="grid min-h-[calc(100svh-5.75rem)] content-center gap-12 py-14 sm:py-16 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-14 lg:py-20">
           <FadeIn className="space-y-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-primary shadow-[0_0_36px_rgba(255,106,0,0.16)] backdrop-blur-xl">
@@ -179,12 +134,11 @@ export default function LandingFoundationPage() {
             </div>
             <div className="space-y-5">
               <h1 className="max-w-5xl text-balance text-5xl font-semibold tracking-[-0.05em] text-[#15110d] sm:text-6xl lg:text-[4.25rem] lg:leading-[0.95] xl:text-7xl">
-                Where AI ideas become reusable enterprise accelerators.
+                Build Reusable AI Accelerators, Together.
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-[#5f5348] sm:text-xl">
-                SurgeVector and Taxilla builders submit practical ideas, form
-                focused teams, and move into mentor-led execution during the
-                hackathon.
+                SurgeVector and Taxilla builders submit ideas, form focused
+                teams, and sprint to build working AI prototypes.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -233,10 +187,10 @@ export default function LandingFoundationPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                      Event Flow
+                      Quick start
                     </p>
                     <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#15110d]">
-                      Start with registration, then pick the right path.
+                      Submit an idea. Form a team. Build.
                     </h2>
                   </div>
                   <div className="rounded-full border border-primary/30 bg-primary/10 p-3 text-primary">
@@ -268,108 +222,116 @@ export default function LandingFoundationPage() {
           </FadeIn>
         </section>
 
+        {/* ── Journey / Timeline ── */}
         <section
-          aria-labelledby="phase-one-scope"
-          className="flex min-h-svh flex-col justify-center gap-10 py-20 sm:py-24 lg:py-28"
+          aria-labelledby="event-timeline"
+          className="py-20 sm:py-24 lg:py-28"
         >
-          <FadeIn className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-            <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                Hackathon Details
-              </p>
-              <h2
-                className="max-w-3xl text-3xl font-semibold tracking-tight text-[#15110d] sm:text-4xl"
-                id="phase-one-scope"
-              >
-                The participant journey separates idea ownership from team
-                formation.
-              </h2>
-            </div>
-            <p className="max-w-md text-sm leading-6 text-[#66584c]">
-              Submit ideas as yourself, then register a compact team as captain
-              when you are ready to build or claim from the shared pool.
+          <FadeIn className="mb-12 space-y-3 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+              Journey
             </p>
+            <h2
+              className="text-3xl font-semibold tracking-tight text-[#15110d] sm:text-4xl"
+              id="event-timeline"
+            >
+              Five milestones, from idea to demo day.
+            </h2>
           </FadeIn>
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            {phaseOneFeatures.map((feature, index) => {
-              const Icon = feature.icon;
 
-              return (
-                <FadeIn
-                  className="h-full"
-                  key={feature.title}
-                  transition={{ delay: index * 0.04, duration: 0.35 }}
-                >
-                  <Card className="h-full overflow-hidden border-orange-200/60 bg-white/70 text-[#15110d] shadow-[0_18px_70px_rgba(17,17,17,0.08)]">
+          {/* Desktop: hexathon-style horizontal alternating timeline */}
+          <FadeIn>
+            <div className="hidden lg:block" aria-label="Hackathon timeline">
+              {/* Above labels — even indices (0, 2, 4) */}
+              <div className="grid grid-cols-5">
+                {HACKATHON_TIMELINE.map((item, index) =>
+                  index % 2 === 0 ? (
                     <div
-                      aria-hidden="true"
-                      className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-primary/80 via-[#111111]/20 to-transparent"
-                    />
-                    <CardHeader>
-                      <div className="flex items-center justify-between gap-4">
-                        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                          {feature.label}
-                        </span>
-                        <span className="rounded-full border border-orange-200/70 bg-primary/10 p-2 text-primary">
-                          <Icon aria-hidden="true" className="size-5" />
-                        </span>
-                      </div>
-                      <CardTitle className="text-2xl">{feature.title}</CardTitle>
-                      <CardDescription className="text-sm leading-6 text-[#66584c]">
-                        {feature.description}
-                      </CardDescription>
-                    </CardHeader>
-                  </Card>
-                </FadeIn>
-              );
-            })}
+                      className="flex flex-col items-center pb-5 text-center"
+                      key={item.title}
+                    >
+                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+                        {item.date}
+                      </p>
+                      <h3 className="mt-2 px-2 text-sm font-semibold text-[#15110d]">
+                        {item.title}
+                      </h3>
+                      <p className="mt-1.5 px-2 text-xs leading-5 text-[#66584c]">
+                        {item.description}
+                      </p>
+                    </div>
+                  ) : (
+                    <div aria-hidden="true" key={item.title} />
+                  ),
+                )}
+              </div>
+
+              {/* Dots row with connecting line */}
+              <div className="relative grid grid-cols-5 items-center py-1">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-x-[10%] top-1/2 h-0.5 -translate-y-1/2 bg-gradient-to-r from-primary/30 via-primary/70 to-primary/30"
+                />
+                {HACKATHON_TIMELINE.map((item) => (
+                  <div className="flex justify-center" key={item.title}>
+                    <div className="relative z-10 flex size-5 items-center justify-center rounded-full border-2 border-primary bg-[#fff8ef] shadow-[0_0_16px_rgba(255,106,0,0.4)]">
+                      <div className="size-2.5 rounded-full bg-primary" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Below labels — odd indices (1, 3) */}
+              <div className="grid grid-cols-5">
+                {HACKATHON_TIMELINE.map((item, index) =>
+                  index % 2 !== 0 ? (
+                    <div
+                      className="flex flex-col items-center pt-5 text-center"
+                      key={item.title}
+                    >
+                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+                        {item.date}
+                      </p>
+                      <h3 className="mt-2 px-2 text-sm font-semibold text-[#15110d]">
+                        {item.title}
+                      </h3>
+                      <p className="mt-1.5 px-2 text-xs leading-5 text-[#66584c]">
+                        {item.description}
+                      </p>
+                    </div>
+                  ) : (
+                    <div aria-hidden="true" key={item.title} />
+                  ),
+                )}
+              </div>
+            </div>
+          </FadeIn>
+
+          {/* Mobile / tablet: card grid fallback */}
+          <div className="grid gap-5 sm:grid-cols-2 lg:hidden">
+            {HACKATHON_TIMELINE.map((item) => (
+              <Card
+                className="border-orange-200/60 bg-white/70 text-[#15110d] shadow-[0_18px_70px_rgba(17,17,17,0.08)]"
+                key={item.title}
+              >
+                <CardHeader>
+                  <span className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">
+                    {item.date}
+                  </span>
+                  <CardTitle className="text-base">{item.title}</CardTitle>
+                  <CardDescription className="text-sm leading-6 text-[#66584c]">
+                    {item.description}
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
           </div>
         </section>
 
-        <section className="grid min-h-svh content-center gap-6 py-20 sm:py-24 lg:grid-cols-[0.78fr_1.22fr] lg:items-center lg:gap-8 lg:py-28">
-          <FadeIn>
-            <Card className="h-full overflow-hidden border-orange-200/70 bg-white/75 text-[#15110d] shadow-[0_18px_70px_rgba(17,17,17,0.08)]">
-              <div
-                aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-primary via-[#111111] to-primary"
-              />
-              <CardHeader>
-                <div className="mb-2 inline-flex size-12 items-center justify-center rounded-2xl bg-[#111111] text-white shadow-[0_0_32px_rgba(255,106,0,0.24)]">
-                  <CalendarDays aria-hidden="true" className="size-6" />
-                </div>
-                <CardTitle className="text-3xl">Participant flow</CardTitle>
-                <CardDescription className="text-base leading-7 text-[#66584c]">
-                  SurgeVector Hackathon keeps the participant flow simple:
-                  participants submit ideas under their own name, then team
-                  captains claim ideas and coordinate the build group.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </FadeIn>
-          <FadeIn transition={{ delay: 0.06, duration: 0.35 }}>
-            <Card className="h-full border-orange-200/60 bg-white/70 text-[#15110d] shadow-[0_18px_70px_rgba(17,17,17,0.08)]">
-              <ol className="grid gap-6 sm:grid-cols-2">
-                {operatingSteps.map((step, index) => (
-                  <li
-                    className="rounded-xl border border-orange-200/70 bg-[#fffaf4]/80 p-5"
-                    key={step}
-                  >
-                    <span className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                      Step {index + 1}
-                    </span>
-                    <p className="mt-3 text-sm leading-6 text-[#2a1b10]">
-                      {step}
-                    </p>
-                  </li>
-                ))}
-              </ol>
-            </Card>
-          </FadeIn>
-        </section>
-
+        {/* ── Why Participate ── */}
         <section
           aria-labelledby="why-participate"
-          className="flex min-h-svh flex-col justify-center gap-10 py-20 sm:py-24 lg:py-28"
+          className="flex flex-col justify-center gap-10 py-20 sm:py-24 lg:py-28"
         >
           <FadeIn className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <div className="space-y-3">
