@@ -5,6 +5,7 @@
 SurgeVector Hackathon 2026 uses a focused Next.js 15 App Router application backed by Supabase. The foundation keeps UI, feature ownership, validation, services, and database access separate without introducing future-phase infrastructure.
 
 The app is organized around Phase 1 features:
+
 - `landing` for the public-facing entry experience.
 - `registration` for team registration and registration editing.
 - `volunteers` for volunteer signups and coordination views.
@@ -80,7 +81,7 @@ supabase/
 
 | Route | Purpose |
 | --- | --- |
-| `/` | Landing foundation and Phase 1 route map |
+| `/` | Polished HackVector landing page with Phase 1 CTAs and route map |
 | `/register/team` | Team registration foundation |
 | `/register/volunteer` | Volunteer registration foundation |
 | `/registrations/[registrationId]/edit` | Registration editing foundation |
@@ -90,6 +91,7 @@ supabase/
 ## Database Schema
 
 The initial migration defines:
+
 - `users`
 - `teams`
 - `team_members`
@@ -104,6 +106,7 @@ The initial migration defines:
 All operational tables use UUID primary keys and timestamps. Soft delete columns are included where records may need to remain auditable. Audit logs are append-only and record actor, entity, action, before state, after state, and metadata.
 
 Key Phase 1 constraints:
+
 - Team member count is enforced at a maximum of 3 active members.
 - App validation enforces minimum 1 team member.
 - Mentor capacity is modeled with `capacity`, `current_team_count`, and `is_available`.
@@ -115,6 +118,7 @@ Key Phase 1 constraints:
 Tailwind CSS is configured through `src/app/globals.css` using a CSS-first theme. The palette is intentionally limited to orange, black, white, muted glass surfaces, and accessible focus rings.
 
 Reusable visual rules:
+
 - Use black backgrounds with controlled orange gradients.
 - Use `bg-card/80`, `border-border`, and `backdrop-blur-xl` for glass surfaces.
 - Keep motion subtle and use `FadeIn` for short entrance transitions.
@@ -123,14 +127,17 @@ Reusable visual rules:
 ## Environment Variables
 
 Required:
+
 - `NEXT_PUBLIC_APP_URL`
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
 Server-only:
+
 - `SUPABASE_SERVICE_ROLE_KEY`
 
 Optional for Phase 1 notifications:
+
 - `EMAIL_FROM`
 
 ## Supabase Integration Structure
@@ -146,6 +153,7 @@ Optional for Phase 1 notifications:
 ## Dependency List
 
 Runtime:
+
 - Next.js 15
 - React
 - Supabase JS and Supabase SSR helpers
@@ -156,6 +164,7 @@ Runtime:
 - Lucide React icons
 
 Development:
+
 - TypeScript
 - ESLint with Next config
 - Tailwind CSS
@@ -164,6 +173,7 @@ Development:
 ## Recommended Reusable UI Primitives
 
 Initial primitives:
+
 - `Button`
 - `Card`
 - `CardHeader`
@@ -173,6 +183,7 @@ Initial primitives:
 - `FadeIn`
 
 Recommended next primitives:
+
 - `Input`
 - `Textarea`
 - `Select`
@@ -213,7 +224,7 @@ Use this only when the feature needs the folder. Do not create abstractions befo
 ## Suggested Implementation Order
 
 1. Finalize project setup and Supabase connection.
-2. Build polished landing page.
+2. Build polished landing page. Completed for HackVector by SurgeVector.
 3. Apply and verify Supabase schema.
 4. Implement team registration with React Hook Form and Zod.
 5. Implement volunteer registration.
