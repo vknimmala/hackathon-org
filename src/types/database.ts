@@ -190,6 +190,60 @@ export interface Database {
         Update: Partial<Database["public"]["Tables"]["mentors"]["Insert"]>;
         Relationships: [];
       };
+      achievements: {
+        Row: {
+          id: string;
+          code: string;
+          name: string;
+          description: string | null;
+          points: number;
+          badge_icon: string | null;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          code: string;
+          name: string;
+          description?: string | null;
+          points?: number;
+          badge_icon?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["achievements"]["Insert"]>;
+        Relationships: [];
+      };
+      leaderboard_entries: {
+        Row: {
+          id: string;
+          team_id: string;
+          total_points: number;
+          badges: Json;
+          completion_progress: number;
+          created_at: string;
+          updated_at: string;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          team_id: string;
+          total_points?: number;
+          badges?: Json;
+          completion_progress?: number;
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+        };
+        Update: Partial<
+          Database["public"]["Tables"]["leaderboard_entries"]["Insert"]
+        >;
+        Relationships: [];
+      };
       volunteer_registrations: {
         Row: {
           id: string;
