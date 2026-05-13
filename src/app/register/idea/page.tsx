@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, ClipboardCheck, Lightbulb, Users } from "lucide-react";
+import { ArrowLeft, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,121 +14,81 @@ import { isIdeaSubmissionOpen } from "@/lib/constants";
 export const metadata: Metadata = {
   title: "Submit Idea",
   description:
-    "Submit your SurgeVector Hackathon idea for Phase 1 review before team registration.",
+    "Submit your SurgeVector Hackathon AI idea before May 22.",
 };
-
-const reviewSteps = [
-  {
-    description:
-      "Share your participant details and the AI idea you want to prototype.",
-    icon: Lightbulb,
-    title: "Submit the idea",
-  },
-  {
-    description:
-      "Admins, mentors, or the panel vet the idea with a simple Phase 1 approval status.",
-    icon: ClipboardCheck,
-    title: "Review and approve",
-  },
-  {
-    description:
-      "Create a team as captain for your own idea immediately, or join the shared idea pool after team formation opens.",
-    icon: Users,
-    title: "Form the team",
-  },
-];
 
 export default function IdeaRegistrationRoute() {
   const isOpen = isIdeaSubmissionOpen();
 
   return (
-    <main className="relative min-h-screen overflow-hidden px-6 py-8 sm:px-8 lg:px-10">
+    <main className="relative min-h-screen overflow-hidden bg-[#fff8ef] text-[#15110d] px-6 py-8 sm:px-8 lg:px-10">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(255,106,0,0.28),transparent_28rem),radial-gradient(circle_at_86%_12%,rgba(255,255,255,0.12),transparent_22rem)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_12%,rgba(255,106,0,0.20),transparent_28rem),radial-gradient(circle_at_86%_8%,rgba(255,255,255,0.90),transparent_22rem)]"
       />
-      <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-8">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(17,17,17,0.030)_1px,transparent_1px),linear-gradient(90deg,rgba(17,17,17,0.030)_1px,transparent_1px)] bg-[size:72px_72px]"
+      />
+      <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-10">
         <header className="flex items-center justify-between gap-4">
-          <Button asChild variant="ghost">
-            <Link href="/">
+          <Button asChild variant="ghost" className="text-[#15110d] hover:bg-primary/10 hover:text-[#15110d]">
+            <Link href="/register/participant">
               <ArrowLeft aria-hidden="true" className="size-4" />
-              Back to hackathon
+              Back
             </Link>
-          </Button>
-          <Button asChild variant="secondary">
-            <Link href="/register/participant">Participant timeline</Link>
           </Button>
         </header>
 
-        <section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
-          <div className="space-y-6">
-            <Card className="overflow-hidden">
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,106,0,0.18),transparent_46%,rgba(255,255,255,0.06))]"
-              />
-              <CardHeader className="relative">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                  Participant Intake
-                </p>
-                <CardTitle className="text-4xl sm:text-5xl">
-                  Submit your SurgeVector Hackathon idea.
-                </CardTitle>
-                <CardDescription className="text-base leading-7">
-                  Start with your own name and idea. Team formation is a
-                  separate step led by a captain or point of contact.
+        <section className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+          <div className="space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+              Idea Submission
+            </p>
+            <h1 className="text-4xl font-semibold tracking-tight text-[#15110d] sm:text-5xl">
+              Submit your hackathon idea.
+            </h1>
+            <p className="text-base leading-7 text-[#5f5348]">
+              Submit under your own name. You get 1 hour of priority to register
+              a team, then the idea enters the shared pool for others to claim.
+            </p>
+
+            <Card className="border-orange-200/60 bg-white/70 text-[#15110d] shadow-[0_18px_60px_rgba(17,17,17,0.07)]">
+              <CardHeader>
+                <span className="mb-2 flex size-11 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
+                  <Users aria-hidden="true" className="size-5" />
+                </span>
+                <CardTitle className="text-[#15110d]">Then form a team</CardTitle>
+                <CardDescription className="text-sm leading-6 text-[#66584c]">
+                  After submitting, go to team registration and add one to four
+                  members. The first member becomes the captain and point of
+                  contact for mentor coordination.
                 </CardDescription>
               </CardHeader>
             </Card>
-
-            <div className="grid gap-4">
-              {reviewSteps.map((step) => {
-                const Icon = step.icon;
-
-                return (
-                  <Card className="p-5" key={step.title}>
-                    <div className="flex gap-4">
-                      <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
-                        <Icon aria-hidden="true" className="size-5" />
-                      </span>
-                      <div>
-                        <h2 className="font-semibold text-white">
-                          {step.title}
-                        </h2>
-                        <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                          {step.description}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                );
-              })}
-            </div>
           </div>
 
-          <Card className="h-fit">
-            <CardHeader className="mb-6">
+          <Card className="h-fit border-orange-200/60 bg-white/80 text-[#15110d] shadow-[0_30px_80px_rgba(17,17,17,0.10)]">
+            <CardHeader className="mb-4">
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                Idea Submission
+                Your idea
               </p>
-              <CardTitle>Tell us what you want to build</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-[#15110d]">Tell us what you want to build</CardTitle>
+              <CardDescription className="text-[#66584c]">
                 Keep it focused on a prototype that can be shaped during the
-                hackathon.
+                hackathon sprint.
               </CardDescription>
             </CardHeader>
             {isOpen ? (
               <IdeaSubmissionForm />
             ) : (
-              <Card className="border-primary/40">
-                <CardHeader>
-                  <CardTitle>Idea submission is closed</CardTitle>
-                  <CardDescription className="text-base leading-7">
-                    Idea submission closed on May 22 at 12:00 PM IST. Continue
-                    with team registration for the remaining available ideas.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
+              <div className="rounded-xl border border-primary/30 bg-primary/5 p-5">
+                <p className="font-semibold text-[#15110d]">Idea submission is closed</p>
+                <p className="mt-2 text-sm leading-6 text-[#66584c]">
+                  Submission closed May 22 at 11:59 PM IST. Head to team
+                  registration to claim an available idea.
+                </p>
+              </div>
             )}
           </Card>
         </section>

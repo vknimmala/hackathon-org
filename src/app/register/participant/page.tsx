@@ -5,7 +5,6 @@ import {
   ArrowLeft,
   ArrowRight,
   CalendarDays,
-  ClipboardCheck,
   Lightbulb,
   Users,
 } from "lucide-react";
@@ -16,11 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  HACKATHON_TIMELINE,
-  isIdeaSubmissionOpen,
-  isSharedTeamFormationOpen,
-} from "@/lib/constants";
+import { HACKATHON_TIMELINE, isIdeaSubmissionOpen } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Participant Registration",
@@ -30,7 +25,8 @@ export const metadata: Metadata = {
 
 const participantActions = [
   {
-    description: "Submit an AI idea under your own name before May 18.",
+    description:
+      "Submit your AI idea before May 22. You can register a team straight away or let it enter the shared pool.",
     href: "/register/idea" as Route,
     icon: Lightbulb,
     label: "Idea submission",
@@ -38,7 +34,7 @@ const participantActions = [
   },
   {
     description:
-      "Register as captain for your idea now, or claim from the shared pool once it opens on May 22.",
+      "Register as captain for your submitted idea, or claim an available idea from the shared pool.",
     href: "/register/team" as Route,
     icon: Users,
     label: "Team registration",
@@ -46,86 +42,44 @@ const participantActions = [
   },
 ] as const;
 
-function getStatusCard(isIdeaOpen: boolean, isSharedPoolOpen: boolean) {
-  if (isSharedPoolOpen) {
-    return {
-      title: "Shared pool is open",
-      description:
-        "Team captains can now claim any remaining submitted idea that has not already been taken by a team.",
-    };
-  }
-
-  if (!isIdeaOpen) {
-    return {
-      title: "Idea submission closed",
-      description:
-        "Idea submission ended on May 18. Original idea owners can still form a team. The shared pool opens May 22 at 12:00 PM IST.",
-    };
-  }
-
-  return {
-    title: "Idea window is live",
-    description:
-      "Submit your AI idea before May 18. Once submitted, you can register a team right away or let your idea enter the shared pool on May 22.",
-  };
-}
-
 export default function ParticipantRegistrationRoute() {
   const isIdeaOpen = isIdeaSubmissionOpen();
-  const isSharedPoolOpen = isSharedTeamFormationOpen();
-  const statusCard = getStatusCard(isIdeaOpen, isSharedPoolOpen);
 
   return (
-    <main className="relative min-h-screen overflow-hidden px-6 py-8 sm:px-8 lg:px-10">
+    <main className="relative min-h-screen overflow-hidden bg-[#fff8ef] text-[#15110d] px-6 py-8 sm:px-8 lg:px-10">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(255,106,0,0.28),transparent_28rem),radial-gradient(circle_at_86%_12%,rgba(255,255,255,0.12),transparent_22rem)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_12%,rgba(255,106,0,0.20),transparent_28rem),radial-gradient(circle_at_86%_8%,rgba(255,255,255,0.90),transparent_22rem)]"
       />
-      <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-8">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(17,17,17,0.030)_1px,transparent_1px),linear-gradient(90deg,rgba(17,17,17,0.030)_1px,transparent_1px)] bg-[size:72px_72px]"
+      />
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-10">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <Button asChild variant="ghost">
+          <Button asChild variant="ghost" className="text-[#15110d] hover:bg-primary/10 hover:text-[#15110d]">
             <Link href="/register">
               <ArrowLeft aria-hidden="true" className="size-4" />
               Back to registration
             </Link>
           </Button>
-          <Button asChild variant="secondary">
+          <Button asChild variant="secondary" className="border-orange-200/70 bg-white/80 text-[#15110d] hover:bg-primary/10 hover:text-[#15110d]">
             <Link href="/leaderboard">View leaderboard</Link>
           </Button>
         </header>
 
-        <section className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-stretch">
-          <Card className="overflow-hidden">
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,106,0,0.18),transparent_46%,rgba(255,255,255,0.06))]"
-            />
-            <CardHeader className="relative">
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                Participant Timeline
-              </p>
-              <CardTitle className="text-4xl sm:text-5xl">
-                Submit an idea. Form a team. Build.
-              </CardTitle>
-              <CardDescription className="text-base leading-7">
-                Submit your AI idea individually by May 18. Then register as
-                team captain straight away, or let your idea enter the shared
-                pool for others to claim from May 22.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <span className="mb-2 inline-flex size-12 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
-                <ClipboardCheck aria-hidden="true" className="size-6" />
-              </span>
-              <CardTitle>{statusCard.title}</CardTitle>
-              <CardDescription className="text-base leading-7">
-                {statusCard.description}
-              </CardDescription>
-            </CardHeader>
-          </Card>
+        <section className="space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+            Participant Timeline
+          </p>
+          <h1 className="text-4xl font-semibold tracking-tight text-[#15110d] sm:text-5xl">
+            Submit an idea. Form a team. Build.
+          </h1>
+          <p className="max-w-2xl text-base leading-7 text-[#5f5348]">
+            Submit your idea before May 22. You have 1 hour of priority to
+            register your team, then the idea enters the shared pool for anyone
+            to claim.
+          </p>
         </section>
 
         <section className="grid gap-5 md:grid-cols-2">
@@ -134,45 +88,45 @@ export default function ParticipantRegistrationRoute() {
             const isClosed = action.status === "idea" && !isIdeaOpen;
 
             return (
-              <Card
-                className={isClosed ? "border-primary/40 opacity-75" : ""}
+              <div
+                className={`rounded-2xl border p-7 shadow-[0_18px_60px_rgba(17,17,17,0.08)] backdrop-blur-xl ${
+                  isClosed
+                    ? "border-orange-200/40 bg-white/50 opacity-70"
+                    : "border-orange-200/70 bg-white/80"
+                }`}
                 key={action.href}
               >
-                <div className="flex h-full flex-col gap-5">
-                  <span className="flex size-12 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
-                    <Icon aria-hidden="true" className="size-6" />
-                  </span>
-                  <div>
-                    <h2 className="text-2xl font-semibold text-white">
-                      {action.label}
-                    </h2>
-                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                      {isClosed
-                        ? "Idea submission is closed. Continue with team registration to claim an available idea."
-                        : action.description}
-                    </p>
-                  </div>
-                  <div className="mt-auto">
-                    {isClosed ? (
-                      <Button disabled type="button" variant="secondary">
-                        Closed
-                      </Button>
-                    ) : (
-                      <Button asChild>
-                        <Link href={action.href}>
-                          Open
-                          <ArrowRight aria-hidden="true" className="size-4" />
-                        </Link>
-                      </Button>
-                    )}
-                  </div>
+                <span className="mb-5 flex size-12 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
+                  <Icon aria-hidden="true" className="size-6" />
+                </span>
+                <h2 className="text-2xl font-semibold text-[#15110d]">
+                  {action.label}
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-[#66584c]">
+                  {isClosed
+                    ? "Idea submission is closed. Continue with team registration to claim an available idea."
+                    : action.description}
+                </p>
+                <div className="mt-6">
+                  {isClosed ? (
+                    <Button disabled type="button" variant="secondary" className="border-orange-200/60 bg-white/60 text-[#7a6a5b]">
+                      Closed
+                    </Button>
+                  ) : (
+                    <Button asChild>
+                      <Link href={action.href}>
+                        Open
+                        <ArrowRight aria-hidden="true" className="size-4" />
+                      </Link>
+                    </Button>
+                  )}
                 </div>
-              </Card>
+              </div>
             );
           })}
         </section>
 
-        <section aria-labelledby="event-schedule" className="space-y-5">
+        <section aria-labelledby="event-schedule" className="space-y-6">
           <div className="flex items-center gap-3">
             <span className="flex size-11 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
               <CalendarDays aria-hidden="true" className="size-5" />
@@ -182,23 +136,28 @@ export default function ParticipantRegistrationRoute() {
                 Event Schedule
               </p>
               <h2
-                className="text-2xl font-semibold text-white"
+                className="text-2xl font-semibold text-[#15110d]"
                 id="event-schedule"
               >
                 Key hackathon dates
               </h2>
             </div>
           </div>
-          <div className="grid gap-4 lg:grid-cols-5">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {HACKATHON_TIMELINE.map((item) => (
-              <Card className="p-5" key={item.title}>
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">
-                  {item.date}
-                </p>
-                <h3 className="mt-3 font-semibold text-white">{item.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  {item.description}
-                </p>
+              <Card
+                className="border-orange-200/60 bg-white/70 text-[#15110d] shadow-[0_18px_60px_rgba(17,17,17,0.07)]"
+                key={item.title}
+              >
+                <CardHeader>
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">
+                    {item.date}
+                  </p>
+                  <CardTitle className="text-base text-[#15110d]">{item.title}</CardTitle>
+                  <CardDescription className="text-sm leading-6 text-[#66584c]">
+                    {item.description}
+                  </CardDescription>
+                </CardHeader>
               </Card>
             ))}
           </div>
