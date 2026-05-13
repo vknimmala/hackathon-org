@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { isSharedTeamFormationOpen } from "@/lib/constants";
+import { isIdeaInExclusiveWindow } from "@/lib/constants";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/server";
 import type { Database, Json } from "@/types/database";
 import {
@@ -387,7 +387,7 @@ export async function submitTeamRegistrationAction(
     const supabase = createSupabaseServiceRoleClient();
     const { data: idea, error: ideaError } = await supabase
       .from("idea_submissions")
-      .select("id, participant_email, status")
+      .select("id, participant_email, status, submitted_at")
       .eq("id", values.ideaSubmissionId)
       .is("deleted_at", null)
       .maybeSingle();
@@ -438,13 +438,14 @@ export async function submitTeamRegistrationAction(
     const primaryContactEmail = values.members[0]?.email.toLowerCase();
 
     if (
-      !isSharedTeamFormationOpen() &&
+      idea.submitted_at &&
+      isIdeaInExclusiveWindow(idea.submitted_at) &&
       primaryContactEmail !== idea.participant_email.toLowerCase()
     ) {
       return {
         ok: false,
         message:
-          "Before May 22 at 12:00 PM IST, only the original idea submitter can register a team for this idea.",
+          "This idea was just submitted. Only the original submitter can register a team during the first hour after submission.",
       };
     }
 
