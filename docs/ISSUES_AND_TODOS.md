@@ -373,6 +373,91 @@ Findings:
 - P1: Invalid submissions must not create partial volunteer or audit records.
 - P3: Focused automated tests can be added later when the project has a test runner; for now, lint and typecheck validate implementation shape.
 
+## Paper-Based Mentor Management Simulation
+
+Date: 2026-05-13
+
+### Scenario: Admin opens mentor management page
+
+Initial state:
+
+- Route `/admin/mentors` resolves to `src/app/(dashboard)/admin/mentors/page.tsx`.
+- Mentor rows may or may not exist in the existing `mentors` table.
+- The Phase 1 admin assumption remains controlled internal organizer access until auth roles and RLS policies are finalized.
+
+Execution:
+
+- The server route creates a Supabase service-role client through a feature-local mentor query.
+- The query reads non-deleted `mentors` rows ordered by newest `created_at`.
+- The page renders the mentor create form, summary cards, and either the mentor list, an empty state, or a load error.
+- No mentor-team assignment, matching algorithm, realtime update, scheduling workflow, or AI assistant is created.
+
+Object state:
+
+- Database state is read-only during page render.
+- If Supabase service configuration is missing, the page shows an operational error instead of crashing.
+
+Findings:
+
+- P0: None.
+- P1: The route must keep the same minimal admin access assumption documented for `/admin` until auth/RLS hardening is implemented.
+- P2: A card list is sufficient for Phase 1; do not add data table or filtering abstractions before assignment workflows exist.
+
+### Scenario: Admin creates an available mentor
+
+Initial state:
+
+- Admin opens `/admin/mentors`.
+- The form contains full name, email, comma-separated expertise, capacity, and an availability checkbox.
+- Existing schema supports `expertise`, `capacity`, `current_team_count`, and `is_available`.
+
+Execution:
+
+- Admin submits valid mentor details.
+- Server action reads `FormData`, trims text fields, converts capacity to a number, and maps the availability checkbox to a boolean.
+- Zod validation enforces full name, valid email, at least one expertise item, capacity limits, and availability.
+- Server action inserts one `mentors` row with lowercased email, expertise array, capacity, and availability.
+- After successful insert, the action writes an `audit_logs` row with action `created`, entity table `mentors`, the created row as `after_state`, and source metadata.
+- `/admin/mentors` is revalidated so the new mentor appears in the list.
+
+Object state:
+
+- Form state moves from idle to pending to success or error.
+- Database state gains one mentor row and one append-only audit log row on success.
+- `current_team_count` stays at the database default of `0`.
+- No team, mentor assignment, leaderboard, notification, realtime, or scheduling rows are created.
+
+Findings:
+
+- P0: None.
+- P1: Audit logging should run immediately after the mentor insert and surface a clear error if it fails.
+- P1: Server-side validation remains authoritative because the admin form can be bypassed.
+- P2: Expertise stays a simple text array parsed from organizer-entered comma or newline-separated text.
+- P2: Duplicate mentor email relies on the existing database uniqueness constraint and should return a clear action error.
+
+### Scenario: Invalid mentor creation attempt
+
+Initial state:
+
+- Admin submits missing contact details, invalid email, empty expertise, non-numeric capacity, capacity below one, or capacity above the Phase 1 form limit.
+
+Execution:
+
+- Server-side Zod validation rejects malformed form data before database writes.
+- No mentor insert is attempted when validation fails.
+- No audit log is attempted when no mentor row is created.
+
+Object state:
+
+- Existing mentor rows remain unchanged.
+- Existing audit logs remain unchanged.
+
+Findings:
+
+- P0: None.
+- P1: Invalid submissions must not create partial mentor or audit records.
+- P3: Focused automated tests can be added later when the project has a test runner; for now, lint and typecheck validate implementation shape.
+
 ## Open TODOs
 
 - Add RLS policies when auth roles and ownership flows are implemented.
