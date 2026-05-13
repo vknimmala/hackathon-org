@@ -1,9 +1,7 @@
 import Link from "next/link";
-import type { Route } from "next";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
-  Gauge,
   Sparkles,
   Trophy,
   UserRoundCheck,
@@ -19,12 +17,6 @@ import {
 } from "@/components/ui/card";
 import { HACKATHON_TIMELINE } from "@/lib/constants";
 
-interface PrimaryRoute {
-  description: string;
-  href: Route;
-  label: string;
-}
-
 interface ParticipationBenefit {
   description: string;
   icon: LucideIcon;
@@ -35,21 +27,6 @@ const heroMetrics = [
   { label: "Team size", value: "1–4" },
   { label: "Eligibility", value: "SurgeVector, Taxilla" },
   { label: "Dates", value: "May 14–30" },
-];
-
-const primaryRoutes: PrimaryRoute[] = [
-  {
-    description:
-      "Choose participant or volunteer registration, then follow the right path.",
-    href: "/register" as Route,
-    label: "Register now",
-  },
-  {
-    description:
-      "Track participation points, badges, and completion progress.",
-    href: "/leaderboard",
-    label: "View leaderboard",
-  },
 ];
 
 const participationBenefits: ParticipationBenefit[] = [
@@ -126,14 +103,14 @@ export default function LandingFoundationPage() {
         </header>
 
         {/* ── Hero ── */}
-        <section className="grid min-h-[calc(100svh-5.75rem)] content-center gap-12 py-14 sm:py-16 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-14 lg:py-20">
-          <FadeIn className="space-y-8">
+        <section className="flex min-h-[calc(100svh-5.75rem)] flex-col justify-center gap-10 py-20 sm:py-24">
+          <FadeIn className="max-w-4xl space-y-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-primary shadow-[0_0_36px_rgba(255,106,0,0.16)] backdrop-blur-xl">
               <Sparkles aria-hidden="true" className="size-4" />
               2026 Internal AI Hackathon
             </div>
             <div className="space-y-5">
-              <h1 className="max-w-5xl text-balance text-5xl font-semibold tracking-[-0.05em] text-[#15110d] sm:text-6xl lg:text-[4.25rem] lg:leading-[0.95] xl:text-7xl">
+              <h1 className="text-balance text-5xl font-semibold tracking-[-0.05em] text-[#15110d] sm:text-6xl lg:text-[4.25rem] lg:leading-[0.95] xl:text-7xl">
                 Build Reusable AI Accelerators, Together.
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-[#5f5348] sm:text-xl">
@@ -143,7 +120,7 @@ export default function LandingFoundationPage() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button asChild className="h-12 px-6" size="lg">
-                <Link href={"/register" as Route}>
+                <Link href="/register">
                   Register now
                   <ArrowRight aria-hidden="true" className="size-4" />
                 </Link>
@@ -173,53 +150,6 @@ export default function LandingFoundationPage() {
               ))}
             </dl>
           </FadeIn>
-
-          <FadeIn
-            className="relative"
-            transition={{ delay: 0.08, duration: 0.35 }}
-          >
-            <Card className="overflow-hidden border-orange-200/70 bg-white/75 p-0 text-[#15110d] shadow-[0_30px_100px_rgba(17,17,17,0.14)]">
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,106,0,0.16),transparent_46%,rgba(17,17,17,0.05))]"
-              />
-              <div className="relative border-b border-orange-200/60 p-6 sm:p-8">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                      Quick start
-                    </p>
-                    <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#15110d]">
-                      Submit an idea. Form a team. Build.
-                    </h2>
-                  </div>
-                  <div className="rounded-full border border-primary/30 bg-primary/10 p-3 text-primary">
-                    <Gauge aria-hidden="true" className="size-6" />
-                  </div>
-                </div>
-              </div>
-              <div className="relative grid gap-4 p-6 sm:p-8">
-                {primaryRoutes.map((route) => (
-                  <Link
-                    className="group rounded-xl border border-orange-200/70 bg-[#fffaf4]/80 p-4 shadow-[0_14px_44px_rgba(17,17,17,0.06)] transition hover:border-primary/60 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    href={route.href}
-                    key={route.href}
-                  >
-                    <span className="flex items-center justify-between gap-4 text-sm font-semibold text-[#15110d]">
-                      {route.label}
-                      <ArrowRight
-                        aria-hidden="true"
-                        className="size-4 text-primary transition group-hover:translate-x-1"
-                      />
-                    </span>
-                    <span className="mt-2 block text-sm leading-6 text-[#66584c]">
-                      {route.description}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </Card>
-          </FadeIn>
         </section>
 
         {/* ── Journey / Timeline ── */}
@@ -243,7 +173,7 @@ export default function LandingFoundationPage() {
           <FadeIn>
             <div className="hidden lg:block" aria-label="Hackathon timeline">
               {/* Above labels — even indices (0, 2, 4) */}
-              <div className="grid grid-cols-5">
+              <div className="grid grid-cols-4">
                 {HACKATHON_TIMELINE.map((item, index) =>
                   index % 2 === 0 ? (
                     <div
@@ -267,7 +197,7 @@ export default function LandingFoundationPage() {
               </div>
 
               {/* Dots row with connecting line */}
-              <div className="relative grid grid-cols-5 items-center py-1">
+              <div className="relative grid grid-cols-4 items-center py-1">
                 <div
                   aria-hidden="true"
                   className="absolute inset-x-[10%] top-1/2 h-0.5 -translate-y-1/2 bg-gradient-to-r from-primary/30 via-primary/70 to-primary/30"
@@ -282,7 +212,7 @@ export default function LandingFoundationPage() {
               </div>
 
               {/* Below labels — odd indices (1, 3) */}
-              <div className="grid grid-cols-5">
+              <div className="grid grid-cols-4">
                 {HACKATHON_TIMELINE.map((item, index) =>
                   index % 2 !== 0 ? (
                     <div
@@ -308,7 +238,7 @@ export default function LandingFoundationPage() {
           </FadeIn>
 
           {/* Mobile / tablet: card grid fallback */}
-          <div className="grid gap-5 sm:grid-cols-2 lg:hidden">
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4 lg:hidden">
             {HACKATHON_TIMELINE.map((item) => (
               <Card
                 className="border-orange-200/60 bg-white/70 text-[#15110d] shadow-[0_18px_70px_rgba(17,17,17,0.08)]"
