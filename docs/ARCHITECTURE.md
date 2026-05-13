@@ -142,8 +142,9 @@ Tailwind CSS is configured through `src/app/globals.css` using a CSS-first theme
 
 Reusable visual rules:
 
-- Use black backgrounds with controlled orange gradients.
-- Use `bg-card/80`, `border-border`, and `backdrop-blur-xl` for glass surfaces.
+- The landing route should use a light cream or white event canvas with controlled orange gradients and black contrast text.
+- Keep admin and registration pages simple and avoid redesigning them during landing-only visual refreshes.
+- Use `bg-card/80`, `border-border`, and `backdrop-blur-xl` for shared glass surfaces; landing-specific surfaces can use translucent white or cream with soft orange borders.
 - Keep motion subtle and use `FadeIn` for short entrance transitions.
 - Prefer accessible focus rings and semantic landmarks.
 
