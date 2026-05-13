@@ -62,6 +62,8 @@ src/
       actions/
       components/
     volunteers/
+      actions/
+      components/
   hooks/
     use-media-query.ts
   lib/
@@ -95,7 +97,7 @@ supabase/
 | `/` | SurgeVector Hackathon landing page with event details and Phase 1 CTAs |
 | `/register/idea` | Participant idea submission before review |
 | `/register/team` | Approved-idea team registration |
-| `/register/volunteer` | Volunteer registration foundation |
+| `/register/volunteer` | Volunteer registration for contact details, preferred roles, and availability notes |
 | `/registrations/[registrationId]/edit` | Registration editing foundation |
 | `/admin` | Organizer idea review dashboard for approving or rejecting submitted ideas |
 | `/admin/mentors` | Mentor management foundation |
@@ -125,6 +127,7 @@ Key Phase 1 constraints:
 - Organizer review updates `idea_submissions.status`, `reviewed_at`, and `review_notes`, then writes an `audit_logs` row for approval or rejection.
 - Team member count is enforced at a maximum of 3 active members.
 - App validation enforces minimum 1 team member.
+- Volunteer registration inserts a `submitted` volunteer row and audit log only; assignment, scheduling, shifts, realtime coordination, and approval workflows stay out of scope.
 - Mentor capacity is modeled with `capacity`, `current_team_count`, and `is_available`.
 - Manual mentor override support is modeled through `mentor_assignments.override_reason`.
 - Simple gamification is modeled through `participation_points`, `achievements`, and `leaderboard_entries`.
@@ -166,6 +169,7 @@ Optional for Phase 1 notifications:
 | `src/lib/env.ts` | Zod-backed environment validation |
 | `src/features/admin/actions/idea-review-actions.ts` | Service-role idea approval/rejection action with audit logging |
 | `src/features/admin/queries/idea-review-queries.ts` | Service-role submitted idea list query for the organizer dashboard |
+| `src/features/volunteers/actions/volunteer-registration-actions.ts` | Service-role volunteer registration action with audit logging |
 | `supabase/migrations/001_phase_1_initial_schema.sql` | Phase 1 foundation PostgreSQL schema |
 | `supabase/migrations/002_idea_first_registration_flow.sql` | Participant idea intake and approved team linkage |
 
@@ -247,7 +251,7 @@ Use this only when the feature needs the folder. Do not create abstractions befo
 3. Apply and verify Supabase schema.
 4. Implement idea submission and approved team registration with React Hook Form and Zod. Completed.
 5. Build simple admin idea review with approval, rejection, review notes, and audit logs. Completed.
-6. Implement volunteer registration.
+6. Implement volunteer registration. Completed.
 7. Add mentor management and manual assignment controls.
 8. Add registration editing with audit log writes.
 9. Add simple gamification and leaderboard views.

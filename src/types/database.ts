@@ -158,6 +158,38 @@ export interface Database {
         Update: Partial<Database["public"]["Tables"]["teams"]["Insert"]>;
         Relationships: [];
       };
+      volunteer_registrations: {
+        Row: {
+          id: string;
+          user_id: string | null;
+          full_name: string;
+          email: string;
+          department: string;
+          preferred_roles: string[];
+          availability_notes: string | null;
+          status: VolunteerStatus;
+          created_at: string;
+          updated_at: string;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string | null;
+          full_name: string;
+          email: string;
+          department: string;
+          preferred_roles?: string[];
+          availability_notes?: string | null;
+          status?: VolunteerStatus;
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+        };
+        Update: Partial<
+          Database["public"]["Tables"]["volunteer_registrations"]["Insert"]
+        >;
+        Relationships: [];
+      };
       users: {
         Row: {
           id: string;
