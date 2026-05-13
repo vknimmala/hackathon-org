@@ -311,6 +311,68 @@ Findings:
 - P1: Server-side validation remains authoritative because client forms can be bypassed.
 - P3: Focused automated tests can be added later when the project has a test runner; for now, lint and typecheck validate implementation shape.
 
+## Paper-Based Volunteer Registration Simulation
+
+Date: 2026-05-13
+
+### Scenario: Participant submits a volunteer registration
+
+Initial state:
+
+- User opens `/register/volunteer`.
+- Route renders a Phase 1 volunteer intake form instead of the placeholder.
+- React Hook Form initializes with empty full name, email, department, preferred roles, and availability notes.
+- `volunteerRegistrationSchema` validates the same payload on the client and server.
+- Supabase writes happen only inside a feature-local server action.
+
+Execution:
+
+- User enters full name, work email, department, at least one preferred role, and optional availability notes.
+- Client validation blocks missing contact details, invalid email, missing preferred roles, or oversized notes before the server action runs.
+- Server action validates the payload again because client validation can be bypassed.
+- Server action inserts one `volunteer_registrations` row with status `submitted`.
+- After a successful volunteer insert, server action writes one `audit_logs` row with action `submitted` and source metadata.
+- UI shows a loading state during submission, then either the submitted volunteer registration ID or a form error.
+
+Object state:
+
+- Form state moves from idle to submitting to success or error.
+- Database state gains one submitted volunteer registration and one append-only audit log row on success.
+- No volunteer assignment, scheduling, shift, approval workflow, realtime state, mentor assignment, or gamification row is created.
+
+Findings:
+
+- P0: None.
+- P1: Server-side validation remains authoritative because client validation can be bypassed.
+- P1: Audit logging should be attempted immediately after the volunteer row is inserted and should surface a clear error if it fails.
+- P2: Preferred roles stay as a simple text array in the existing `volunteer_registrations` table; do not add assignment, shift, or scheduling tables.
+- P2: Missing Supabase service configuration must return a friendly form error instead of crashing the route.
+- P3: Volunteer status remains `submitted`; approval and coordination views can be added only when explicitly scoped.
+
+### Scenario: Invalid volunteer registration attempt
+
+Initial state:
+
+- User opens `/register/volunteer`.
+- Required fields are empty, email is malformed, preferred roles are unselected, or availability notes exceed the allowed length.
+
+Execution:
+
+- React Hook Form and Zod report field-level validation errors.
+- If a malformed payload reaches the server action, server-side Zod validation returns a generic correction message.
+- No Supabase insert is attempted for invalid input.
+
+Object state:
+
+- Existing volunteer registrations remain unchanged.
+- Existing audit logs remain unchanged.
+
+Findings:
+
+- P0: None.
+- P1: Invalid submissions must not create partial volunteer or audit records.
+- P3: Focused automated tests can be added later when the project has a test runner; for now, lint and typecheck validate implementation shape.
+
 ## Open TODOs
 
 - Add RLS policies when auth roles and ownership flows are implemented.

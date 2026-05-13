@@ -125,5 +125,126 @@ TODOs:
 - Update docs and run lint/typecheck.
 
 ================================================================================
+VOLUNTEER REGISTRATION SIMULATION
+================================================================================
+Date: 2026-05-13
+Test Case: Phase 1 volunteer registration
+Command: Manual paper-based simulation before implementation and validation
+
+================================================================================
+INITIAL STATE
+================================================================================
+ENVIRONMENT:
+- Next.js App Router route `/register/volunteer`
+- React Hook Form and Zod available for form validation
+- Supabase writes happen through a server action
+
+FILE SYSTEM:
+- `src/app/register/volunteer/page.tsx` currently renders a placeholder.
+- `src/validations/volunteer.ts` already describes the volunteer payload.
+- `supabase/migrations/001_phase_1_initial_schema.sql` defines
+  `volunteer_registrations`.
+- `docs/ISSUES_AND_TODOS.md` records persistent findings.
+
+================================================================================
+EXECUTION FLOW - STEP BY STEP
+================================================================================
+
+STEP 1: Render volunteer registration route
+--------------------------------------------------------------------------------
+OBJECT STATE:
+- Form default values are empty strings for contact fields and notes.
+- Preferred roles starts as an empty string array.
+
+EXECUTION:
+- Route renders explanatory Phase 1 volunteer copy.
+- Client form initializes with `volunteerRegistrationSchema`.
+- No Supabase client is created during static route render.
+
+MEMORY:
+- Client form state is idle.
+- Database state is unchanged.
+
+NEXT: User submits a valid volunteer registration.
+
+STEP 2: Submit valid volunteer registration
+--------------------------------------------------------------------------------
+OBJECT STATE:
+- Payload contains full name, email, department, one or more preferred roles,
+  and optional availability notes.
+
+EXECUTION:
+- Client Zod validation passes.
+- Server action validates the same payload again.
+- Server action inserts one `volunteer_registrations` row with status
+  `submitted`.
+- Server action writes one `audit_logs` row with action `submitted`.
+- Form shows success and resets to default values.
+
+MEMORY:
+- Form state moves idle -> submitting -> success.
+- Database gains one volunteer row and one audit row.
+- No scheduling, shift, assignment, approval, realtime, or future-phase state is
+  created.
+
+NEXT: Handle invalid or failed submissions.
+
+STEP 3: Invalid volunteer registration
+--------------------------------------------------------------------------------
+OBJECT STATE:
+- Required fields may be missing, email malformed, preferred roles empty, or
+  notes oversized.
+
+EXECUTION:
+- Client validation reports field-level errors.
+- If bypassed, server validation returns a generic correction message.
+- No Supabase write occurs on invalid payloads.
+
+MEMORY:
+- Existing volunteer and audit rows remain unchanged.
+
+STEP 4: Supabase or audit logging failure
+--------------------------------------------------------------------------------
+OBJECT STATE:
+- Valid payload reaches the server action.
+- Supabase service role configuration may be missing, or a database insert may
+  fail.
+
+EXECUTION:
+- Missing service role key returns a friendly form error.
+- Volunteer insert failure returns the database error.
+- Audit log failure is surfaced clearly after the volunteer row is inserted.
+
+MEMORY:
+- Partial audit failure does not create assignment or scheduling side effects.
+
+================================================================================
+ISSUES IDENTIFIED
+================================================================================
+P0 Critical:
+- None.
+
+P1 High:
+- Server-side validation is authoritative because client validation can be
+  bypassed.
+- Invalid submissions must not create partial volunteer or audit rows.
+- Audit logging should happen immediately after a successful volunteer insert.
+
+P2 Medium:
+- Preferred roles should stay in the existing text array column; do not add
+  assignment, shift, or scheduling systems.
+- Missing Supabase service configuration must return a friendly form error.
+
+P3 Low:
+- Volunteer status remains `submitted`; approval and coordination screens are
+  out of scope unless explicitly requested later.
+
+TODOs:
+- Implement volunteer server action and form.
+- Wire `/register/volunteer` to the real Phase 1 route.
+- Update architecture and volunteer docs.
+- Run lint and typecheck.
+
+================================================================================
 END OF SIMULATION
 ================================================================================
