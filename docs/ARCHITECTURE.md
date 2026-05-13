@@ -58,6 +58,9 @@ src/
     gamification/
     landing/
     mentors/
+      actions/
+      components/
+      queries/
     registration/
       actions/
       components/
@@ -100,7 +103,7 @@ supabase/
 | `/register/volunteer` | Volunteer registration for contact details, preferred roles, and availability notes |
 | `/registrations/[registrationId]/edit` | Registration editing foundation |
 | `/admin` | Organizer idea review dashboard for approving or rejecting submitted ideas |
-| `/admin/mentors` | Mentor management foundation |
+| `/admin/mentors` | Organizer mentor profile list and create form |
 
 ## Database Schema
 
@@ -129,6 +132,7 @@ Key Phase 1 constraints:
 - App validation enforces minimum 1 team member.
 - Volunteer registration inserts a `submitted` volunteer row and audit log only; assignment, scheduling, shifts, realtime coordination, and approval workflows stay out of scope.
 - Mentor capacity is modeled with `capacity`, `current_team_count`, and `is_available`.
+- Mentor management creates profiles in the existing `mentors` table and writes an `audit_logs` row after successful creation.
 - Manual mentor override support is modeled through `mentor_assignments.override_reason`.
 - Simple gamification is modeled through `participation_points`, `achievements`, and `leaderboard_entries`.
 
@@ -169,6 +173,8 @@ Optional for Phase 1 notifications:
 | `src/lib/env.ts` | Zod-backed environment validation |
 | `src/features/admin/actions/idea-review-actions.ts` | Service-role idea approval/rejection action with audit logging |
 | `src/features/admin/queries/idea-review-queries.ts` | Service-role submitted idea list query for the organizer dashboard |
+| `src/features/mentors/actions/mentor-actions.ts` | Service-role mentor profile creation action with audit logging |
+| `src/features/mentors/queries/mentor-queries.ts` | Service-role mentor list query for organizer mentor management |
 | `src/features/volunteers/actions/volunteer-registration-actions.ts` | Service-role volunteer registration action with audit logging |
 | `supabase/migrations/001_phase_1_initial_schema.sql` | Phase 1 foundation PostgreSQL schema |
 | `supabase/migrations/002_idea_first_registration_flow.sql` | Participant idea intake and approved team linkage |
@@ -252,7 +258,7 @@ Use this only when the feature needs the folder. Do not create abstractions befo
 4. Implement idea submission and approved team registration with React Hook Form and Zod. Completed.
 5. Build simple admin idea review with approval, rejection, review notes, and audit logs. Completed.
 6. Implement volunteer registration. Completed.
-7. Add mentor management and manual assignment controls.
+7. Add mentor management foundation. Completed for profile creation and listing; manual assignment controls remain later Phase 1 scope.
 8. Add registration editing with audit log writes.
 9. Add simple gamification and leaderboard views.
 10. Add basic analytics views.
