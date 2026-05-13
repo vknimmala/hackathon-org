@@ -31,7 +31,7 @@ const volunteerNotes = [
   },
   {
     description:
-      "Keep the hackathon moving for SurgeVector and Taxila builders without adding shift workflows.",
+      "Keep the hackathon moving for SurgeVector and Taxilla builders without adding shift workflows.",
     icon: UsersRound,
     title: "Enable builders",
   },

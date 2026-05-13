@@ -36,7 +36,7 @@ interface PrimaryRoute {
 
 const heroMetrics = [
   { label: "Team size", value: "1-3" },
-  { label: "Eligibility", value: "SV + Taxila" },
+  { label: "Eligibility", value: "SV + Taxilla" },
   { label: "Entry", value: "Idea first" },
 ];
 
@@ -120,7 +120,7 @@ const participationBenefits = [
   },
   {
     description:
-      "Work with SurgeVector and Taxila builders across teams while growing your AI delivery skills.",
+      "Work with SurgeVector and Taxilla builders across teams while growing your AI delivery skills.",
     icon: Users,
     title: "Network And Grow",
   },
@@ -182,7 +182,7 @@ export default function LandingFoundationPage() {
                 Where AI ideas become reusable enterprise accelerators.
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-[#5f5348] sm:text-xl">
-                SurgeVector and Taxila builders submit practical ideas, form
+                SurgeVector and Taxilla builders submit practical ideas, form
                 focused teams, and move into mentor-led execution during the
                 hackathon.
               </p>
@@ -386,7 +386,7 @@ export default function LandingFoundationPage() {
             </div>
             <p className="max-w-md text-sm leading-6 text-[#66584c]">
               Bring a practical AI idea, learn with mentors, and showcase a
-              working prototype with builders across SurgeVector and Taxila.
+              working prototype with builders across SurgeVector and Taxilla.
             </p>
           </FadeIn>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">

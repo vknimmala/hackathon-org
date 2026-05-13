@@ -103,7 +103,7 @@ Initial state:
 
 Execution:
 
-- Landing route renders hackathon-specific details for SurgeVector and Taxila teams instead of describing the website as a product.
+- Landing route renders hackathon-specific details for SurgeVector and Taxilla teams instead of describing the website as a product.
 - Primary CTA routes participants to `/register/idea`.
 - Secondary CTAs route volunteers to `/register/volunteer` and coordinators to `/admin`.
 - The page explains the Phase 1 event flow: register yourself, submit an AI idea, receive review, form a team after approval, and then receive mentor coordination.
@@ -829,6 +829,40 @@ Findings:
 - P1: Recheck claim status inside the server action to prevent stale available-idea selections.
 - P1: The pre-cutoff owner exception needs email matching because auth ownership is not implemented in the MVP yet.
 - P2: A future database unique partial index on active `teams.idea_submission_id` would strengthen this invariant after schema migration policy is decided.
+
+## Paper-Based Taxilla Typo Correction Simulation
+
+Date: 2026-05-13
+
+### Scenario: Repository uses the corrected Taxilla organization name
+
+Initial state:
+
+- Display copy uses the misspelled Taxilla organization name in landing, registration, volunteer, README, and metadata text.
+- Typed organization values use a misspelled persisted enum value in validation, TypeScript database types, and the initial Supabase migration.
+- Existing registration forms, admin labels, leaderboard labels, and edit forms map the typo value to the typo label.
+- The active working tree has unrelated `next-env.d.ts` and `src/app/icon.svg` changes that must remain untouched.
+
+Execution:
+
+- Replace display text with `Taxilla` everywhere in repo-owned source and docs.
+- Replace the persisted organization value with `taxilla` in validation schemas, UI option values, route label maps, TypeScript database types, and the initial Supabase enum definition.
+- Keep the change as a rename only; no new tables, workflows, routes, or future-phase features are added.
+- Leave unrelated generated/icon working tree changes unstaged and unmodified.
+
+Object state:
+
+- Form submissions now send `organization: "taxilla"` for Taxilla selections.
+- Admin, leaderboard, registration edit, and team registration label maps now render `Taxilla`.
+- Database type unions and validation enums remain aligned with the Supabase enum migration.
+- Existing deployed rows with the previous misspelled enum value would need migration if this schema had live data, but this Phase 1 MVP branch is still under active development.
+
+Findings:
+
+- P0: None.
+- P1: Stored enum values, Zod enums, and TypeScript `Organization` must change together or typecheck will fail.
+- P2: This is a breaking rename for any existing local seed/data using the previous misspelled enum value; no compatibility shim is needed for unshipped branch work.
+- P3: Run lint and typecheck after the rename to catch missed labels or enum mismatches.
 
 ## Open TODOs
 

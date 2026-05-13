@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 const organizationLabels = {
   surgevector: "SurgeVector",
-  taxila: "Taxila",
+  taxilla: "Taxilla",
 } as const;
 
 function getLeaderboardStats(entries: LeaderboardTeam[]) {

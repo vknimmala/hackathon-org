@@ -96,7 +96,7 @@ export function VolunteerRegistrationForm() {
           Team or department
         </span>
         <Input
-          placeholder="Engineering, AI Platform, Taxila Labs..."
+          placeholder="Engineering, AI Platform, Taxilla Labs..."
           {...register("department")}
         />
         <FieldError message={errors.department?.message} />

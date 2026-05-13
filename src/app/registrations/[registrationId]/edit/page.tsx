@@ -25,7 +25,7 @@ interface EditRegistrationRouteProps {
 
 const organizationLabels = {
   surgevector: "SurgeVector",
-  taxila: "Taxila",
+  taxilla: "Taxilla",
 } as const;
 
 function formatDate(value: string | null) {

@@ -11,7 +11,7 @@ PROJECT PURPOSE
 Build an enterprise-grade internal AI Hackathon Management Platform for:
 
 - SurgeVector Teams
-- Taxila Teams
+- Taxilla Teams
 
 The platform should support:
 - registrations

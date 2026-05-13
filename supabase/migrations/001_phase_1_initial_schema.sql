@@ -1,7 +1,7 @@
 create extension if not exists "pgcrypto";
 
 create type public.user_role as enum ('participant', 'volunteer', 'mentor', 'admin');
-create type public.organization_type as enum ('surgevector', 'taxila');
+create type public.organization_type as enum ('surgevector', 'taxilla');
 create type public.registration_status as enum ('draft', 'submitted', 'approved', 'rejected');
 create type public.mentor_assignment_status as enum ('active', 'reassigned', 'removed');
 create type public.volunteer_status as enum ('submitted', 'approved', 'waitlisted', 'declined');

@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 const organizationLabels = {
   surgevector: "SurgeVector",
-  taxila: "Taxila",
+  taxilla: "Taxilla",
 } as const;
 
 function assertNever(value: never): never {

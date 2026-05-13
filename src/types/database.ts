@@ -7,7 +7,7 @@ export type Json =
   | Json[];
 
 export type UserRole = "participant" | "volunteer" | "mentor" | "admin";
-export type Organization = "surgevector" | "taxila";
+export type Organization = "surgevector" | "taxilla";
 export type RegistrationStatus = "draft" | "submitted" | "approved" | "rejected";
 export type MentorAssignmentStatus = "active" | "reassigned" | "removed";
 export type VolunteerStatus = "submitted" | "approved" | "waitlisted" | "declined";

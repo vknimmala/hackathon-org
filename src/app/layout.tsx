@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     template: "%s | SurgeVector Hackathon",
   },
   description:
-    "Internal AI hackathon registration for SurgeVector and Taxila teams.",
+    "Internal AI hackathon registration for SurgeVector and Taxilla teams.",
 };
 
 export default function RootLayout({

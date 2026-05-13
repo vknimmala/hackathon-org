@@ -9,7 +9,7 @@ export const teamMemberSchema = z.object({
 export const ideaSubmissionSchema = z.object({
   participantFullName: z.string().min(2, "Enter your full name.").max(120),
   participantEmail: z.string().email("Enter a valid work email address."),
-  organization: z.enum(["surgevector", "taxila"]),
+  organization: z.enum(["surgevector", "taxilla"]),
   department: z.string().min(2, "Enter your team or department.").max(120),
   ideaTitle: z.string().min(4, "Give your idea a clear title.").max(140),
   problemStatement: z
@@ -32,7 +32,7 @@ export const teamRegistrationSchema = z
       .string()
       .uuid({ message: "Select or enter a valid idea ID." }),
     teamName: z.string().min(2, "Enter a team name.").max(120),
-    organization: z.enum(["surgevector", "taxila"]),
+    organization: z.enum(["surgevector", "taxilla"]),
     projectSummary: z.string().max(1000).optional(),
     members: z
       .array(teamMemberSchema)
@@ -67,7 +67,7 @@ export const teamRegistrationEditSchema = z
       .array(teamMemberEditSchema)
       .min(1, "Add at least one team member.")
       .max(3, "A team can have at most three members."),
-    organization: z.enum(["surgevector", "taxila"]),
+    organization: z.enum(["surgevector", "taxilla"]),
     projectSummary: z.string().max(1000).optional(),
     registrationId: z
       .string()

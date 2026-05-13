@@ -18,7 +18,7 @@ import {
 
 const organizationOptions = [
   { label: "SurgeVector", value: "surgevector" },
-  { label: "Taxila", value: "taxila" },
+  { label: "Taxilla", value: "taxilla" },
 ] as const;
 
 const defaultMember = {

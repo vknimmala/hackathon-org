@@ -1,6 +1,6 @@
 # SurgeVector Hackathon 2026
 
-Phase 1 MVP foundation for an internal AI Hackathon Management Platform serving SurgeVector and Taxila teams.
+Phase 1 MVP foundation for an internal AI Hackathon Management Platform serving SurgeVector and Taxilla teams.
 
 ## Scope
 

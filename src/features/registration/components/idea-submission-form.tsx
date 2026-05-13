@@ -17,7 +17,7 @@ import {
 
 const organizationOptions = [
   { label: "SurgeVector", value: "surgevector" },
-  { label: "Taxila", value: "taxila" },
+  { label: "Taxilla", value: "taxilla" },
 ] as const;
 
 const defaultValues: IdeaSubmissionInput = {
@@ -109,7 +109,7 @@ export function IdeaSubmissionForm() {
           <span className="text-sm font-semibold text-white">
             Team or department
           </span>
-          <Input placeholder="AI Platform, Taxila Labs..." {...register("department")} />
+          <Input placeholder="AI Platform, Taxilla Labs..." {...register("department")} />
           <FieldError message={errors.department?.message} />
         </label>
       </div>
