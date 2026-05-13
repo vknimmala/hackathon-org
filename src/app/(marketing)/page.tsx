@@ -1,12 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
-import {
-  ArrowRight,
-  Sparkles,
-  Trophy,
-  UserRoundCheck,
-  Users,
-} from "lucide-react";
+import { ArrowRight, ChevronDown, Sparkles } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,42 +11,22 @@ import {
 } from "@/components/ui/card";
 import { HACKATHON_TIMELINE } from "@/lib/constants";
 
-interface ParticipationBenefit {
-  description: string;
-  icon: LucideIcon;
-  title: string;
-}
-
 const heroMetrics = [
   { label: "Team size", value: "1–4" },
   { label: "Eligibility", value: "SurgeVector, Taxilla" },
   { label: "Dates", value: "May 14–30" },
 ];
 
-const participationBenefits: ParticipationBenefit[] = [
+const faqs = [
   {
-    description:
-      "Turn an internal workflow, customer pain, or operational gap into a practical AI prototype.",
-    icon: Sparkles,
-    title: "Build Real-World AI Solutions",
+    answer:
+      "Any full-time employee at SurgeVector or Taxilla is eligible to participate. Teams can have between one and four members.",
+    question: "Who can participate in the hackathon?",
   },
   {
-    description:
-      "Get focused guidance from mentors as your idea moves toward the build phase.",
-    icon: UserRoundCheck,
-    title: "Mentorship From Experts",
-  },
-  {
-    description:
-      "Showcase strong prototypes and earn visibility for thoughtful execution.",
-    icon: Trophy,
-    title: "Prizes And Recognition",
-  },
-  {
-    description:
-      "Work with SurgeVector and Taxilla builders across teams while growing your AI delivery skills.",
-    icon: Users,
-    title: "Network And Grow",
+    answer:
+      "You can submit an idea, form a team around an available idea, or volunteer to support the event. Visit the registration page to get started.",
+    question: "How do I register?",
   },
 ];
 
@@ -103,8 +77,8 @@ export default function LandingFoundationPage() {
         </header>
 
         {/* ── Hero ── */}
-        <section className="flex min-h-[calc(100svh-5.75rem)] flex-col justify-center gap-10 py-20 sm:py-24">
-          <FadeIn className="max-w-4xl space-y-8">
+        <section className="flex min-h-[calc(100svh-5.75rem)] items-center gap-10 py-20 sm:py-24 lg:grid lg:grid-cols-2 lg:gap-16">
+          <FadeIn className="space-y-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-primary shadow-[0_0_36px_rgba(255,106,0,0.16)] backdrop-blur-xl">
               <Sparkles aria-hidden="true" className="size-4" />
               2026 Internal AI Hackathon
@@ -117,22 +91,6 @@ export default function LandingFoundationPage() {
                 SurgeVector and Taxilla builders submit ideas, form focused
                 teams, and sprint to build working AI prototypes.
               </p>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button asChild className="h-12 px-6" size="lg">
-                <Link href="/register">
-                  Register now
-                  <ArrowRight aria-hidden="true" className="size-4" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                className="h-12 border-orange-200/80 bg-white/70 px-6 text-[#15110d] shadow-[0_18px_50px_rgba(17,17,17,0.08)] hover:bg-primary/10 hover:text-[#15110d]"
-                size="lg"
-                variant="secondary"
-              >
-                <Link href="/leaderboard">View leaderboard</Link>
-              </Button>
             </div>
             <dl className="grid max-w-xl grid-cols-3 gap-3">
               {heroMetrics.map((metric) => (
@@ -149,6 +107,20 @@ export default function LandingFoundationPage() {
                 </div>
               ))}
             </dl>
+          </FadeIn>
+
+          <FadeIn
+            className="hidden lg:block"
+            transition={{ delay: 0.15, duration: 0.5 }}
+          >
+            <Image
+              alt="AI accelerator core visualization showing data ingestion, model training, code generation, and agentic ops"
+              className="w-full rounded-2xl shadow-[0_40px_100px_rgba(17,17,17,0.22)]"
+              height={507}
+              priority
+              src="/images/hero-visual.png"
+              width={900}
+            />
           </FadeIn>
         </section>
 
@@ -172,7 +144,7 @@ export default function LandingFoundationPage() {
           {/* Desktop: hexathon-style horizontal alternating timeline */}
           <FadeIn>
             <div className="hidden lg:block" aria-label="Hackathon timeline">
-              {/* Above labels — even indices (0, 2, 4) */}
+              {/* Above labels — even indices */}
               <div className="grid grid-cols-4">
                 {HACKATHON_TIMELINE.map((item, index) =>
                   index % 2 === 0 ? (
@@ -211,7 +183,7 @@ export default function LandingFoundationPage() {
                 ))}
               </div>
 
-              {/* Below labels — odd indices (1, 3) */}
+              {/* Below labels — odd indices */}
               <div className="grid grid-cols-4">
                 {HACKATHON_TIMELINE.map((item, index) =>
                   index % 2 !== 0 ? (
@@ -258,54 +230,121 @@ export default function LandingFoundationPage() {
           </div>
         </section>
 
-        {/* ── Why Participate ── */}
+        {/* ── Registration CTA ── */}
         <section
-          aria-labelledby="why-participate"
-          className="flex flex-col justify-center gap-10 py-20 sm:py-24 lg:py-28"
+          aria-labelledby="registration-cta"
+          className="py-20 sm:py-24 lg:py-28"
         >
-          <FadeIn className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-            <div className="space-y-3">
+          <FadeIn>
+            <div className="overflow-hidden rounded-3xl bg-[#111111] px-8 py-16 text-center shadow-[0_40px_100px_rgba(17,17,17,0.22)] sm:px-16 sm:py-20">
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                Why Participate
+                Registration
               </p>
               <h2
-                className="max-w-3xl text-3xl font-semibold tracking-tight text-[#15110d] sm:text-4xl"
-                id="why-participate"
+                className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl"
+                id="registration-cta"
               >
-                Build useful AI prototypes, learn with mentors, and grow across
-                teams.
+                Ready to build something real?
+              </h2>
+              <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-[#a89a8c]">
+                Submit your idea, form a team of up to four, and build a working
+                AI prototype in two weeks. Open to all SurgeVector and Taxilla
+                employees.
+              </p>
+              <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+                <Button
+                  asChild
+                  className="h-12 bg-primary px-8 text-white hover:bg-primary/90"
+                  size="lg"
+                >
+                  <Link href="/register">
+                    Register now
+                    <ArrowRight aria-hidden="true" className="size-4" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </FadeIn>
+        </section>
+
+        {/* ── About Us ── */}
+        <section
+          aria-labelledby="about-us"
+          className="py-20 sm:py-24 lg:py-28"
+        >
+          <FadeIn className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:items-start">
+            <div className="space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+                About
+              </p>
+              <h2
+                className="text-3xl font-semibold tracking-tight text-[#15110d] sm:text-4xl"
+                id="about-us"
+              >
+                Who we are.
               </h2>
             </div>
-            <p className="max-w-md text-sm leading-6 text-[#66584c]">
-              Bring a practical AI idea, learn with mentors, and showcase a
-              working prototype with builders across SurgeVector and Taxilla.
-            </p>
+            <div className="space-y-5 text-base leading-8 text-[#5f5348]">
+              <p>
+                SurgeVector is an AI-first software delivery company focused on
+                building intelligent accelerators that reduce time-to-value for
+                enterprise teams. Alongside our partner Taxilla, we operate
+                across data ingestion, model training, code generation, and
+                agentic operations.
+              </p>
+              <p>
+                The SurgeVector Internal AI Hackathon brings builders from both
+                organizations together for two weeks of focused ideation and
+                prototyping. Every idea starts with a real problem — an
+                internal workflow, a customer pain point, or an operational gap
+                — and ends with a working demonstration.
+              </p>
+              <p>
+                This is Phase 1 of our ongoing commitment to democratize AI
+                delivery skills across every team. The best prototypes will be
+                reviewed for production readiness and potential integration into
+                our accelerator platform.
+              </p>
+            </div>
           </FadeIn>
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            {participationBenefits.map((benefit, index) => {
-              const Icon = benefit.icon;
+        </section>
 
-              return (
-                <FadeIn
-                  className="h-full"
-                  key={benefit.title}
-                  transition={{ delay: index * 0.04, duration: 0.35 }}
-                >
-                  <Card className="h-full border-orange-200/60 bg-white/70 text-[#15110d] shadow-[0_18px_70px_rgba(17,17,17,0.08)]">
-                    <CardHeader>
-                      <span className="mb-2 inline-flex size-11 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
-                        <Icon aria-hidden="true" className="size-5" />
-                      </span>
-                      <CardTitle>{benefit.title}</CardTitle>
-                      <CardDescription className="leading-6 text-[#66584c]">
-                        {benefit.description}
-                      </CardDescription>
-                    </CardHeader>
-                  </Card>
-                </FadeIn>
-              );
-            })}
-          </div>
+        {/* ── FAQs ── */}
+        <section
+          aria-labelledby="faqs"
+          className="pb-28 pt-4 sm:pb-32"
+        >
+          <FadeIn className="mb-12 space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+              FAQs
+            </p>
+            <h2
+              className="text-3xl font-semibold tracking-tight text-[#15110d] sm:text-4xl"
+              id="faqs"
+            >
+              Common questions.
+            </h2>
+          </FadeIn>
+
+          <FadeIn className="divide-y divide-orange-200/60">
+            {faqs.map((faq) => (
+              <details
+                className="group py-6"
+                key={faq.question}
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-[#15110d] [&::-webkit-details-marker]:hidden">
+                  {faq.question}
+                  <ChevronDown
+                    aria-hidden="true"
+                    className="size-5 shrink-0 text-primary transition-transform duration-200 group-open:rotate-180"
+                  />
+                </summary>
+                <p className="mt-4 text-sm leading-7 text-[#5f5348]">
+                  {faq.answer}
+                </p>
+              </details>
+            ))}
+          </FadeIn>
         </section>
       </div>
     </main>
