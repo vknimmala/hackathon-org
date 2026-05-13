@@ -954,6 +954,62 @@ Findings:
 - P2: Available idea query already filters by `["submitted", "approved"]` — submitted ideas pass through without an approval step. No change needed.
 - P3: Run lint and typecheck after changes to validate import cleanup from removed sections.
 
+## Paper-Based Unified Deadline, Grace Window, and Form Theme Simulation
+
+Date: 2026-05-13
+
+### Scenario: Simplify deadline logic and apply cream theme to all register pages
+
+Initial state:
+
+- `IDEA_SUBMISSION_CLOSES_AT` is May 18; `TEAM_FORMATION_POOL_OPENS_AT` is May 22.
+- `isSharedTeamFormationOpen()` is a global check against `TEAM_FORMATION_POOL_OPENS_AT`.
+- Team registration action uses `isSharedTeamFormationOpen()` to enforce who can claim an idea.
+- Team registration page and form pass `isSharedPoolOpen` as a flag.
+- All register route pages (`/register`, `/register/participant`, `/register/idea`, `/register/team`, `/register/volunteer`) use the dark theme inherited from `globals.css`.
+- Form components have explicit dark-mode classes: `text-white`, `bg-black/30`, `bg-black/25`.
+
+New business rules:
+
+- Both idea submission and team registration close May 22.
+- After submitting an idea, the original submitter has 1 hour of exclusive priority to register a team.
+- After 1 hour, the idea enters the shared pool and any captain can claim it.
+- No global pool-open gate; the gate is per-idea, based on `submitted_at + 1 hour`.
+
+Execution:
+
+- `IDEA_SUBMISSION_CLOSES_AT` reverts to May 22 end-of-day IST.
+- `TEAM_FORMATION_POOL_OPENS_AT` constant removed; no longer a single global cutoff.
+- New `IDEA_EXCLUSIVE_WINDOW_HOURS = 1` constant.
+- New `isIdeaInExclusiveWindow(submittedAt)` helper returns true when now < submittedAt + 1 hour.
+- Registration action adds `submitted_at` to the idea select query.
+- Registration action replaces the `isSharedTeamFormationOpen()` guard with `isIdeaInExclusiveWindow(idea.submitted_at)`.
+- `isSharedTeamFormationOpen` export removed from constants; its import removed from all consumers.
+- `HACKATHON_TIMELINE` updates to 4 items: Kick-off (May 14), Ideas & Teams (May 14-22), Development Sprint (May 22-29), Demo Day (May 30).
+- Landing hero right card (Quick start) removed; hero becomes single-column full-width.
+- All register route pages: `<main>` gets `bg-[#fff8ef] text-[#15110d]`; gradient updated to light variant; Card classes updated to cream; `text-white` changed to `text-[#15110d]`; `text-muted-foreground` changed to `text-[#66584c]`.
+- Form components: `bg-black/30` select and result box backgrounds changed to cream; `text-white` labels changed to `text-[#15110d]`; member block backgrounds changed to `bg-orange-50/30`.
+- Idea page removes the "Review and approve" review step (no approval step exists).
+- Team page sidebar updated: removes the global pool-open status card; adds a "1-hour head start" info card.
+- Register choice page removes the redundant top-right context card; header and two choice cards remain.
+- Participant page: `isSharedTeamFormationOpen` import removed; status card simplifies to two states (open / closed).
+- `TeamRegistrationForm` `isSharedPoolOpen` prop removed; static helper text replaces the conditional string.
+
+Object state:
+
+- No database schema changes.
+- `isIdeaInExclusiveWindow` is the new per-idea enforcement path in the server action.
+- All register route pages and form components shift to the cream/orange visual palette.
+
+Findings:
+
+- P0: None.
+- P1: `submitted_at` must be added to the idea select in the registration action, or `isIdeaInExclusiveWindow` receives null and fails silently.
+- P1: `isSharedTeamFormationOpen` must be removed from every import to avoid a typecheck error after it is deleted from constants.
+- P2: The 4-item timeline changes the desktop grid from `grid-cols-5` to `grid-cols-4`; both landing and participant pages use this count.
+- P2: The select element `option` color in cream mode depends on the browser; use a light background on the select to keep text readable across browsers.
+- P3: Form component test coverage remains manual; lint and typecheck are the validation gates.
+
 ## Open TODOs
 
 - Add RLS policies when auth roles and ownership flows are implemented.
