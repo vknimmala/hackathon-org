@@ -28,7 +28,7 @@ export default function LandingFoundationPage() {
   return (
     <>
       {/* ── Sticky dark header ── */}
-      <header className="sticky top-0 z-30 flex items-center justify-between bg-[#0d0d0d]/95 px-6 py-3.5 backdrop-blur-xl sm:px-8 lg:px-10">
+      <header className="sticky top-0 z-30 flex items-center justify-between bg-[#1c1008]/95 px-6 py-3.5 backdrop-blur-xl sm:px-8 lg:px-10">
         <Link aria-label="SurgeVector Hackathon home" href="/">
           <span className="flex items-center overflow-hidden rounded-xl bg-white/95 px-3 py-1.5 shadow-[0_2px_12px_rgba(0,0,0,0.2)]">
             <Image
@@ -220,8 +220,8 @@ export default function LandingFoundationPage() {
             className="py-20 sm:py-24 lg:py-28"
           >
             <FadeIn>
-              <div className="overflow-hidden rounded-3xl bg-[#111111] px-8 py-16 text-center shadow-[0_40px_100px_rgba(17,17,17,0.22)] sm:px-16 sm:py-20">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+              <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#ff6a00] to-[#d94f00] px-8 py-16 text-center shadow-[0_40px_100px_rgba(255,106,0,0.30)] sm:px-16 sm:py-20">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/60">
                   Registration
                 </p>
                 <h2
@@ -230,7 +230,7 @@ export default function LandingFoundationPage() {
                 >
                   Ready to build something real?
                 </h2>
-                <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-[#a89a8c]">
+                <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-white/70">
                   Submit your idea, form a team of up to four, and build a
                   working AI prototype in two weeks. Open to all SurgeVector and
                   Taxilla employees.
@@ -238,7 +238,7 @@ export default function LandingFoundationPage() {
                 <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
                   <Button
                     asChild
-                    className="h-12 bg-primary px-8 text-white hover:bg-primary/90"
+                    className="h-12 border-0 bg-white px-8 text-primary hover:bg-white/90"
                     size="lg"
                   >
                     <Link href="/register">
