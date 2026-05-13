@@ -900,6 +900,60 @@ Findings:
 - P1: Client validation, form add-button guards, and the database trigger must all move to four together.
 - P2: Older paper simulation notes may mention prior one-to-three behavior; current architecture and feature docs should describe the new rule.
 
+## Paper-Based Timeline and Landing Simplification Simulation
+
+Date: 2026-05-13
+
+### Scenario: Update timeline dates and simplify landing page
+
+Initial state:
+
+- `IDEA_SUBMISSION_CLOSES_AT` and `TEAM_FORMATION_POOL_OPENS_AT` are both set to May 22 06:30 UTC.
+- `HACKATHON_TIMELINE` has five entries with idea submission ending May 22.
+- Landing page has four major sections: hero/event flow, hackathon details (phaseOneFeatures cards), participant flow (operatingSteps), and why-participate.
+- Participant page status card has two states: idea open or shared pool open.
+- Team registration action enforces the pool-open check using `isSharedTeamFormationOpen()`.
+- Business doc specifies idea generation ends May 18, team formation closes May 22, sprint May 22–29, demo day May 30.
+- No idea approval or vetting step is required — submitted ideas are immediately available for team formation.
+
+Execution:
+
+- `IDEA_SUBMISSION_CLOSES_AT` changes to May 18 end-of-day IST (2026-05-18T18:30:00Z).
+- `TEAM_FORMATION_POOL_OPENS_AT` changes to May 22 12:00 PM IST (2026-05-22T06:30:00Z) — now decoupled from idea close date.
+- `isIdeaSubmissionOpen()` now returns false after May 18 instead of May 22. No logic change needed.
+- `isSharedTeamFormationOpen()` still gates the shared pool on May 22. No logic change needed.
+- Team registration action already allows ideas with status `submitted` or `approved`, so no approval step removal is needed.
+- Landing removes the "Hackathon Details" section (phaseOneFeatures 4 cards) and the "Participant Flow" section (operatingSteps).
+- Landing adds an inline timeline section using `HACKATHON_TIMELINE` from constants.
+- Landing hero slogan changes to "Build Reusable AI Accelerators, Together."
+- Hero metrics change "Entry: Idea first" to "Dates: May 14–30".
+- Hero right card simplifies to two links: Register and Leaderboard (removes Participant timeline link).
+- Participant page status card gains a third state for May 18–22 gap (idea closed, pool not yet open).
+- Participant page idea submission description updated from May 22 to May 18.
+
+Gap state analysis (May 18–22):
+
+- `isIdeaOpen` = false, `isSharedPoolOpen` = false.
+- The participant page status card currently only has two states, so it would show "Idea window is live" — incorrect.
+- The idea submission action card shows "Closed" — correct.
+- Team registration remains open only for original idea owners during this gap.
+- Fix: add a third status card state for "Idea submission closed — shared pool opens May 22."
+
+Object state:
+
+- No database schema changes. No new tables, routes, or server actions.
+- `isIdeaSubmissionOpen()` and `isSharedTeamFormationOpen()` return values change after May 18 and May 22 respectively.
+- Landing page renders fewer sections, adds timeline.
+- Participant page renders correct 3-state status messaging.
+
+Findings:
+
+- P0: None.
+- P1: Participant page must handle the May 18–22 gap state explicitly or it will show "Idea window is live" when the idea window is actually closed.
+- P1: The hardcoded date "May 22 at 12:00 PM IST" in `registration-actions.ts` is still accurate because it references pool open time, not idea close time. No change needed.
+- P2: Available idea query already filters by `["submitted", "approved"]` — submitted ideas pass through without an approval step. No change needed.
+- P3: Run lint and typecheck after changes to validate import cleanup from removed sections.
+
 ## Open TODOs
 
 - Add RLS policies when auth roles and ownership flows are implemented.

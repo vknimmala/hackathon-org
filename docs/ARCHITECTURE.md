@@ -107,7 +107,7 @@ supabase/
 | `/` | SurgeVector Hackathon landing page with event details and Phase 1 CTAs |
 | `/register` | Registration choice page for participant or volunteer paths |
 | `/register/participant` | Participant timeline with idea submission and team registration actions |
-| `/register/idea` | Individual participant idea submission before the May 22 noon cutoff |
+| `/register/idea` | Individual participant idea submission before the May 18 deadline |
 | `/register/team` | Team captain registration for an unclaimed submitted or approved idea |
 | `/register/volunteer` | Volunteer registration for contact details, preferred roles, and availability notes |
 | `/leaderboard` | Simple leaderboard for team points, badges, and completion progress |
@@ -135,12 +135,13 @@ All operational tables use UUID primary keys and timestamps. Soft delete columns
 
 Key Phase 1 constraints:
 
-- Participants submit ideas under their own name before team creation.
+- Participants submit ideas under their own name before May 18.
+- No idea approval or vetting step is required; submitted ideas are immediately available for team registration.
 - Team registration is separate from idea submission and is led by a captain / point of contact.
-- Team registration claims an unclaimed submitted or approved idea through `teams.idea_submission_id`; claimed ideas are hidden from the available idea list.
-- Before May 22, 2026 at 12:00 PM IST, only the original idea submitter can register a team for that idea by matching the captain email to the idea submitter email. After that cutoff, the remaining idea pool is open for team captains.
+- Team registration claims an unclaimed submitted idea through `teams.idea_submission_id`; claimed ideas are hidden from the available idea list.
+- Before May 22, 2026 at 12:00 PM IST (`TEAM_FORMATION_POOL_OPENS_AT`), only the original idea submitter can register a team for that idea, matched by captain email. After that cutoff the remaining idea pool is open to any team captain.
 - Registration editing loads an existing non-deleted team, active team members, and linked idea context; successful updates write `audit_logs.before_state` and `audit_logs.after_state`.
-- Organizer review updates `idea_submissions.status`, `reviewed_at`, and `review_notes`, then writes an `audit_logs` row for approval or rejection.
+- Organizer review can optionally update `idea_submissions.status`, `reviewed_at`, and `review_notes`, but ideas are available for team registration as soon as they are submitted.
 - Team member count is enforced at a maximum of 4 active members.
 - App validation enforces minimum 1 team member.
 - Volunteer registration inserts a `submitted` volunteer row and audit log only; assignment, scheduling, shifts, realtime coordination, and approval workflows stay out of scope.
@@ -155,6 +156,7 @@ Tailwind CSS is configured through `src/app/globals.css` using a CSS-first theme
 
 Reusable visual rules:
 
+- The landing route uses a hero, a hexathon-style horizontal alternating timeline (desktop) with a card grid fallback (mobile), and a why-participate section. Keep this three-section structure and avoid adding back the removed redundant sections.
 - The landing route should use a light cream or white event canvas with controlled orange gradients and black contrast text.
 - Keep admin and registration pages simple and avoid redesigning them during landing-only visual refreshes.
 - Use `bg-card/80`, `border-border`, and `backdrop-blur-xl` for shared glass surfaces; landing-specific surfaces can use translucent white or cream with soft orange borders.
