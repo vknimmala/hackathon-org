@@ -135,14 +135,13 @@ export default async function AdminDashboardRoute() {
           <Card>
             <CardHeader>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                Minimal Access Assumption
+                Review Flow
               </p>
-              <CardTitle>Internal organizer route</CardTitle>
+              <CardTitle>Approve or reject, then the idea is open for teams.</CardTitle>
               <CardDescription className="text-base leading-7">
-                This MVP uses the server-side Supabase service role for admin
-                review because auth screens and the final ownership model are not
-                implemented yet. Supabase Auth and RLS hardening remain tracked
-                for the Phase 1 admin model.
+                Approved ideas appear in the team registration dropdown.
+                Rejected ideas are locked out. Review notes are stored for audit
+                purposes.
               </CardDescription>
             </CardHeader>
           </Card>

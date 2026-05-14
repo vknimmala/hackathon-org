@@ -92,13 +92,13 @@ export default async function MentorManagementRoute() {
           <Card>
             <CardHeader>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                Current Scope
+                Coordination
               </p>
-              <CardTitle>Simple profiles only</CardTitle>
+              <CardTitle>Profiles are the starting point for mentor coordination.</CardTitle>
               <CardDescription className="text-base leading-7">
-                This foundation lists mentors and creates profiles in the existing
-                table. Matching algorithms, scheduling, realtime updates, and AI
-                mentor assistants stay out of Phase 1.
+                Once profiles are created, organizers can match mentors to
+                registered teams manually based on expertise and remaining
+                capacity.
               </CardDescription>
             </CardHeader>
           </Card>

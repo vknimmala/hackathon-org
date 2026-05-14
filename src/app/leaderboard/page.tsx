@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Award, BarChart3, Sparkles, Trophy } from "lucide-react";
+import { ArrowLeft, Award, BarChart3, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -96,14 +96,14 @@ export default async function LeaderboardRoute() {
 
           <Card>
             <CardHeader>
-              <span className="mb-2 inline-flex size-12 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
-                <Sparkles aria-hidden="true" className="size-6" />
-              </span>
-              <CardTitle>No realtime scoring engine</CardTitle>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+                Points
+              </p>
+              <CardTitle>Points are awarded by organizers throughout the sprint.</CardTitle>
               <CardDescription className="text-base leading-7">
-                This page reads the existing Phase 1 gamification tables only.
-                Audience voting, advanced ranking, judging workflows, and XP
-                systems stay out of scope.
+                Teams earn participation points and badges for milestones
+                reached during the build sprint. The leaderboard updates as
+                organizers record progress.
               </CardDescription>
             </CardHeader>
           </Card>
