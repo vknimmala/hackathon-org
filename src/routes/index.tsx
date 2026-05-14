@@ -83,22 +83,26 @@ function HomePage() {
             <h2 className="mt-3 text-4xl sm:text-5xl font-bold tracking-tight">Four milestones, from idea to demo day.</h2>
           </div>
 
-          <div className="relative mt-20 hidden lg:grid grid-cols-4 gap-6">
-            {/* horizontal line passes through dot row */}
+          <div className="relative mt-20 hidden min-h-[22rem] lg:grid grid-cols-4 gap-6">
+            {/* horizontal line passes through the fixed dot row */}
             <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-primary/40" />
             {journey.map((step, i) => {
               const above = i % 2 === 0;
               return (
-                <div key={step.title} className="relative flex flex-col items-center text-center">
-                  <div className={`px-2 ${above ? "" : "invisible"}`}>
+                <div key={step.title} className="relative min-h-[22rem] text-center">
+                  <div
+                    className={`absolute inset-x-0 bottom-[calc(50%+3.5rem)] px-2 ${above ? "" : "invisible"}`}
+                  >
                     <div className="text-xs font-semibold tracking-[0.2em] text-primary">{step.date}</div>
                     <h3 className="mt-2 font-display font-semibold text-lg">{step.title}</h3>
                     <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{step.body}</p>
                   </div>
-                  <div className="relative z-10 my-10 grid place-items-center w-6 h-6 rounded-full bg-background border-2 border-primary shadow-glow">
+                  <div className="absolute left-1/2 top-1/2 z-10 grid h-6 w-6 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-primary bg-background shadow-glow">
                     <span className="w-2.5 h-2.5 rounded-full bg-primary" />
                   </div>
-                  <div className={`px-2 ${!above ? "" : "invisible"}`}>
+                  <div
+                    className={`absolute inset-x-0 top-[calc(50%+3.5rem)] px-2 ${!above ? "" : "invisible"}`}
+                  >
                     <div className="text-xs font-semibold tracking-[0.2em] text-primary">{step.date}</div>
                     <h3 className="mt-2 font-display font-semibold text-lg">{step.title}</h3>
                     <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{step.body}</p>
