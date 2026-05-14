@@ -33,7 +33,7 @@ export default function IdeaRegistrationRoute() {
       <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-10">
         <header className="flex items-center justify-between gap-4">
           <Button asChild variant="ghost" className="text-[#15110d] hover:bg-primary/10 hover:text-[#15110d]">
-            <Link href="/register/participant">
+            <Link href="/register">
               <ArrowLeft aria-hidden="true" className="size-4" />
               Back
             </Link>

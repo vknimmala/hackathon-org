@@ -55,7 +55,7 @@ export default function LandingFoundationPage() {
       {/* ── Full-bleed dark hero ── */}
       <section
         aria-label="Hero"
-        className="relative flex min-h-[calc(100svh-3.75rem)] flex-col items-center justify-center overflow-hidden text-center"
+        className="relative flex min-h-[calc(100svh-3.75rem)] flex-col overflow-hidden"
       >
         {/* Background image */}
         <Image
@@ -67,7 +67,7 @@ export default function LandingFoundationPage() {
           src="/images/hero-visual.png"
         />
         {/* Overlay for readability */}
-        <div aria-hidden="true" className="absolute inset-0 bg-black/60" />
+        <div aria-hidden="true" className="absolute inset-0 bg-black/50" />
 
         {/* Accessible h1 for SEO — visually hidden since the image carries the headline */}
         <h1 className="sr-only">
@@ -75,7 +75,10 @@ export default function LandingFoundationPage() {
           Hackathon 2026
         </h1>
 
-        <FadeIn className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-6 px-6 py-24 text-center">
+        {/* Spacer pushes content to the bottom, away from the image text */}
+        <div className="flex-1" aria-hidden="true" />
+
+        <FadeIn className="relative z-10 flex flex-col items-center gap-4 px-6 pb-10 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-primary backdrop-blur-xl">
             <Sparkles aria-hidden="true" className="size-4" />
             2026 Internal AI Hackathon
@@ -89,7 +92,7 @@ export default function LandingFoundationPage() {
         </FadeIn>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+        <div className="relative z-10 flex justify-center pb-6">
           <div className="flex size-10 items-center justify-center rounded-full border border-white/20 text-white/35">
             <ChevronDown aria-hidden="true" className="size-5" />
           </div>
