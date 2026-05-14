@@ -210,7 +210,15 @@ export function TeamRegistrationForm({ availableIdeas }: TeamRegistrationFormPro
             {result.message}
           </p>
           {result.ok ? (
-            <p className="mt-2 text-[#66584c]">Team ID: {result.id}</p>
+            <p className="mt-2 text-[#66584c]">
+              Save this link to edit your registration:{" "}
+              <a
+                className="underline"
+                href={`/registrations/${result.id}/edit`}
+              >
+                /registrations/{result.id}/edit
+              </a>
+            </p>
           ) : null}
         </div>
       ) : null}
