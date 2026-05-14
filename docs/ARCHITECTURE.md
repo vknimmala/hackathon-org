@@ -35,14 +35,11 @@ src/
       loading.tsx
       page.tsx
     register/
-      participant/
-        page.tsx
       idea/
         page.tsx
       team/
         page.tsx
-      volunteer/
-        page.tsx
+      page.tsx          ← Participant/Volunteer toggle (client component via RegisterPage)
     globals.css
     layout.tsx
   components/
@@ -105,11 +102,9 @@ supabase/
 | Route | Purpose |
 | --- | --- |
 | `/` | SurgeVector Hackathon landing page with event details and Phase 1 CTAs |
-| `/register` | Registration choice page for participant or volunteer paths |
-| `/register/participant` | Participant timeline with idea submission and team registration actions |
+| `/register` | Registration choice page — Participant tab for idea submission and team registration; Volunteer tab for contact details, preferred roles, and availability notes. |
 | `/register/idea` | Individual participant idea submission before the May 18 deadline |
 | `/register/team` | Team captain registration for an unclaimed submitted or approved idea |
-| `/register/volunteer` | Volunteer registration for contact details, preferred roles, and availability notes |
 | `/leaderboard` | Simple leaderboard for team points, badges, and completion progress |
 | `/registrations/[registrationId]/edit` | Edit an existing team registration and audit successful updates |
 | `/admin` | Organizer idea review dashboard for approving or rejecting submitted ideas |
@@ -139,7 +134,7 @@ Key Phase 1 constraints:
 - No idea approval or vetting step is required; submitted ideas are immediately available for team registration.
 - Team registration is separate from idea submission and is led by a captain / point of contact.
 - Team registration claims an unclaimed submitted idea through `teams.idea_submission_id`; claimed ideas are hidden from the available idea list.
-- Before May 22, 2026 at 12:00 PM IST (`TEAM_FORMATION_POOL_OPENS_AT`), only the original idea submitter can register a team for that idea, matched by captain email. After that cutoff the remaining idea pool is open to any team captain.
+- After submitting an idea, the original submitter has a 1-hour exclusive window (`IDEA_EXCLUSIVE_WINDOW_HOURS`) to register a team, matched by captain email. After that window the idea enters the shared pool and any team captain can claim it.
 - Registration editing loads an existing non-deleted team, active team members, and linked idea context; successful updates write `audit_logs.before_state` and `audit_logs.after_state`.
 - Organizer review can optionally update `idea_submissions.status`, `reviewed_at`, and `review_notes`, but ideas are available for team registration as soon as they are submitted.
 - Team member count is enforced at a maximum of 4 active members.

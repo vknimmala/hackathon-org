@@ -1010,8 +1010,227 @@ Findings:
 - P2: The select element `option` color in cream mode depends on the browser; use a light background on the select to keep text readable across browsers.
 - P3: Form component test coverage remains manual; lint and typecheck are the validation gates.
 
+## Paper-Based Full Phase 1 Page Audit Simulation
+
+Date: 2026-05-14
+
+This simulation traces every rendered route from the browser's perspective using the current code. It assumes Supabase is not yet connected (no env vars). Each section describes the visible state, the data path, and any issues found.
+
+### Route: `/` — Landing page
+
+Initial state:
+
+- `src/app/(marketing)/page.tsx` renders inside root layout (`<html><body>`).
+- No Supabase calls. All content is static.
+
+Execution:
+
+- Sticky dark header renders SurgeVector logo from `/images/surgevector-logo.png` and a "Register now" button linking to `/register`.
+- Full-viewport hero section renders `/images/hero-visual.png` as a fill image with a `bg-black/50` overlay. `<h1>` is `sr-only` for SEO; visual headline is baked into the image.
+- Cream `<main>` renders four sections: Journey (timeline), Registration CTA, About Us, and FAQs.
+- Timeline uses `HACKATHON_TIMELINE` (4 items): Kick-off May 14, Ideas & Teams May 14–22, Development Sprint May 22–29, Demo Day May 30.
+- Desktop timeline uses alternating above/below layout with a connecting gradient line. Mobile uses a card grid.
+- Registration CTA is an orange gradient card with a "Register now" link to `/register`.
+- FAQs use native `<details>` elements with a rotating chevron.
+
+Findings:
+
+- P0: None.
+- P1: None.
+- P2: Hero image path must be present at `/public/images/hero-visual.png` or the section renders as a blank overlay.
+
+---
+
+### Route: `/register` — Registration choice page
+
+Initial state:
+
+- `src/app/register/page.tsx` calls `isIdeaSubmissionOpen()` (today May 14 < May 22, returns `true`) and passes `isIdeaOpen=true` to `RegisterPage`.
+- `RegisterPage` is a client component with `useState<"participant" | "volunteer">`.
+
+Execution:
+
+- Cream page with radial gradient and grid texture.
+- Tab toggle renders "Participant" (active, orange) and "Volunteer" side by side.
+- Participant tab (default): heading "Submit an idea. Form a team. Build." + two action cards.
+  - Idea Submission card: description references May 22 deadline, orange "Open" button linking to `/register/idea` (rendered because `isIdeaOpen=true`).
+  - Team Registration card: always shows orange "Open" button linking to `/register/team`.
+- Volunteer tab: heading "Help run the hackathon." + three info cards + `VolunteerRegistrationForm` inline.
+- Header has back-to-hackathon ghost button and "View leaderboard" secondary button.
+
+Findings:
+
+- P0: None.
+- P1: None.
+- P2: After May 22 `isIdeaOpen` becomes `false`; the Idea Submission card correctly renders a disabled "Closed" button.
+
+---
+
+### Route: `/register/idea` — Idea submission form
+
+Initial state:
+
+- `src/app/register/idea/page.tsx` calls `isIdeaSubmissionOpen()` (returns `true` today).
+- Passes `isOpen=true` to the form section.
+
+Execution:
+
+- Cream page with left info panel and right form card.
+- Info panel: label "Idea Submission", heading, description of 1-hour priority, and a "Then form a team" info card.
+- Form card renders `IdeaSubmissionForm` (client component).
+- Form fields: full name, work email, organization (SurgeVector / Taxilla select), department, idea title, problem statement, proposed solution, AI usage.
+- Submit calls `submitIdeaAction`. With no Supabase, action throws → catches → returns `{ ok: false, message: "Registration is not connected yet..." }`.
+- Success path shows idea ID under the form. Error path shows error message.
+
+Findings:
+
+- P0: None.
+- P1: Without Supabase env vars, form correctly shows a friendly error instead of crashing.
+- P2: After May 22, `isOpen=false` renders a "Submission closed" notice instead of the form.
+
+---
+
+### Route: `/register/team` — Team registration form
+
+Initial state:
+
+- `src/app/register/team/page.tsx` calls `getAvailableIdeasForTeamRegistration()`.
+- Without Supabase, query catches and returns `{ ok: false, ideas: [], message: "Registration is not connected yet..." }`.
+
+Execution:
+
+- Cream page with left info panel (two info cards) and right form card.
+- Without Supabase: error notice renders above the form ("Available ideas could not be loaded").
+- `TeamRegistrationForm` renders with an empty ideas list; idea select dropdown shows no options.
+- Form fields: idea selection (dropdown), team name, organization, optional project summary, 1–4 member rows.
+- Submit calls `submitTeamRegistrationAction`. Server action validates payload, checks idea, checks claim status, checks 1-hour exclusive window via `isIdeaInExclusiveWindow`.
+
+Findings:
+
+- P0: None.
+- P1: Without Supabase the form renders but submitting fails gracefully with a friendly error.
+- P2: The 1-hour exclusive window check happens server-side only; client does not need to enforce it.
+
+---
+
+### Route: `/admin` — Idea review dashboard
+
+Initial state:
+
+- `src/app/(dashboard)/admin/page.tsx` calls `getIdeaSubmissionsForReview()`.
+- Without Supabase, query returns `{ ok: false, ideas: [], message: "Admin review is not connected yet..." }`.
+- `result.ideas` destructuring is safe because error state always returns `ideas: []`.
+
+Execution:
+
+- Dark page with orange radial gradient.
+- Two hero cards: "Approve ideas for team registration" and "Minimal Access Assumption" (documents service-role MVP pattern).
+- Four stat cards: Total ideas, Awaiting review, Approved, Rejected — all show `0` without Supabase.
+- Without Supabase: error card renders with message. No idea list renders.
+- With Supabase and ideas: each idea card renders participant info, status badge, problem statement, proposed solution, AI usage, and `IdeaReviewForm` for approve / reject / notes.
+
+Findings:
+
+- P0: None.
+- P1: `entity_table: "idea_submissions"` in `idea-review-actions.ts` was inconsistent with the `sv_` prefix convention used elsewhere. Fixed to `"sv_idea_submissions"`.
+- P2: No auth guard exists. Route is accessible by anyone who knows the URL. Documented as a Phase 1 minimal-access assumption.
+
+---
+
+### Route: `/admin/mentors` — Mentor management
+
+Initial state:
+
+- `src/app/(dashboard)/admin/mentors/page.tsx` calls `getMentorsForAdmin()`.
+- Without Supabase, query returns `{ ok: false, mentors: [], message: "Mentor management is not connected yet..." }`.
+
+Execution:
+
+- Dark page with orange radial gradient.
+- Two hero cards: "Build the Phase 1 mentor bench" and "Simple profiles only" (scope note).
+- Three stat cards: Total mentors, Available, Total capacity — all `0` without Supabase.
+- Left column: `MentorCreateForm` (full name, email, expertise comma-separated, capacity, availability checkbox). Submits via `createMentorAction` with `useFormState`.
+- Right column: error/empty/mentor-list depending on result.
+- Mentor list cards show capacity progress, created date, ID, and expertise badge chips.
+
+Findings:
+
+- P0: None.
+- P1: None.
+- P2: Duplicate email is rejected by database uniqueness constraint; action returns the constraint error message.
+
+---
+
+### Route: `/leaderboard` — Team leaderboard
+
+Initial state:
+
+- `src/app/leaderboard/page.tsx` calls `getLeaderboard()` which queries three tables: `sv_teams`, `sv_leaderboard_entries`, `sv_achievements`.
+- Without Supabase, query returns `{ ok: false, entries: [], achievements: [], message: "Leaderboard is not connected yet..." }`.
+
+Execution:
+
+- Dark page.
+- Two hero cards: "Track participation, badges, and progress" and "No realtime scoring engine" (scope note).
+- Three stat cards: Teams, Total points, Badges earned — all `0` without Supabase.
+- Without Supabase: error card renders.
+- With Supabase and no data: empty-state card renders.
+- With data: ranked team cards show rank number, organization/status, team name, completion progress bar, participation points, badge chips, and total points. Achievement catalog section renders below when active achievements exist.
+- Teams without leaderboard entries fall back to `participation_points` from the team row.
+
+Findings:
+
+- P0: None.
+- P1: None.
+- P2: Badge JSON is parsed conservatively by `parseBadges` — unexpected JSONB shapes produce empty badge arrays rather than errors.
+
+---
+
+### Route: `/registrations/[registrationId]/edit` — Edit registration
+
+Initial state:
+
+- `src/app/registrations/[registrationId]/edit/page.tsx` receives a `registrationId` param.
+- Calls `getTeamRegistrationForEdit(registrationId)`.
+- Without Supabase: query returns `{ ok: false, registration: null, message: "..." }`.
+
+Execution:
+
+- Dark page with orange radial gradient.
+- Left column: hero card "Keep team details current", registration ID card, linked idea card, and current scope card (rendered only when registration is found).
+- Right column:
+  - Without Supabase: error card renders.
+  - With Supabase, ID not found: "No registration found" card renders.
+  - With Supabase, team found but no active members: warning card renders; form still shows.
+  - With Supabase, team found: `TeamRegistrationEditForm` renders pre-filled with team name, organization, project summary, and existing member rows.
+- Form submit calls `updateTeamRegistrationAction` which syncs member rows and writes an audit log.
+
+Findings:
+
+- P0: None.
+- P1: There is no UI path to reach this route from the main navigation. Users need the team ID from the success message after team registration. This is acceptable for Phase 1 but should be noted.
+- P2: Soft-deleted members retain auditability through `deleted_at`; they do not reappear in the form on reload.
+
+---
+
+### Cross-Cutting Findings
+
+| Finding | Severity | Status |
+| --- | --- | --- |
+| `entity_table: "idea_submissions"` missing sv_ prefix in `idea-review-actions.ts` | P1 | Fixed |
+| ARCHITECTURE.md referenced removed `TEAM_FORMATION_POOL_OPENS_AT` constant | P2 | Fixed |
+| No auth guard on `/admin` or `/admin/mentors` | P2 | Documented as Phase 1 minimal-access assumption |
+| No navigation path to `/registrations/[id]/edit` from the main UI | P2 | Acceptable for Phase 1 |
+| All error paths handled gracefully without crashing routes | — | Verified |
+| All forms show friendly errors when Supabase is not connected | — | Verified |
+
+---
+
 ## Open TODOs
 
 - Add RLS policies when auth roles and ownership flows are implemented.
-- Generate full Supabase TypeScript types after the Supabase project is created.
+- Generate full Supabase TypeScript types after the Supabase project is created (`supabase gen types typescript`).
 - Add focused tests after the first real form and server action are implemented.
+- Surface team registration ID on the success confirmation so participants can bookmark the edit route.
+- [x] Fix scope-boundary hero cards on /admin, /admin/mentors, /leaderboard.
+- [x] Show /registrations/{id}/edit URL in team registration success state.
