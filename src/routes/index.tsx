@@ -4,6 +4,7 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Button } from "@/components/ui/button";
 import heroBanner from "@/assets/hero-banner.png";
+import aiModelsVsTasks from "@/assets/ai-models-vs-tasks.png";
 import {
   Accordion,
   AccordionContent,
@@ -48,6 +49,11 @@ const faqs = [
   { q: "What is the theme of the hackathon?", a: "Building reusable AI accelerators that improve productivity, automation, and cross-functional efficiency." },
   { q: "Who can participate?", a: "Teams of 1–4 members from the SurgeVector and Taxilla organizations across all teams and functions." },
   { q: "What kind of projects can we build?", a: "AI solutions for GTM & Sales, Engineering productivity, HR/Finance/Legal operations, or cross-functional automation." },
+  {
+    q: "How do I choose the right AI model and stack?",
+    image: aiModelsVsTasks,
+    alt: "AI models versus tasks and recommended tools and frameworks for hackathon builds",
+  },
   { q: "What are the required deliverables?", a: "A documented AI accelerator, live demo, and benchmark results showing measurable impact." },
   { q: "How will projects be judged?", a: "Based on AI effectiveness, productivity improvement, reusability, and responsible AI practices." },
   { q: "Are mentors and tools provided?", a: "Yes, mentors, AI frameworks, VM provisioning, and tool access will be provided." },
@@ -139,7 +145,18 @@ function HomePage() {
             {faqs.map((f, i) => (
               <AccordionItem key={i} value={`f-${i}`} className="border-b border-border/60">
                 <AccordionTrigger className="text-left font-display font-semibold text-base hover:text-primary">{f.q}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">{f.a}</AccordionContent>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                  {"image" in f ? (
+                    <img
+                      src={f.image}
+                      alt={f.alt}
+                      className="mt-2 w-full rounded-2xl border border-border/60 bg-background shadow-soft"
+                      loading="lazy"
+                    />
+                  ) : (
+                    f.a
+                  )}
+                </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
