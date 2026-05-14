@@ -17,6 +17,7 @@ There is also an untracked Lovable export folder (`surge-attendee-hub-main/`). T
 - React 19 with TypeScript
 - TanStack Start, TanStack Router, and TanStack Query
 - Vite with `@lovable.dev/vite-tanstack-config`
+- Nitro Vercel adapter for production deployment
 - Tailwind CSS v4
 - Radix/shadcn-style UI components under `src/components/ui/`
 - Supabase Auth and database via `@supabase/supabase-js`
@@ -95,9 +96,11 @@ For Vercel, configure environment variables in the Vercel project settings for t
 
 ## Deployment Notes
 
-The repo currently has Cloudflare/Wrangler configuration (`wrangler.jsonc`) and Lovable's TanStack Vite config. The user also intends to deploy/configure Vercel env vars, so confirm the target platform before changing deployment config.
+The active production target is Vercel at `https://hackathon.surgevector.ai`.
 
-`vite.config.ts` intentionally uses `@lovable.dev/vite-tanstack-config`. That package already installs several plugins and aliases. Do not manually add duplicate plugins for React, Tailwind, TanStack Start, `tsconfig` paths, Cloudflare, or Lovable tagging unless the config package is removed.
+`vite.config.ts` intentionally uses `@lovable.dev/vite-tanstack-config` plus `nitro({ preset: "vercel" })`. The Lovable Cloudflare adapter is disabled with `cloudflare: false` so Vercel receives Build Output API files under `.vercel/output`.
+
+Do not manually add duplicate plugins for React, Tailwind, TanStack Start, `tsconfig` paths, or Lovable tagging unless the config package is removed.
 
 ## Upcoming Work Notes
 
