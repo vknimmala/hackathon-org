@@ -101,7 +101,7 @@ export async function reviewIdeaSubmissionAction(
       after_state: updatedIdea as unknown as Json,
       before_state: existingIdea as unknown as Json,
       entity_id: updatedIdea.id,
-      entity_table: "idea_submissions",
+      entity_table: "sv_idea_submissions",
       metadata: {
         previous_status: existingIdea.status,
         source: "admin_idea_review",
