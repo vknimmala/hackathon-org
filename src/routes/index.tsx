@@ -147,8 +147,8 @@ function HomePage() {
         <div className="mx-auto max-w-5xl px-6">
           <div className="relative overflow-hidden rounded-3xl bg-primary-gradient text-primary-foreground p-12 sm:p-16 shadow-glow">
             <Sparkles className="absolute top-6 right-6 w-24 h-24 opacity-20" />
-            <h3 className="font-display text-3xl sm:text-4xl font-bold max-w-2xl">Registrations are open. Bring an idea, or claim one.</h3>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <h3 className="max-w-2xl text-center font-display text-3xl font-bold sm:text-left sm:text-4xl">Registrations are open. Bring an idea, or claim one.</h3>
+            <div className="mt-8 flex flex-wrap justify-center gap-3 sm:justify-start">
               <Link to="/register">
                 <Button size="lg" variant="secondary" className="h-12 px-6 bg-background text-foreground hover:bg-background/90">
                   <Rocket className="mr-2 w-4 h-4" /> Register Now

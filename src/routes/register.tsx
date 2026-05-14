@@ -64,7 +64,7 @@ function RegisterPage() {
             </div>
             <h1 className="mt-6 font-display text-3xl font-bold">You're in.</h1>
             <p className="mt-3 text-muted-foreground">Your registration was received. Organisers will reach out via email with next steps.</p>
-            <div className="mt-8 flex justify-center gap-3">
+            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Button onClick={() => setDone(false)} variant="outline">Submit another</Button>
               <Link to="/"><Button className="bg-primary-gradient text-primary-foreground shadow-glow">Back home</Button></Link>
             </div>
@@ -181,7 +181,7 @@ function ParticipantForm({ onDone }: { onDone: () => void }) {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="rounded-3xl border border-border/60 bg-card p-8 shadow-soft space-y-5">
+    <form onSubmit={onSubmit} noValidate className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft space-y-5 sm:p-8">
       <div className="grid sm:grid-cols-2 gap-4">
         <Field label="Full name" name="full_name" required placeholder="Your name" error={errors.full_name} onChange={() => clearError("full_name")} />
         <Field label="Work email" name="email" type="email" required placeholder="you@surgevector.ai" error={errors.email} onChange={() => clearError("email")} />
@@ -207,7 +207,7 @@ function ParticipantForm({ onDone }: { onDone: () => void }) {
 
       {/* Team section */}
       <div className="rounded-2xl border border-border/60 bg-background/50 p-5 space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="font-display font-semibold">Team</h3>
             <p className="text-xs text-muted-foreground mt-0.5">Add a team name and up to 4 members.</p>
@@ -240,7 +240,7 @@ function ParticipantForm({ onDone }: { onDone: () => void }) {
                 />
                 {errors[`team_members.${i}.email`] && <p className="mt-1.5 text-xs text-destructive">{errors[`team_members.${i}.email`]}</p>}
               </div>
-              <div className="sm:pt-7">
+              <div className="flex justify-end sm:pt-7">
                 <Button type="button" variant="ghost" size="icon" onClick={() => removeMember(i)} aria-label="Remove member">
                   <Trash2 className="w-4 h-4" />
                 </Button>

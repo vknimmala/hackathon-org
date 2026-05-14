@@ -85,7 +85,7 @@ function AuthScreen() {
   }
 
   return (
-    <div className="min-h-screen grid place-items-center bg-hero px-6">
+    <div className="min-h-screen grid place-items-center bg-hero px-4 py-10 sm:px-6">
       <Card className="w-full max-w-md p-8">
         <Link to="/" className="flex items-center gap-2 mb-6">
           <span className="grid place-items-center w-9 h-9 rounded-lg bg-primary-gradient text-primary-foreground shadow-glow">
@@ -120,11 +120,11 @@ function NoAccessScreen() {
   const navigate = useNavigate();
   return (
     <div className="min-h-screen grid place-items-center px-6">
-      <Card className="max-w-md p-8 text-center">
+      <Card className="mx-4 max-w-md p-6 text-center sm:p-8">
         <Shield className="w-10 h-10 mx-auto text-primary" />
         <h1 className="mt-4 font-display text-2xl font-bold">No admin access</h1>
         <p className="mt-2 text-sm text-muted-foreground">Your account is signed in but doesn't have admin rights yet. Ask an organiser to grant you the <code>admin</code> role in <code>user_roles</code>.</p>
-        <div className="mt-6 flex justify-center gap-2">
+        <div className="mt-6 flex flex-col justify-center gap-2 sm:flex-row">
           <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/admin" }); }}>
             <LogOut className="w-4 h-4 mr-2" /> Sign out
           </Button>
@@ -198,14 +198,14 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-40 bg-background/80 backdrop-blur border-b border-border/60">
-        <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
+        <div className="mx-auto flex min-h-16 max-w-7xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-0">
+          <Link to="/" className="flex min-w-0 items-center gap-2">
             <span className="grid place-items-center w-9 h-9 rounded-lg bg-primary-gradient text-primary-foreground shadow-glow">
               <Zap className="w-4 h-4" />
             </span>
-            <span className="font-display font-bold">SurgeVector Admin</span>
+            <span className="truncate font-display font-bold">SurgeVector Admin</span>
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex w-full items-center gap-2 sm:w-auto">
             <Button variant="ghost" size="sm" onClick={load}><RefreshCw className="w-4 h-4 mr-2" /> Refresh</Button>
             <Button variant="outline" size="sm" onClick={async () => { await supabase.auth.signOut(); }}>
               <LogOut className="w-4 h-4 mr-2" /> Sign out
@@ -214,7 +214,7 @@ function Dashboard() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-6 py-10">
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
         <h1 className="font-display text-3xl font-bold">Registrations</h1>
         <p className="text-muted-foreground mt-1">All hackathon submissions across both tracks.</p>
 
@@ -232,7 +232,7 @@ function Dashboard() {
         </div>
 
         <Tabs defaultValue="all" className="mt-6">
-          <TabsList>
+          <TabsList className="flex h-auto w-full flex-wrap justify-start sm:w-auto">
             <TabsTrigger value="all">All ({stats.total})</TabsTrigger>
             <TabsTrigger value="Participant">Participants ({stats.participants})</TabsTrigger>
             <TabsTrigger value="Volunteer">Volunteers ({stats.volunteers})</TabsTrigger>
@@ -261,9 +261,9 @@ function Stat({ label, value, icon }: { label: string; value: number; icon: Reac
 function Table({ rows, loading, onExport, onStatus }: { rows: Reg[]; loading: boolean; onExport: () => void; onStatus: (id: string, status: RegStatus) => void }) {
   return (
     <Card className="mt-4 overflow-hidden">
-      <div className="flex items-center justify-between p-4 border-b border-border/60">
+      <div className="flex flex-col gap-3 p-4 border-b border-border/60 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-muted-foreground">{rows.length} record{rows.length === 1 ? "" : "s"}</p>
-        <Button size="sm" variant="outline" onClick={onExport} disabled={!rows.length}>
+        <Button size="sm" variant="outline" onClick={onExport} disabled={!rows.length} className="w-full sm:w-auto">
           <Download className="w-4 h-4 mr-2" /> Export CSV
         </Button>
       </div>
@@ -327,7 +327,7 @@ function Table({ rows, loading, onExport, onStatus }: { rows: Reg[]; loading: bo
                 </td>
                 <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{new Date(r.created_at).toLocaleString()}</td>
                 <td className="px-4 py-3">
-                  <div className="flex justify-end gap-2">
+                  <div className="flex flex-wrap justify-end gap-2">
                     <Button
                       size="sm"
                       variant="outline"

@@ -24,6 +24,8 @@ There is also an untracked Lovable export folder (`surge-attendee-hub-main/`). T
 
 ## Commands
 
+Use Node.js `>=22.12.0`. TanStack Start, Wrangler, and related packages warn or may fail on Node 20.
+
 Prefer Bun because the repo includes `bun.lock`.
 
 ```bash
