@@ -1,6 +1,6 @@
-create table public.idea_submissions (
+create table public.sv_idea_submissions (
   id uuid primary key default gen_random_uuid(),
-  participant_user_id uuid references public.users(id),
+  participant_user_id uuid references public.sv_users(id),
   participant_full_name text not null,
   participant_email text not null,
   organization public.organization_type not null,
@@ -11,7 +11,7 @@ create table public.idea_submissions (
   ai_usage text not null,
   status public.registration_status not null default 'submitted',
   submitted_at timestamptz not null default now(),
-  reviewed_by uuid references public.users(id),
+  reviewed_by uuid references public.sv_users(id),
   reviewed_at timestamptz,
   review_notes text,
   created_at timestamptz not null default now(),
@@ -19,17 +19,17 @@ create table public.idea_submissions (
   deleted_at timestamptz
 );
 
-alter table public.teams
-  add column idea_submission_id uuid references public.idea_submissions(id);
+alter table public.sv_teams
+  add column idea_submission_id uuid references public.sv_idea_submissions(id);
 
-create index idea_submissions_status_idx on public.idea_submissions(status)
+create index sv_idea_submissions_status_idx on public.sv_idea_submissions(status)
   where deleted_at is null;
-create index idea_submissions_participant_email_idx on public.idea_submissions(participant_email)
+create index sv_idea_submissions_participant_email_idx on public.sv_idea_submissions(participant_email)
   where deleted_at is null;
-create index teams_idea_submission_idx on public.teams(idea_submission_id)
+create index sv_teams_idea_submission_idx on public.sv_teams(idea_submission_id)
   where deleted_at is null;
 
-create trigger set_idea_submissions_updated_at before update on public.idea_submissions
+create trigger set_sv_idea_submissions_updated_at before update on public.sv_idea_submissions
   for each row execute function public.set_updated_at();
 
-alter table public.idea_submissions enable row level security;
+alter table public.sv_idea_submissions enable row level security;

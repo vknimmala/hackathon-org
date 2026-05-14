@@ -1,10 +1,10 @@
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/server";
 import type { Database, Json } from "@/types/database";
 
-type AchievementRow = Database["public"]["Tables"]["achievements"]["Row"];
+type AchievementRow = Database["public"]["Tables"]["sv_achievements"]["Row"];
 type LeaderboardEntryRow =
-  Database["public"]["Tables"]["leaderboard_entries"]["Row"];
-type TeamRow = Database["public"]["Tables"]["teams"]["Row"];
+  Database["public"]["Tables"]["sv_leaderboard_entries"]["Row"];
+type TeamRow = Database["public"]["Tables"]["sv_teams"]["Row"];
 
 const achievementSelect = `
   badge_icon,
@@ -170,7 +170,7 @@ export async function getLeaderboard(): Promise<LeaderboardResult> {
   try {
     const supabase = createSupabaseServiceRoleClient();
     const { data: teams, error: teamsError } = await supabase
-      .from("teams")
+      .from("sv_teams")
       .select(teamSelect)
       .is("deleted_at", null);
 
@@ -184,7 +184,7 @@ export async function getLeaderboard(): Promise<LeaderboardResult> {
     }
 
     const { data: entries, error: entriesError } = await supabase
-      .from("leaderboard_entries")
+      .from("sv_leaderboard_entries")
       .select(leaderboardEntrySelect)
       .is("deleted_at", null);
 
@@ -198,7 +198,7 @@ export async function getLeaderboard(): Promise<LeaderboardResult> {
     }
 
     const { data: achievements, error: achievementsError } = await supabase
-      .from("achievements")
+      .from("sv_achievements")
       .select(achievementSelect)
       .eq("is_active", true)
       .is("deleted_at", null)

@@ -13,7 +13,7 @@ import {
   type TeamRegistrationInput,
 } from "@/validations/registration";
 
-type TeamMemberRow = Database["public"]["Tables"]["team_members"]["Row"];
+type TeamMemberRow = Database["public"]["Tables"]["sv_team_members"]["Row"];
 
 export type RegistrationActionResult =
   | {
@@ -79,7 +79,7 @@ export async function submitIdeaAction(
   try {
     const supabase = createSupabaseServiceRoleClient();
     const { data, error } = await supabase
-      .from("idea_submissions")
+      .from("sv_idea_submissions")
       .insert(ideaRecord)
       .select("id")
       .single();
@@ -91,11 +91,11 @@ export async function submitIdeaAction(
       };
     }
 
-    await supabase.from("audit_logs").insert({
+    await supabase.from("sv_audit_logs").insert({
       action: "submitted",
       after_state: ideaRecord as Json,
       entity_id: data.id,
-      entity_table: "idea_submissions",
+      entity_table: "sv_idea_submissions",
       metadata: { source: "participant_idea_form" },
     });
 
@@ -132,7 +132,7 @@ export async function updateTeamRegistrationAction(
   try {
     const supabase = createSupabaseServiceRoleClient();
     const { data: existingTeam, error: teamLookupError } = await supabase
-      .from("teams")
+      .from("sv_teams")
       .select("*")
       .eq("id", values.registrationId)
       .is("deleted_at", null)
@@ -153,7 +153,7 @@ export async function updateTeamRegistrationAction(
     }
 
     const { data: existingMembers, error: membersLookupError } = await supabase
-      .from("team_members")
+      .from("sv_team_members")
       .select("*")
       .eq("team_id", existingTeam.id)
       .is("deleted_at", null)
@@ -217,7 +217,7 @@ export async function updateTeamRegistrationAction(
       project_summary: values.projectSummary || null,
     };
     const { data: updatedTeam, error: updateTeamError } = await supabase
-      .from("teams")
+      .from("sv_teams")
       .update(teamRecord)
       .eq("id", existingTeam.id)
       .is("deleted_at", null)
@@ -233,7 +233,7 @@ export async function updateTeamRegistrationAction(
 
     if (memberIdsToSoftDelete.length > 0) {
       const { error: softDeleteError } = await supabase
-        .from("team_members")
+        .from("sv_team_members")
         .update({
           deleted_at: new Date().toISOString(),
           is_primary_contact: false,
@@ -256,7 +256,7 @@ export async function updateTeamRegistrationAction(
 
       if (member.id) {
         const { error: updateMemberError } = await supabase
-          .from("team_members")
+          .from("sv_team_members")
           .update(memberRecord)
           .eq("id", member.id)
           .eq("team_id", existingTeam.id)
@@ -284,7 +284,7 @@ export async function updateTeamRegistrationAction(
         !usedExistingMemberIds.has(reusableMember.id)
       ) {
         const { error: updateMemberError } = await supabase
-          .from("team_members")
+          .from("sv_team_members")
           .update(memberRecord)
           .eq("id", reusableMember.id)
           .eq("team_id", existingTeam.id)
@@ -303,7 +303,7 @@ export async function updateTeamRegistrationAction(
       }
 
       const { error: insertMemberError } = await supabase
-        .from("team_members")
+        .from("sv_team_members")
         .insert({
           ...memberRecord,
           team_id: existingTeam.id,
@@ -318,7 +318,7 @@ export async function updateTeamRegistrationAction(
     }
 
     const { data: updatedMembers, error: updatedMembersError } = await supabase
-      .from("team_members")
+      .from("sv_team_members")
       .select("*")
       .eq("team_id", existingTeam.id)
       .is("deleted_at", null)
@@ -332,7 +332,7 @@ export async function updateTeamRegistrationAction(
       };
     }
 
-    const { error: auditError } = await supabase.from("audit_logs").insert({
+    const { error: auditError } = await supabase.from("sv_audit_logs").insert({
       action: "updated",
       after_state: {
         members: updatedMembers,
@@ -343,7 +343,7 @@ export async function updateTeamRegistrationAction(
         team: existingTeam,
       } as Json,
       entity_id: existingTeam.id,
-      entity_table: "teams",
+      entity_table: "sv_teams",
       metadata: { source: "team_registration_edit" },
     });
 
@@ -386,7 +386,7 @@ export async function submitTeamRegistrationAction(
   try {
     const supabase = createSupabaseServiceRoleClient();
     const { data: idea, error: ideaError } = await supabase
-      .from("idea_submissions")
+      .from("sv_idea_submissions")
       .select("id, participant_email, status, submitted_at")
       .eq("id", values.ideaSubmissionId)
       .is("deleted_at", null)
@@ -414,7 +414,7 @@ export async function submitTeamRegistrationAction(
     }
 
     const { data: existingClaims, error: claimsError } = await supabase
-      .from("teams")
+      .from("sv_teams")
       .select("id")
       .eq("idea_submission_id", values.ideaSubmissionId)
       .is("deleted_at", null)
@@ -459,7 +459,7 @@ export async function submitTeamRegistrationAction(
     };
 
     const { data: team, error: teamError } = await supabase
-      .from("teams")
+      .from("sv_teams")
       .insert(teamRecord)
       .select("id")
       .single();
@@ -480,7 +480,7 @@ export async function submitTeamRegistrationAction(
     }));
 
     const { error: membersError } = await supabase
-      .from("team_members")
+      .from("sv_team_members")
       .insert(memberRecords);
 
     if (membersError) {
@@ -490,14 +490,14 @@ export async function submitTeamRegistrationAction(
       };
     }
 
-    await supabase.from("audit_logs").insert({
+    await supabase.from("sv_audit_logs").insert({
       action: "submitted",
       after_state: {
         members: memberRecords,
         team: teamRecord,
       },
       entity_id: team.id,
-      entity_table: "teams",
+      entity_table: "sv_teams",
       metadata: { source: "idea_claim_team_registration" },
     });
 

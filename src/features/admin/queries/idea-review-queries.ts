@@ -2,7 +2,7 @@ import { createSupabaseServiceRoleClient } from "@/lib/supabase/server";
 import type { Database } from "@/types/database";
 
 type IdeaSubmissionRow =
-  Database["public"]["Tables"]["idea_submissions"]["Row"];
+  Database["public"]["Tables"]["sv_idea_submissions"]["Row"];
 
 const ideaReviewSelect = `
   ai_usage,
@@ -64,7 +64,7 @@ export async function getIdeaSubmissionsForReview(): Promise<IdeaReviewListResul
   try {
     const supabase = createSupabaseServiceRoleClient();
     const { data, error } = await supabase
-      .from("idea_submissions")
+      .from("sv_idea_submissions")
       .select(ideaReviewSelect)
       .is("deleted_at", null)
       .order("submitted_at", { ascending: false });

@@ -3,9 +3,9 @@ import { createSupabaseServiceRoleClient } from "@/lib/supabase/server";
 import type { Database } from "@/types/database";
 
 type IdeaSubmissionRow =
-  Database["public"]["Tables"]["idea_submissions"]["Row"];
-type TeamMemberRow = Database["public"]["Tables"]["team_members"]["Row"];
-type TeamRow = Database["public"]["Tables"]["teams"]["Row"];
+  Database["public"]["Tables"]["sv_idea_submissions"]["Row"];
+type TeamMemberRow = Database["public"]["Tables"]["sv_team_members"]["Row"];
+type TeamRow = Database["public"]["Tables"]["sv_teams"]["Row"];
 
 const registrationIdSchema = z.string().uuid();
 
@@ -91,7 +91,7 @@ export async function getTeamRegistrationForEdit(
   try {
     const supabase = createSupabaseServiceRoleClient();
     const { data: team, error: teamError } = await supabase
-      .from("teams")
+      .from("sv_teams")
       .select(teamEditSelect)
       .eq("id", parsed.data)
       .is("deleted_at", null)
@@ -113,7 +113,7 @@ export async function getTeamRegistrationForEdit(
     }
 
     const { data: members, error: membersError } = await supabase
-      .from("team_members")
+      .from("sv_team_members")
       .select(teamMemberEditSelect)
       .eq("team_id", team.id)
       .is("deleted_at", null)
@@ -130,7 +130,7 @@ export async function getTeamRegistrationForEdit(
 
     const idea = team.idea_submission_id
       ? await supabase
-          .from("idea_submissions")
+          .from("sv_idea_submissions")
           .select(ideaSummarySelect)
           .eq("id", team.idea_submission_id)
           .is("deleted_at", null)

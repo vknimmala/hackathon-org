@@ -65,7 +65,7 @@ export async function createMentorAction(
   try {
     const supabase = createSupabaseServiceRoleClient();
     const { data, error } = await supabase
-      .from("mentors")
+      .from("sv_mentors")
       .insert(mentorRecord)
       .select("*")
       .single();
@@ -77,11 +77,11 @@ export async function createMentorAction(
       };
     }
 
-    const { error: auditError } = await supabase.from("audit_logs").insert({
+    const { error: auditError } = await supabase.from("sv_audit_logs").insert({
       action: "created",
       after_state: data as unknown as Json,
       entity_id: data.id,
-      entity_table: "mentors",
+      entity_table: "sv_mentors",
       metadata: { source: "admin_mentor_create" },
     });
 

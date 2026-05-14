@@ -2,8 +2,8 @@ import { createSupabaseServiceRoleClient } from "@/lib/supabase/server";
 import type { Database } from "@/types/database";
 
 type IdeaSubmissionRow =
-  Database["public"]["Tables"]["idea_submissions"]["Row"];
-type TeamRow = Database["public"]["Tables"]["teams"]["Row"];
+  Database["public"]["Tables"]["sv_idea_submissions"]["Row"];
+type TeamRow = Database["public"]["Tables"]["sv_teams"]["Row"];
 
 const availableIdeaSelect = `
   department,
@@ -63,7 +63,7 @@ export async function getAvailableIdeasForTeamRegistration(): Promise<AvailableT
   try {
     const supabase = createSupabaseServiceRoleClient();
     const { data: ideas, error: ideasError } = await supabase
-      .from("idea_submissions")
+      .from("sv_idea_submissions")
       .select(availableIdeaSelect)
       .in("status", ["submitted", "approved"])
       .is("deleted_at", null)
@@ -78,7 +78,7 @@ export async function getAvailableIdeasForTeamRegistration(): Promise<AvailableT
     }
 
     const { data: teams, error: teamsError } = await supabase
-      .from("teams")
+      .from("sv_teams")
       .select("idea_submission_id")
       .not("idea_submission_id", "is", null)
       .is("deleted_at", null);

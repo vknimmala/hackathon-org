@@ -24,7 +24,7 @@ export type AuditAction =
 export interface Database {
   public: {
     Tables: {
-      audit_logs: {
+      sv_audit_logs: {
         Row: {
           id: string;
           actor_id: string | null;
@@ -47,10 +47,10 @@ export interface Database {
           metadata?: Json;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["audit_logs"]["Insert"]>;
+        Update: Partial<Database["public"]["Tables"]["sv_audit_logs"]["Insert"]>;
         Relationships: [];
       };
-      idea_submissions: {
+      sv_idea_submissions: {
         Row: {
           id: string;
           participant_user_id: string | null;
@@ -92,11 +92,11 @@ export interface Database {
           deleted_at?: string | null;
         };
         Update: Partial<
-          Database["public"]["Tables"]["idea_submissions"]["Insert"]
+          Database["public"]["Tables"]["sv_idea_submissions"]["Insert"]
         >;
         Relationships: [];
       };
-      team_members: {
+      sv_team_members: {
         Row: {
           id: string;
           team_id: string;
@@ -119,10 +119,10 @@ export interface Database {
           updated_at?: string;
           deleted_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["team_members"]["Insert"]>;
+        Update: Partial<Database["public"]["Tables"]["sv_team_members"]["Insert"]>;
         Relationships: [];
       };
-      teams: {
+      sv_teams: {
         Row: {
           id: string;
           name: string;
@@ -155,10 +155,10 @@ export interface Database {
           submitted_at?: string | null;
           deleted_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["teams"]["Insert"]>;
+        Update: Partial<Database["public"]["Tables"]["sv_teams"]["Insert"]>;
         Relationships: [];
       };
-      mentors: {
+      sv_mentors: {
         Row: {
           id: string;
           user_id: string | null;
@@ -187,10 +187,10 @@ export interface Database {
           updated_at?: string;
           deleted_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["mentors"]["Insert"]>;
+        Update: Partial<Database["public"]["Tables"]["sv_mentors"]["Insert"]>;
         Relationships: [];
       };
-      achievements: {
+      sv_achievements: {
         Row: {
           id: string;
           code: string;
@@ -215,10 +215,10 @@ export interface Database {
           updated_at?: string;
           deleted_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["achievements"]["Insert"]>;
+        Update: Partial<Database["public"]["Tables"]["sv_achievements"]["Insert"]>;
         Relationships: [];
       };
-      leaderboard_entries: {
+      sv_leaderboard_entries: {
         Row: {
           id: string;
           team_id: string;
@@ -240,11 +240,11 @@ export interface Database {
           deleted_at?: string | null;
         };
         Update: Partial<
-          Database["public"]["Tables"]["leaderboard_entries"]["Insert"]
+          Database["public"]["Tables"]["sv_leaderboard_entries"]["Insert"]
         >;
         Relationships: [];
       };
-      volunteer_registrations: {
+      sv_volunteer_registrations: {
         Row: {
           id: string;
           user_id: string | null;
@@ -272,11 +272,11 @@ export interface Database {
           deleted_at?: string | null;
         };
         Update: Partial<
-          Database["public"]["Tables"]["volunteer_registrations"]["Insert"]
+          Database["public"]["Tables"]["sv_volunteer_registrations"]["Insert"]
         >;
         Relationships: [];
       };
-      users: {
+      sv_users: {
         Row: {
           id: string;
           email: string;
@@ -295,7 +295,7 @@ export interface Database {
           updated_at?: string;
           deleted_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["users"]["Insert"]>;
+        Update: Partial<Database["public"]["Tables"]["sv_users"]["Insert"]>;
         Relationships: [];
       };
     };

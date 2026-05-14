@@ -55,7 +55,7 @@ export async function submitVolunteerRegistrationAction(
   try {
     const supabase = createSupabaseServiceRoleClient();
     const { data, error } = await supabase
-      .from("volunteer_registrations")
+      .from("sv_volunteer_registrations")
       .insert(volunteerRecord)
       .select("id")
       .single();
@@ -67,11 +67,11 @@ export async function submitVolunteerRegistrationAction(
       };
     }
 
-    const { error: auditError } = await supabase.from("audit_logs").insert({
+    const { error: auditError } = await supabase.from("sv_audit_logs").insert({
       action: "submitted",
       after_state: volunteerRecord as Json,
       entity_id: data.id,
-      entity_table: "volunteer_registrations",
+      entity_table: "sv_volunteer_registrations",
       metadata: { source: "volunteer_registration_form" },
     });
 

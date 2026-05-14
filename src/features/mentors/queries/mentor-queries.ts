@@ -1,7 +1,7 @@
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/server";
 import type { Database } from "@/types/database";
 
-type MentorRow = Database["public"]["Tables"]["mentors"]["Row"];
+type MentorRow = Database["public"]["Tables"]["sv_mentors"]["Row"];
 
 const mentorListSelect = `
   capacity,
@@ -53,7 +53,7 @@ export async function getMentorsForAdmin(): Promise<MentorListResult> {
   try {
     const supabase = createSupabaseServiceRoleClient();
     const { data, error } = await supabase
-      .from("mentors")
+      .from("sv_mentors")
       .select(mentorListSelect)
       .is("deleted_at", null)
       .order("created_at", { ascending: false });

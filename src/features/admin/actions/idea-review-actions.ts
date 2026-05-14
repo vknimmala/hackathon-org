@@ -55,7 +55,7 @@ export async function reviewIdeaSubmissionAction(
   try {
     const supabase = createSupabaseServiceRoleClient();
     const { data: existingIdea, error: lookupError } = await supabase
-      .from("idea_submissions")
+      .from("sv_idea_submissions")
       .select("*")
       .eq("id", values.ideaId)
       .is("deleted_at", null)
@@ -82,7 +82,7 @@ export async function reviewIdeaSubmissionAction(
     };
 
     const { data: updatedIdea, error: updateError } = await supabase
-      .from("idea_submissions")
+      .from("sv_idea_submissions")
       .update(reviewRecord)
       .eq("id", values.ideaId)
       .is("deleted_at", null)
@@ -96,7 +96,7 @@ export async function reviewIdeaSubmissionAction(
       };
     }
 
-    const { error: auditError } = await supabase.from("audit_logs").insert({
+    const { error: auditError } = await supabase.from("sv_audit_logs").insert({
       action: values.reviewStatus,
       after_state: updatedIdea as unknown as Json,
       before_state: existingIdea as unknown as Json,
