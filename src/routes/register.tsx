@@ -5,7 +5,6 @@ import { ArrowLeft, CheckCircle2, Plus, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
-import { RegistrationTypeToggle } from "@/components/registration/RegistrationTypeToggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -90,7 +89,7 @@ function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex-1 bg-hero">
         <div className="mx-auto max-w-5xl px-6 py-16">
@@ -98,7 +97,6 @@ function RegisterPage() {
             <ArrowLeft className="w-4 h-4" /> Back to hackathon
           </Link>
 
-          <RegistrationTypeToggle active="participant" />
           <div className="mt-8">
             <span className="text-xs font-semibold tracking-[0.2em] text-primary uppercase">Registration</span>
             <h1 className="mt-3 font-display text-4xl sm:text-5xl font-bold tracking-tight">Join the hackathon.</h1>
