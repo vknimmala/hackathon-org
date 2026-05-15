@@ -172,7 +172,16 @@ function HomePage() {
             <div className="mt-8 flex flex-wrap justify-center gap-3 sm:justify-start">
               <Link to="/register">
                 <Button size="lg" variant="secondary" className="h-12 px-6 bg-background text-foreground hover:bg-background/90">
-                  <Rocket className="mr-2 w-4 h-4" /> Register Now
+                  <Rocket className="mr-2 w-4 h-4" /> Register as participant
+                </Button>
+              </Link>
+              <Link to="/volunteer">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="h-12 border-primary-foreground/30 bg-transparent px-6 text-primary-foreground hover:bg-primary-foreground/10"
+                >
+                  Volunteer
                 </Button>
               </Link>
             </div>

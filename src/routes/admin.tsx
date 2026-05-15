@@ -239,7 +239,9 @@ function Dashboard() {
           </TabsList>
           <TabsContent value="all"><Table rows={filtered()} loading={loading} onExport={() => exportCsv()} onStatus={updateStatus} /></TabsContent>
           <TabsContent value="Participant"><Table rows={filtered("Participant")} loading={loading} onExport={() => exportCsv("Participant")} onStatus={updateStatus} /></TabsContent>
-          <TabsContent value="Volunteer"><Table rows={filtered("Volunteer")} loading={loading} onExport={() => exportCsv("Volunteer")} onStatus={updateStatus} /></TabsContent>
+          <TabsContent value="Volunteer">
+            <VolunteerTable rows={filtered("Volunteer")} loading={loading} onExport={() => exportCsv("Volunteer")} />
+          </TabsContent>
         </Tabs>
       </main>
     </div>
@@ -254,6 +256,96 @@ function Stat({ label, value, icon }: { label: string; value: number; icon: Reac
         <div className="font-display text-3xl font-bold mt-1">{value}</div>
       </div>
       <div className="w-10 h-10 rounded-xl bg-primary-gradient text-primary-foreground grid place-items-center shadow-glow">{icon}</div>
+    </Card>
+  );
+}
+
+function VolunteerTable({ rows, loading, onExport }: { rows: Reg[]; loading: boolean; onExport: () => void }) {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  return (
+    <Card className="mt-4 overflow-hidden">
+      <div className="flex flex-col gap-3 border-b border-border/60 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-muted-foreground">{rows.length} volunteer{rows.length === 1 ? "" : "s"}</p>
+        <Button size="sm" variant="outline" onClick={onExport} disabled={!rows.length} className="w-full sm:w-auto">
+          <Download className="mr-2 h-4 w-4" /> Export CSV
+        </Button>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-muted/50 text-left text-xs uppercase tracking-wider text-muted-foreground">
+            <tr>
+              <th className="px-4 py-3">Submitted</th>
+              <th className="px-4 py-3">Name</th>
+              <th className="px-4 py-3">Email</th>
+              <th className="px-4 py-3">Team / dept</th>
+              <th className="px-4 py-3">Preferred roles</th>
+              <th className="px-4 py-3">Availability</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading && (
+              <tr>
+                <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">
+                  Loading…
+                </td>
+              </tr>
+            )}
+            {!loading && rows.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">
+                  No volunteer registrations yet.
+                </td>
+              </tr>
+            )}
+            {rows.map((r) => {
+              const notes = r.availability_notes?.trim() ?? "";
+              const expanded = expandedId === r.id;
+              return (
+                <tr key={r.id} className="border-t border-border/60 hover:bg-muted/30">
+                  <td className="whitespace-nowrap px-4 py-3 text-xs text-muted-foreground">
+                    {new Date(r.created_at).toLocaleString()}
+                  </td>
+                  <td className="px-4 py-3 font-medium">{r.full_name}</td>
+                  <td className="px-4 py-3">{r.email}</td>
+                  <td className="px-4 py-3">{r.team_or_department || "—"}</td>
+                  <td className="px-4 py-3">
+                    {r.preferred_roles && r.preferred_roles.length > 0 ? (
+                      <div className="flex max-w-xs flex-wrap gap-1">
+                        {r.preferred_roles.map((p) => (
+                          <Badge key={p} variant="outline" className="text-[10px]">
+                            {p}
+                          </Badge>
+                        ))}
+                      </div>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
+                  <td className="max-w-sm px-4 py-3">
+                    {notes ? (
+                      <div>
+                        <p className={expanded ? "" : "line-clamp-2 text-muted-foreground"}>{notes}</p>
+                        {notes.length > 120 && (
+                          <button
+                            type="button"
+                            className="mt-1 text-xs font-medium text-primary hover:underline"
+                            onClick={() => setExpandedId(expanded ? null : r.id)}
+                          >
+                            {expanded ? "Show less" : "View full notes"}
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </Card>
   );
 }
