@@ -39,6 +39,19 @@ const participantSchema = z.object({
   idea_description: z.string().trim().min(1, "Idea description is required"),
 });
 
+const ORGANIZATION_OPTIONS = [
+  "Sales",
+  "Finance",
+  "HR",
+  "GTM",
+  "App Modernisation",
+  "Data Engineering",
+  "Taxilla",
+  "SurgeVector Platform",
+  "Products",
+  "Others",
+] as const;
+
 type Errors = Record<string, string>;
 
 function flattenErrors(err: z.ZodError): Errors {
@@ -195,9 +208,11 @@ function ParticipantForm({ onDone }: { onDone: () => void }) {
               <SelectValue placeholder="Select organization" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="SurgeVector">SurgeVector</SelectItem>
-              <SelectItem value="Taxilla">Taxilla</SelectItem>
-              <SelectItem value="Other">Other</SelectItem>
+              {ORGANIZATION_OPTIONS.map((option) => (
+                <SelectItem key={option} value={option}>
+                  {option}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           {errors.organization && <p className="mt-1.5 text-xs text-destructive">{errors.organization}</p>}
