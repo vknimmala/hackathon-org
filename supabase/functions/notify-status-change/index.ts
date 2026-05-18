@@ -4,19 +4,28 @@
  * Sends a status notification email to a participant when their registration
  * is approved or rejected by an admin.
  *
- * Setup:
- *   1. Sign up at https://resend.com and get an API key.
- *   2. Verify your sending domain in the Resend dashboard.
- *   3. Add your API key as a Supabase secret:
- *        supabase secrets set RESEND_API_KEY=re_xxxxxxxxxxxx
- *   4. Update FROM_EMAIL below to match your verified domain.
- *   5. Deploy: supabase functions deploy notify-status-change
+ * Setup (no custom domain needed):
+ *   1. Sign up free at https://resend.com — takes 2 minutes, no card required.
+ *   2. Copy your API key from the Resend dashboard.
+ *   3. In Supabase dashboard → Edge Functions → Manage secrets → add:
+ *        RESEND_API_KEY = re_xxxxxxxxxxxx
+ *   4. Deploy this function (see instructions below).
+ *
+ * Emails will arrive from "onboarding@resend.dev" which works on Resend's
+ * free tier without any domain verification. Update FROM_EMAIL below once
+ * you want to send from your own domain.
+ *
+ * Deploy options (pick one):
+ *   A) Supabase dashboard → Edge Functions → Deploy new function → paste this file
+ *   B) CLI: supabase functions deploy notify-status-change
  */
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-const FROM_EMAIL = "hackathon@surgevector.ai"; // must match your verified Resend domain
+// Free-tier Resend default — works immediately, no domain setup needed.
+// Swap to "hackathon@yourdomain.com" after verifying a domain in Resend.
+const FROM_EMAIL = "onboarding@resend.dev";
 const HACKATHON_NAME = "SurgeVector.ai Hackathon 2026";
 const SITE_URL = "https://hackathon.surgevector.ai"; // update to your live URL
 
