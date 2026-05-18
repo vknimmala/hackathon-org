@@ -7,6 +7,7 @@ CREATE INDEX IF NOT EXISTS registrations_user_id_idx
   ON public.registrations(user_id);
 
 -- Participants can read their own registration
+DROP POLICY IF EXISTS "Users can view own registration" ON public.registrations;
 CREATE POLICY "Users can view own registration"
   ON public.registrations FOR SELECT
   TO authenticated
@@ -15,6 +16,7 @@ CREATE POLICY "Users can view own registration"
 -- Participants can update their own registration
 -- Editable fields and status-lock are enforced in application code.
 -- See src/config/registration-edit.ts for EDITABLE_STATUSES.
+DROP POLICY IF EXISTS "Users can update own registration" ON public.registrations;
 CREATE POLICY "Users can update own registration"
   ON public.registrations FOR UPDATE
   TO authenticated
