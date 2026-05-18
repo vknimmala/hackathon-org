@@ -1,11 +1,21 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import logoIcon from "@/assets/logo-icon.png";
+import type { Session } from "@supabase/supabase-js";
 
 export function Header() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [active, setActive] = useState<string>("");
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (pathname !== "/") {
@@ -62,11 +72,38 @@ export function Header() {
           {navItem("faq", "FAQs")}
         </nav>
         <div className="flex shrink-0 items-center gap-2">
-          <Link to="/register">
-            <Button className="bg-primary-gradient px-3 text-primary-foreground shadow-glow hover:opacity-90 sm:px-4">
-              Register Now
-            </Button>
-          </Link>
+          {session ? (
+            <>
+              <Link to="/dashboard">
+                <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
+                  My Registration
+                </Button>
+              </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                  navigate({ to: "/" });
+                }}
+              >
+                Sign out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
+                  Sign in
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button className="bg-primary-gradient px-3 text-primary-foreground shadow-glow hover:opacity-90 sm:px-4">
+                  Register Now
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
