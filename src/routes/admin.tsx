@@ -181,6 +181,21 @@ function Dashboard() {
         ? "Participant idea approved. Team can proceed with the hackathon."
         : "Participant idea rejected.",
     );
+    // Fire-and-forget: send status notification email to the participant
+    const reg = rows.find((r) => r.id === id);
+    if (reg && (status === "approved" || status === "rejected")) {
+      supabase.functions
+        .invoke("notify-status-change", {
+          body: {
+            registration_id: id,
+            status,
+            email: reg.email,
+            full_name: reg.full_name,
+            idea_title: reg.idea_title ?? null,
+          },
+        })
+        .catch((err) => console.error("notify-status-change:", err));
+    }
   }
 
   const stats = useMemo(() => ({
