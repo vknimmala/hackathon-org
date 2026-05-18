@@ -31,6 +31,7 @@ export type Database = {
           team_name: string | null
           team_or_department: string | null
           type: Database["public"]["Enums"]["registration_type"]
+          user_id: string | null
         }
         Insert: {
           availability_notes?: string | null
@@ -48,6 +49,7 @@ export type Database = {
           team_name?: string | null
           team_or_department?: string | null
           type: Database["public"]["Enums"]["registration_type"]
+          user_id?: string | null
         }
         Update: {
           availability_notes?: string | null
@@ -65,6 +67,7 @@ export type Database = {
           team_name?: string | null
           team_or_department?: string | null
           type?: Database["public"]["Enums"]["registration_type"]
+          user_id?: string | null
         }
         Relationships: []
       }
