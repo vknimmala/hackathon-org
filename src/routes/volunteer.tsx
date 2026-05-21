@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { REGISTRATIONS_OPEN } from "@/config/registrations-open";
+import { RegistrationClosed } from "@/components/site/RegistrationClosed";
 
 export const Route = createFileRoute("/volunteer")({
   component: VolunteerPage,
@@ -44,6 +46,10 @@ function flattenErrors(err: z.ZodError): Errors {
 
 function VolunteerPage() {
   const [done, setDone] = useState(false);
+
+  if (!REGISTRATIONS_OPEN) {
+    return <RegistrationClosed pageTitle="Volunteer registration closed" />;
+  }
 
   if (done) {
     return (
