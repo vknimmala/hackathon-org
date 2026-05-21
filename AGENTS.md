@@ -92,9 +92,12 @@ The current Supabase client expects:
 - `SUPABASE_URL` for SSR fallback
 - `SUPABASE_PUBLISHABLE_KEY` for SSR fallback
 
-HackBot (static `public/hackbot.html` + floating widget) requires a server-only key:
+HackBot (static `public/hackbot.html` + floating widget) uses xAI Grok via a guarded server proxy:
 
-- `ANTHROPIC_API_KEY` — proxied via `POST /api/hackbot/chat` (Nitro route in `server/api/hackbot/`)
+- `XAI_API_KEY` or `GROK_API_KEY` — required (server-only, never `VITE_*`)
+- `GROK_MODEL` — optional (defaults to `grok-2-mini`)
+- Knowledge base: `server/hackbot/knowledge-base.ts`
+- API: `POST /api/hackbot/chat` (rate limit, server-built system prompt, no client `model`/`system`)
 
 For Vercel, configure environment variables in the Vercel project settings for the relevant environments. Because browser code only receives `VITE_*` variables at build time, set the `VITE_` variables before building/deploying. Keep service-role keys out of Vercel unless a server-only function explicitly needs them.
 
