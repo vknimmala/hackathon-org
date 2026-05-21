@@ -71,6 +71,12 @@ export function Header() {
         <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-muted-foreground">
           {navItem("journey", "Journey")}
           {navItem("faq", "FAQs")}
+          <a
+            href="/hackbot.html"
+            className="relative transition hover:text-foreground"
+          >
+            HackBot
+          </a>
         </nav>
         <div className="flex shrink-0 items-center gap-2">
           {session ? (
