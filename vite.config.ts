@@ -14,6 +14,7 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
+    publicDir: "public",
     plugins: [nitro({ preset: "vercel" })],
   },
 });
