@@ -92,10 +92,10 @@ The current Supabase client expects:
 - `SUPABASE_URL` for SSR fallback
 - `SUPABASE_PUBLISHABLE_KEY` for SSR fallback
 
-HackBot (static `public/hackbot.html` + floating widget) uses xAI Grok via a guarded server proxy:
+HackBot (static `public/hackbot.html` + floating widget) uses [Groq](https://console.groq.com/keys) via a guarded server proxy:
 
-- `XAI_API_KEY` or `GROK_API_KEY` — required (server-only, never `VITE_*`)
-- `GROK_MODEL` — optional (defaults to `grok-2-mini`)
+- `GROQ_API_KEY` — required (server-only, never `VITE_*`)
+- `GROQ_MODEL` — optional (defaults to `llama-3.3-70b-versatile`)
 - Knowledge base: `server/hackbot/knowledge-base.ts`
 - API: `POST /api/hackbot/chat` (rate limit, server-built system prompt, no client `model`/`system`)
 

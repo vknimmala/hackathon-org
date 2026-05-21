@@ -2,8 +2,8 @@ import { defineHandler } from "nitro";
 import { buildHackBotSystemPrompt } from "../../hackbot/prompt";
 import { checkRateLimit, getClientIp, parseHackBotRequest } from "../../hackbot/guardrails";
 
-const XAI_CHAT_URL = "https://api.x.ai/v1/chat/completions";
-const DEFAULT_MODEL = "grok-2-mini";
+const GROQ_CHAT_URL = "https://api.groq.com/openai/v1/chat/completions";
+const DEFAULT_MODEL = "llama-3.3-70b-versatile";
 
 function jsonResponse(payload: unknown, status = 200): Response {
   return new Response(JSON.stringify(payload), {
@@ -12,17 +12,14 @@ function jsonResponse(payload: unknown, status = 200): Response {
   });
 }
 
-function getXaiApiKey(): string | undefined {
-  return process.env.XAI_API_KEY || process.env.GROK_API_KEY;
+function getGroqApiKey(): string | undefined {
+  return process.env.GROQ_API_KEY;
 }
 
 export default defineHandler(async (event) => {
-  const apiKey = getXaiApiKey();
+  const apiKey = getGroqApiKey();
   if (!apiKey) {
-    return jsonResponse(
-      { error: { message: "XAI_API_KEY (or GROK_API_KEY) is not configured" } },
-      503,
-    );
+    return jsonResponse({ error: { message: "GROQ_API_KEY is not configured" } }, 503);
   }
 
   const rateError = checkRateLimit(getClientIp(event.req.headers));
@@ -42,10 +39,10 @@ export default defineHandler(async (event) => {
     return jsonResponse({ error: { message: parsed } }, 400);
   }
 
-  const model = process.env.GROK_MODEL || DEFAULT_MODEL;
+  const model = process.env.GROQ_MODEL || DEFAULT_MODEL;
   const system = buildHackBotSystemPrompt(parsed.userName);
 
-  const res = await fetch(XAI_CHAT_URL, {
+  const res = await fetch(GROQ_CHAT_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -61,10 +58,14 @@ export default defineHandler(async (event) => {
 
   const raw = await res.text();
   if (!res.ok) {
-    return new Response(raw || JSON.stringify({ error: { message: "Upstream API error" } }), {
-      status: res.status,
-      headers: { "Content-Type": "application/json" },
-    });
+    let message = "Upstream API error";
+    try {
+      const err = JSON.parse(raw) as { error?: { message?: string } };
+      message = err.error?.message || message;
+    } catch {
+      if (raw) message = raw.slice(0, 300);
+    }
+    return jsonResponse({ error: { message } }, res.status >= 400 && res.status < 600 ? res.status : 502);
   }
 
   let data: {
