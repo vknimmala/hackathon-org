@@ -17,6 +17,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { REGISTRATIONS_OPEN } from "@/config/registrations-open";
+import { RegistrationClosed } from "@/components/site/RegistrationClosed";
 
 export const Route = createFileRoute("/register")({
   component: RegisterPage,
@@ -65,6 +67,10 @@ function flattenErrors(err: z.ZodError): Errors {
 
 function RegisterPage() {
   const [done, setDone] = useState<boolean>(false);
+
+  if (!REGISTRATIONS_OPEN) {
+    return <RegistrationClosed pageTitle="Registration closed" />;
+  }
 
   if (done) {
     return (
