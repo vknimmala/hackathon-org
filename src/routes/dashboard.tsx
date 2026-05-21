@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { isEditingAllowed } from "@/config/registration-edit";
+import { REGISTRATIONS_OPEN, REGISTRATION_CLOSED_MESSAGE } from "@/config/registrations-open";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Button } from "@/components/ui/button";
@@ -145,12 +146,17 @@ function DashboardPage() {
               We couldn't find a registration linked to your account. Make sure you're
               signed in with the same email you used when registering.
             </p>
+            {!REGISTRATIONS_OPEN && (
+              <p className="mt-4 text-sm text-muted-foreground">{REGISTRATION_CLOSED_MESSAGE}</p>
+            )}
             <div className="mt-6 flex flex-col sm:flex-row justify-center gap-3">
-              <Link to="/register">
-                <Button className="bg-primary-gradient text-primary-foreground shadow-glow">
-                  Register now
-                </Button>
-              </Link>
+              {REGISTRATIONS_OPEN && (
+                <Link to="/register">
+                  <Button className="bg-primary-gradient text-primary-foreground shadow-glow">
+                    Register now
+                  </Button>
+                </Link>
+              )}
               <Button variant="outline" onClick={signOut}>
                 <LogOut className="w-4 h-4 mr-2" /> Sign out
               </Button>

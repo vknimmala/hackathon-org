@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import logoIcon from "@/assets/logo-icon.png";
 import type { Session } from "@supabase/supabase-js";
+import { REGISTRATIONS_OPEN } from "@/config/registrations-open";
 
 export function Header() {
   const { pathname } = useLocation();
@@ -98,8 +99,15 @@ export function Header() {
                 </Button>
               </Link>
               <Link to="/register">
-                <Button className="bg-primary-gradient px-3 text-primary-foreground shadow-glow hover:opacity-90 sm:px-4">
-                  Register Now
+                <Button
+                  variant={REGISTRATIONS_OPEN ? "default" : "outline"}
+                  className={
+                    REGISTRATIONS_OPEN
+                      ? "bg-primary-gradient px-3 text-primary-foreground shadow-glow hover:opacity-90 sm:px-4"
+                      : "px-3 sm:px-4"
+                  }
+                >
+                  {REGISTRATIONS_OPEN ? "Register Now" : "Registration closed"}
                 </Button>
               </Link>
             </>

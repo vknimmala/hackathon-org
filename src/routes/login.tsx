@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { REGISTRATIONS_OPEN, REGISTRATION_CLOSED_MESSAGE } from "@/config/registrations-open";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -121,10 +122,16 @@ function LoginPage() {
             {mode === "login" ? "No account? Sign up" : "Already have an account? Sign in"}
           </button>
           <p className="mt-6 text-xs text-muted-foreground border-t border-border pt-4">
-            Not registered yet?{" "}
-            <Link to="/register" className="text-primary hover:underline">
-              Register for the hackathon
-            </Link>
+            {REGISTRATIONS_OPEN ? (
+              <>
+                Not registered yet?{" "}
+                <Link to="/register" className="text-primary hover:underline">
+                  Register for the hackathon
+                </Link>
+              </>
+            ) : (
+              REGISTRATION_CLOSED_MESSAGE
+            )}
           </p>
         </Card>
       </main>

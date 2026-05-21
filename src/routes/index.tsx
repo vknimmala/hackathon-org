@@ -11,13 +11,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { REGISTRATIONS_OPEN, REGISTRATION_CLOSED_MESSAGE } from "@/config/registrations-open";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
       { title: "SurgeVector.ai Hackathon 2026 — Build the next AI wave" },
-      { name: "description", content: "Six weeks of building. Workshops by AWS & Microsoft, IP awareness, mentor demo day. Register your team or volunteer." },
+      { name: "description", content: "Six weeks of building. Workshops by AWS & Microsoft, IP awareness, mentor demo day. SurgeVector Hackathon 2026." },
     ],
   }),
 });
@@ -168,23 +169,33 @@ function HomePage() {
         <div className="mx-auto max-w-5xl px-6">
           <div className="relative overflow-hidden rounded-3xl bg-primary-gradient text-primary-foreground p-12 sm:p-16 shadow-glow">
             <Sparkles className="absolute top-6 right-6 w-24 h-24 opacity-20" />
-            <h3 className="max-w-2xl text-center font-display text-3xl font-bold sm:text-left sm:text-4xl">Registrations are open. Bring an idea, or claim one.</h3>
-            <div className="mt-8 flex flex-wrap justify-center gap-3 sm:justify-start">
-              <Link to="/register">
-                <Button size="lg" variant="secondary" className="h-12 px-6 bg-background text-foreground hover:bg-background/90">
-                  <Rocket className="mr-2 w-4 h-4" /> Register as participant
-                </Button>
-              </Link>
-              <Link to="/volunteer">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="h-12 border-primary-foreground/30 bg-transparent px-6 text-primary-foreground hover:bg-primary-foreground/10"
-                >
-                  Volunteer
-                </Button>
-              </Link>
-            </div>
+            <h3 className="max-w-2xl text-center font-display text-3xl font-bold sm:text-left sm:text-4xl">
+              {REGISTRATIONS_OPEN
+                ? "Registrations are open. Bring an idea, or claim one."
+                : "Registrations are closed."}
+            </h3>
+            {REGISTRATIONS_OPEN ? (
+              <div className="mt-8 flex flex-wrap justify-center gap-3 sm:justify-start">
+                <Link to="/register">
+                  <Button size="lg" variant="secondary" className="h-12 px-6 bg-background text-foreground hover:bg-background/90">
+                    <Rocket className="mr-2 w-4 h-4" /> Register as participant
+                  </Button>
+                </Link>
+                <Link to="/volunteer">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="h-12 border-primary-foreground/30 bg-transparent px-6 text-primary-foreground hover:bg-primary-foreground/10"
+                  >
+                    Volunteer
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <p className="mt-6 max-w-2xl text-center text-primary-foreground/90 sm:text-left">
+                {REGISTRATION_CLOSED_MESSAGE}
+              </p>
+            )}
           </div>
         </div>
       </section>
