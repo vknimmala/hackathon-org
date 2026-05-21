@@ -7,6 +7,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
+import { HackBotWidget } from "@/components/site/HackBotWidget";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -79,6 +80,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
+      <HackBotWidget />
       <Toaster richColors position="top-right" />
     </QueryClientProvider>
   );
